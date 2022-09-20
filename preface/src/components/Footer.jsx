@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 function Footer() {
-  return <div>Copyright © December and Company Inc.</div>;
+  return <div>Copyright © December and Company Inc.</div>
 }
 
-export default Footer;
+export default Footer
