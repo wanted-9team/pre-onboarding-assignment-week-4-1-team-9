@@ -3,13 +3,12 @@ import { storage } from 'utils/storage'
 
 const BACKEND_PORT_NUMBER = process.env.REACT_APP_SERVER_PORT || '4000'
 const SERVER_URL =
-  process.env.REACT_APP_SERVER_URL + ':' + BACKEND_PORT_NUMBER + '/' ||
-  'http://localhost:' + BACKEND_PORT_NUMBER + '/'
+  (process.env.REACT_APP_SERVER_URL || 'http://localhost:') + BACKEND_PORT_NUMBER + '/'
 
 // 로그인 기능이 구현이 안됐으므로 postman으로 로그인 한 번 한 뒤 response 받은 token으로 대체하세요!
 const ACCESS_TOKEN =
   storage.get().access_token ||
-  `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld2ZhY2VAZGNvLmNvbSIsImlhdCI6MTY2Mzc2NzQ2MiwiZXhwIjoxNjYzNzcxMDYyLCJzdWIiOiIxMDEifQ.Ag_DZY-qYQto8tZsVOcUfw8dEAqaSamOsH8kWbHMLtU`
+  `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld2ZhY2VAZGNvLmNvbSIsImlhdCI6MTY2Mzc4NDY3MSwiZXhwIjoxNjYzNzg4MjcxLCJzdWIiOiIxMDIifQ.o7DEOaG_3pA746zF-gDFq8aIuddzUSycouQesZq60Dw`
 
 const Axios = axios.create({
   baseURL: SERVER_URL,
