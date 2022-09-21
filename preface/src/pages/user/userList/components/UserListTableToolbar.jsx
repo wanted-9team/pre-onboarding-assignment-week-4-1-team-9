@@ -6,7 +6,9 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import PropTypes from 'prop-types'
+import TextField from '@mui/material/TextField'
 import { alpha } from '@mui/material/styles'
+import { Stack } from '@mui/material'
 
 function UserListTableToolbar({ numSelected }) {
   return (
@@ -37,11 +39,14 @@ function UserListTableToolbar({ numSelected }) {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        <Stack direction="row" spacing={2}>
+          <TextField placeholder="Enter" />
+          <Tooltip title="Filter list">
+            <IconButton>
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        </Stack>
       )}
     </Toolbar>
   )

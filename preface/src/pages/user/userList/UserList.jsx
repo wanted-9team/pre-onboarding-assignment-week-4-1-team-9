@@ -11,8 +11,8 @@ import Switch from '@mui/material/Switch'
 import UserListTableToolbar from './components/UserListTableToolbar'
 import UserListTableHead from './components/UserListTableHead'
 import UserListTableBody from './components/UserListTableBody'
-import { getUserList, getUserSetting } from 'api'
-import { findUuidFunc } from 'utils/findUuid'
+import { getUserList, getUserSetting, getAccounts } from 'api'
+import { findEqualUuidFunc, findEqualUserId } from 'utils/findEqualData'
 
 const UserList = () => {
   const [order, setOrder] = useState('asc')
@@ -23,12 +23,13 @@ const UserList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [userData, setUserData] = useState([])
 
-  const concatUserFunc = (userList, userSettings) => {
+  const concatUserFunc = (userList, userSettings, accountList) => {
     const newUserData = userList
       .filter(user => user.uuid)
       .map(user => ({
         ...user,
-        ...findUuidFunc(user, userSettings),
+        ...findEqualUuidFunc(user, userSettings),
+        ...findEqualUserId(user, accountList),
       }))
     setUserData(newUserData)
   }
@@ -38,7 +39,8 @@ const UserList = () => {
       try {
         const userListRes = await getUserList()
         const userSettingRes = await getUserSetting()
-        concatUserFunc(userListRes.data, userSettingRes.data)
+        const accountListRes = await getAccounts()
+        concatUserFunc(userListRes.data, userSettingRes.data, accountListRes.data)
       } catch (err) {
         throw new Error(err)
       }
