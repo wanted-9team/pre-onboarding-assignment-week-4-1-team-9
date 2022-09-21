@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableContainer from '@mui/material/TableContainer'
@@ -14,7 +14,6 @@ import AccountCheckbox from './components/AccountCheckBox'
 import AccountSearchBar from './components/AccountSearchBar'
 
 import { getAccounts } from 'api'
-
 
 export const headCells = [
   {
@@ -79,17 +78,15 @@ export const headCells = [
   },
 ]
 
-]
 export default function AccountList() {
+  const [order, setOrder] = useState('asc')
+  const [orderBy, setOrderBy] = useState('user_name')
+  const [selected, setSelected] = useState([])
+  const [page, setPage] = useState(0)
+  const [dense, setDense] = useState(false)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
 
-  const [order, setOrder] = React.useState('asc')
-  const [orderBy, setOrderBy] = React.useState('user_name')
-  const [selected, setSelected] = React.useState([])
-  const [page, setPage] = React.useState(0)
-  const [dense, setDense] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
-
-  const [rows, setRows] = React.useState([])
+  const [rows, setRows] = useState([])
 
   const fetchAccountsData = async () => {
     try {
@@ -100,10 +97,9 @@ export default function AccountList() {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchAccountsData()
   }, [])
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -186,7 +182,6 @@ export default function AccountList() {
               dense={dense}
               rowsPerPage={rowsPerPage}
               onClick={handleClick}
-
             />
           </Table>
         </TableContainer>
@@ -199,7 +194,6 @@ export default function AccountList() {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           onClick={handleClick}
-
         />
       </Paper>
       <FormControlLabel
