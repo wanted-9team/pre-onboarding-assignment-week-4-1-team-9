@@ -22,6 +22,8 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import { visuallyHidden } from '@mui/utils'
 
+import { getAccounts } from 'api'
+
 function createData(
   user_name,
   broker_name,
@@ -47,81 +49,6 @@ function createData(
     created_at,
   }
 }
-
-const rows = [
-  createData(
-    'Dallas 황',
-    '동부증권',
-    268639107537,
-    '투자중지',
-    'checking account',
-    '107392043.98',
-    '552824077.44',
-    '45%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-  createData(
-    'Miss Sonya 예',
-    '대우증권',
-    174434205385,
-    '투자중지',
-    'checking account',
-    '310458659.66',
-    '939990435.06',
-    '42%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-  createData(
-    'Milton 온',
-    '키움증권',
-    994110432822,
-    '투자중지',
-    'checking account',
-    '107392043.98',
-    '552824077.44',
-    '45%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-  createData(
-    'Warren 피',
-    '토스증권',
-    76235153734,
-    '입금대기',
-    'checking account',
-    '107392043.98',
-    '552824077.44',
-    '45%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-  createData(
-    'Becky 동',
-    '현대증권',
-    98092601061,
-    '해지',
-    'checking account',
-    '107392043.98',
-    '552824077.44',
-    '45%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-  createData(
-    'Franklin 임',
-    '동부증권',
-    204108958429,
-    '투자중지',
-    'checking account',
-    '107392043.98',
-    '552824077.44',
-    '45%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-]
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -310,6 +237,21 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
 
+  const [rows, setRows] = React.useState([])
+
+  const fetchAccountsData = async () => {
+    try {
+      const response = await getAccounts()
+      setRows(response.data)
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+
+  React.useEffect(() => {
+    fetchAccountsData()
+  }, [])
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
@@ -389,7 +331,7 @@ export default function EnhancedTable() {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name)
                   const labelId = `enhanced-table-checkbox-${index}`
-
+                  console.log(row)
                   return (
                     <TableRow
                       hover
@@ -417,12 +359,12 @@ export default function EnhancedTable() {
                         padding="none"
                         align="right"
                       >
-                        {row.user_name}
+                        {row.user_id}
                       </TableCell>
-                      <TableCell align="right">{row.broker_name}</TableCell>
-                      <TableCell align="right">{row.account_number}</TableCell>
-                      <TableCell align="right">{row.account_status}</TableCell>
-                      <TableCell align="right">{row.account_name}</TableCell>
+                      <TableCell align="right">{row.broker_id}</TableCell>
+                      <TableCell align="right">{row.number}</TableCell>
+                      <TableCell align="right">{row.status}</TableCell>
+                      <TableCell align="right">{row.name}</TableCell>
                       <TableCell align="right">{row.assets}</TableCell>
                       <TableCell align="right">{row.payments}</TableCell>
                       <TableCell align="right">{row.ratio}</TableCell>
