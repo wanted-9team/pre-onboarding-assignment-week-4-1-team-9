@@ -6,9 +6,12 @@ import TablePagination from '@mui/material/TablePagination'
 import Paper from '@mui/material/Paper'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
+import Button from '@mui/material/Button'
 import AccountTableHead from './components/AccountTableHead'
 import AccountTableToolbar from './components/AccountTableToolbar'
 import AccountTableBody from './components/AccountTableBody'
+import AccountCheckbox from './components/AccountCheckBox'
+import AccountSearchBar from './components/AccountSearchBar'
 
 import { getAccounts } from 'api'
 
@@ -75,7 +78,7 @@ export const headCells = [
   },
 ]
 
-export default function AccountTableList() {
+export default function AccountList() {
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('user_name')
   const [selected, setSelected] = React.useState([])
@@ -151,6 +154,9 @@ export default function AccountTableList() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
+        <AccountCheckbox></AccountCheckbox>
+        <AccountSearchBar></AccountSearchBar>
+        <Button variant="contained">검색하기</Button>
         <AccountTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -174,7 +180,7 @@ export default function AccountTableList() {
               isSelected={isSelected}
               dense={dense}
               rowsPerPage={rowsPerPage}
-              handleclick={handleClick}
+              onClick={handleClick}
             />
           </Table>
         </TableContainer>
@@ -186,7 +192,7 @@ export default function AccountTableList() {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          handleclick={handleClick}
+          onClick={handleClick}
         />
       </Paper>
       <FormControlLabel

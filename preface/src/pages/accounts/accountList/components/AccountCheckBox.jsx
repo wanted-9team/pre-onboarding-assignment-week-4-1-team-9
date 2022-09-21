@@ -8,7 +8,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox'
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
-export default function CheckboxesTags() {
+export default function AccountCheckbox() {
   return (
     <Autocomplete
       multiple
