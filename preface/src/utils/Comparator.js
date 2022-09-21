@@ -8,7 +8,6 @@ const Comparator = {
     }
     return 0
   },
-
   getComparator: (order, orderBy) => {
     return order === 'desc'
       ? (a, b) => Comparator.descendingComparator(a, b, orderBy)
