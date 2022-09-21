@@ -97,7 +97,7 @@ export default function AccountList() {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchAccountsData()
   }, [])
 
