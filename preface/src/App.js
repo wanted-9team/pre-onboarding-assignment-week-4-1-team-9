@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from 'pages/login/Login'
 import AccountList from 'pages/accounts/AccountList'
-import UserList from 'pages/userList/UserList'
+import UserList from 'pages/user/userList/UserList'
 
 const App = () => {
   return (
