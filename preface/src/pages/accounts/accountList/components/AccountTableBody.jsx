@@ -6,7 +6,6 @@ import Checkbox from '@mui/material/Checkbox'
 import Comparator from 'utils/Comparator'
 
 function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsPerPage, onClick }) {
-
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   return (
@@ -23,7 +22,6 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
             <TableRow
               hover
               onClick={event => onClick(event, row.name)}
-              onClick={event => handleClick(event, row.name)}
               role="checkbox"
               aria-checked={isItemSelected}
               tabIndex={-1}
