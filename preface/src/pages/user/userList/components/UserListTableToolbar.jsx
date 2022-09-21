@@ -4,15 +4,12 @@ import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
-import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
-import Button from '@mui/material/Button'
 import { alpha } from '@mui/material/styles'
-import styled from '@emotion/styled'
 
 import FilterIcon from './FilterIcon'
 
-function UserListTableToolbar({ selected, setSearchInputData, handleSearch }) {
+function UserListTableToolbar({ selected }) {
   return (
     <Toolbar
       sx={{
@@ -42,19 +39,6 @@ function UserListTableToolbar({ selected, setSearchInputData, handleSearch }) {
         </Tooltip>
       ) : (
         <Stack direction="row" spacing={2}>
-          <Form onSubmit={handleSearch}>
-            <Stack direction="row" spacing={1}>
-              <TextField
-                placeholder="Enter"
-                size="small"
-                type="text"
-                onChange={({ target }) => setSearchInputData(target.value)}
-              />
-              <Button variant="contained" size="small" disableElevation>
-                검색
-              </Button>
-            </Stack>
-          </Form>
           <FilterIcon />
         </Stack>
       )}
@@ -63,5 +47,3 @@ function UserListTableToolbar({ selected, setSearchInputData, handleSearch }) {
 }
 
 export default UserListTableToolbar
-
-const Form = styled.form``
