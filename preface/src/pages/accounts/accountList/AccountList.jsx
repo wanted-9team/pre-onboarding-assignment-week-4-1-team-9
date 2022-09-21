@@ -180,7 +180,7 @@ export default function AccountList() {
               isSelected={isSelected}
               dense={dense}
               rowsPerPage={rowsPerPage}
-              handleclick={handleClick}
+              onClick={handleClick}
             />
           </Table>
         </TableContainer>
@@ -192,7 +192,7 @@ export default function AccountList() {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          handleclick={handleClick}
+          onClick={handleClick}
         />
       </Paper>
       <FormControlLabel
