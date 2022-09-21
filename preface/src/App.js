@@ -1,16 +1,23 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from 'pages/login/Login'
-import AccountList from 'pages/accounts/AccountList'
-import UserList from 'pages/userList/UserList'
+
+import Main from 'pages/main/Main'
+import AccountTableList from 'pages/accounts/accountList/AccountList'
+import UserList from 'pages/user/userList/UserList'
+import AccountDetails from 'pages/accounts/accountDetails/AccountDetails'
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/accountlist" element={<AccountList />} />
-        <Route path="/userlist" element={<UserList />} />
+
+        <Route path="/main" element={<Main />}>
+          <Route path="/main/" element={<AccountTableList />} />
+          <Route path="/main/:id" element={<AccountDetails />} />
+          <Route path="/main/userDetail" element={<UserList />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

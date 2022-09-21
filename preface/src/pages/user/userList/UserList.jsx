@@ -1,7 +1,7 @@
 import React from 'react'
-
+import ListTable from './listTable/ListTable'
 const UserList = () => {
-  return <div>UserList</div>
+  return <ListTable />
 }
 
 export default UserList

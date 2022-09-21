@@ -11,7 +11,11 @@ const rules = auth.rewriter({
   userSetting: 660,
   accounts: 660,
 })
-
+app.use((req: any, res: any, next: any) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+  res.header('Access-Control-Allow-Headers', '*')
+  next()
+})
 app.use(rules)
 app.use(auth)
 app.use(router)
