@@ -13,7 +13,7 @@ function AccountTableBody({
   isSelected,
   dense,
   rowsPerPage,
-  handleClick,
+  handleclick,
 }) {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
@@ -30,7 +30,7 @@ function AccountTableBody({
           return (
             <TableRow
               hover
-              onClick={event => handleClick(event, row.name)}
+              onClick={event => handleclick(event, row.name)}
               role="checkbox"
               aria-checked={isItemSelected}
               tabIndex={-1}
@@ -48,12 +48,12 @@ function AccountTableBody({
               </TableCell>
 
               <TableCell component="th" id={labelId} scope="row" padding="none" align="right">
-                {row.user_name}
+                {row.user_id}
               </TableCell>
-              <TableCell align="right">{row.broker_name}</TableCell>
-              <TableCell align="right">{row.account_number}</TableCell>
-              <TableCell align="right">{row.account_status}</TableCell>
-              <TableCell align="right">{row.account_name}</TableCell>
+              <TableCell align="right">{row.broker_id}</TableCell>
+              <TableCell align="right">{row.number}</TableCell>
+              <TableCell align="right">{row.status}</TableCell>
+              <TableCell align="right">{row.name}</TableCell>
               <TableCell align="right">{row.assets}</TableCell>
               <TableCell align="right">{row.payments}</TableCell>
               <TableCell align="right">{row.ratio}</TableCell>

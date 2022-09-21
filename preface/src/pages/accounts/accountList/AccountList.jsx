@@ -10,106 +10,7 @@ import AccountTableHead from './components/AccountTableHead'
 import AccountTableToolbar from './components/AccountTableToolbar'
 import AccountTableBody from './components/AccountTableBody'
 
-function createData(
-  user_name,
-  broker_name,
-  account_number,
-  account_status,
-  account_name,
-  assets,
-  payments,
-  ratio,
-  is_active,
-  created_at,
-) {
-  return {
-    user_name,
-    broker_name,
-    account_number,
-    account_status,
-    account_name,
-    assets,
-    payments,
-    ratio,
-    is_active,
-    created_at,
-  }
-}
-
-const rows = [
-  createData(
-    'Dallas 황',
-    '동부증권',
-    268639107537,
-    '투자중지',
-    'checking account',
-    '107392043.98',
-    '552824077.44',
-    '45%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-  createData(
-    'Miss Sonya 예',
-    '대우증권',
-    174434205385,
-    '투자중지',
-    'checking account',
-    '310458659.66',
-    '939990435.06',
-    '42%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-  createData(
-    'Milton 온',
-    '키움증권',
-    994110432822,
-    '투자중지',
-    'checking account',
-    '107392043.98',
-    '552824077.44',
-    '45%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-  createData(
-    'Warren 피',
-    '토스증권',
-    76235153734,
-    '입금대기',
-    'checking account',
-    '107392043.98',
-    '552824077.44',
-    '45%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-  createData(
-    'Becky 동',
-    '현대증권',
-    98092601061,
-    '해지',
-    'checking account',
-    '107392043.98',
-    '552824077.44',
-    '45%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-  createData(
-    'Franklin 임',
-    '동부증권',
-    204108958429,
-    '투자중지',
-    'checking account',
-    '107392043.98',
-    '552824077.44',
-    '45%',
-    true,
-    '2021-09-10T22:05:18.146Z',
-  ),
-]
+import { getAccounts } from 'api'
 
 export const headCells = [
   {
@@ -181,6 +82,21 @@ export default function AccountTableList() {
   const [page, setPage] = React.useState(0)
   const [dense, setDense] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
+
+  const [rows, setRows] = React.useState([])
+
+  const fetchAccountsData = async () => {
+    try {
+      const response = await getAccounts()
+      setRows(response.data)
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+
+  React.useEffect(() => {
+    fetchAccountsData()
+  }, [])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -258,6 +174,7 @@ export default function AccountTableList() {
               isSelected={isSelected}
               dense={dense}
               rowsPerPage={rowsPerPage}
+              handleclick={handleClick}
             />
           </Table>
         </TableContainer>
@@ -269,7 +186,7 @@ export default function AccountTableList() {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          handleClick={handleClick}
+          handleclick={handleClick}
         />
       </Paper>
       <FormControlLabel
