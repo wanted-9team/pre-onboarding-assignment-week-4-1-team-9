@@ -15,6 +15,7 @@ import AccountSearchBar from './components/AccountSearchBar'
 
 import { getAccounts } from 'api'
 
+
 export const headCells = [
   {
     id: 'user_name',
@@ -78,7 +79,9 @@ export const headCells = [
   },
 ]
 
+]
 export default function AccountList() {
+
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('user_name')
   const [selected, setSelected] = React.useState([])
@@ -100,6 +103,7 @@ export default function AccountList() {
   React.useEffect(() => {
     fetchAccountsData()
   }, [])
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -157,6 +161,7 @@ export default function AccountList() {
         <AccountCheckbox></AccountCheckbox>
         <AccountSearchBar></AccountSearchBar>
         <Button variant="contained">검색하기</Button>
+
         <AccountTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -181,6 +186,7 @@ export default function AccountList() {
               dense={dense}
               rowsPerPage={rowsPerPage}
               onClick={handleClick}
+
             />
           </Table>
         </TableContainer>
@@ -193,6 +199,7 @@ export default function AccountList() {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           onClick={handleClick}
+
         />
       </Paper>
       <FormControlLabel
