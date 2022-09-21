@@ -47,8 +47,8 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
               <TableCell align="right">{row.name}</TableCell>
               <TableCell align="right">{row.assets}</TableCell>
               <TableCell align="right">{row.payments}</TableCell>
-              <TableCell align="right">{row.ratio}</TableCell>
-              <TableCell align="right">{row.is_active}</TableCell>
+              <TableCell>45%</TableCell>
+              <TableCell>활성화</TableCell>
               <TableCell align="right">{row.created_at}</TableCell>
             </TableRow>
           )
