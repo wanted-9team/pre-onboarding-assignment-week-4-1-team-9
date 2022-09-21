@@ -5,7 +5,6 @@ import TableSortLabel from '@mui/material/TableSortLabel'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import { visuallyHidden } from '@mui/utils'
-import PropTypes from 'prop-types'
 
 const UserListTableHead = ({ order, orderBy, onRequestSort }) => {
   const createSortHandler = cellId => {
@@ -15,7 +14,7 @@ const UserListTableHead = ({ order, orderBy, onRequestSort }) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox"></TableCell>
+        <TableCell padding="checkbox" align="center"></TableCell>
         {HEAD_CELLS.map(headCell => (
           <TableCell
             key={headCell.id}
@@ -37,7 +36,7 @@ const UserListTableHead = ({ order, orderBy, onRequestSort }) => {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell></TableCell>
+        <TableCell align="center"></TableCell>
       </TableRow>
     </TableHead>
   )
@@ -63,10 +62,3 @@ const HEAD_CELLS = [
   createHeadCell('is_active', '활성화'),
   createHeadCell('created_at', '가입일'),
 ]
-
-UserListTableHead.propTypes = {
-  onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-}

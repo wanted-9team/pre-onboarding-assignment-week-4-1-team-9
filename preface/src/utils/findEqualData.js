@@ -8,5 +8,5 @@ export const findEqualUuidFunc = (user, userSettings) => {
 export const findEqualUserId = (user, accountList) => {
   const account = accountList.filter(account => account.user_id === user.id)
 
-  return { accountLength: account.length }
+  return { accountList: account }
 }
