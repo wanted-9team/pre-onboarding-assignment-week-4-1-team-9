@@ -7,7 +7,7 @@ const SERVER_URL =
   'http://localhost:' + BACKEND_PORT_NUMBER + '/'
 const ACCESS_TOKEN =
   storage.get().access_token ||
-  `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld2ZhY2VAZGNvLmNvbSIsImlhdCI6MTY2Mzc2MzQ2MywiZXhwIjoxNjYzNzY3MDYzLCJzdWIiOiIxMDEifQ.pdV0cCbXgSLeyh1dfxMI6hBcgVUDWSauPNao-QxQgGU`
+  `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld2ZhY2VAZGNvLmNvbSIsImlhdCI6MTY2Mzc2NjQwOSwiZXhwIjoxNjYzNzcwMDA5LCJzdWIiOiIxMDEifQ.pY9luavVBaWZqZ-bpLGHVJJPWgdpCAB9HotWpmXKOhQ`
 
 const Axios = axios.create({
   baseURL: SERVER_URL,

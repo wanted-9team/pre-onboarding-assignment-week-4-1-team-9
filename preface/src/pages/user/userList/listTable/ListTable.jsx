@@ -12,7 +12,7 @@ import Switch from '@mui/material/Switch'
 import ListTableCell from './ListTableCell'
 import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
-
+import { useNavigate } from 'react-router-dom'
 import { getUserList, getUserSetting } from 'api'
 import { toLocaleDateFunc, transLoginTimeFunc } from 'utils/transDate'
 
@@ -52,6 +52,7 @@ const ListTable = () => {
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [userData, setUserData] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -111,7 +112,9 @@ const ListTable = () => {
     setDense(target.checked)
   }
 
-  const goUserDetails = event => {}
+  const goUserDetails = user => {
+    navigate(`${user.id}`, { state: user })
+  }
 
   const isSelected = name => selected.indexOf(name) !== -1
 
@@ -175,7 +178,11 @@ const ListTable = () => {
                         <TableCell align="left">{user.is_active ? 'Yes' : 'No'}</TableCell>
                         <TableCell align="left">{toLocaleDateFunc(user.created_at)}</TableCell>
                         <TableCell align="left">
-                          <Button variant="outlined" size="small" onClick={goUserDetails}>
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={() => goUserDetails(user)}
+                          >
                             상세 보기
                           </Button>
                         </TableCell>
