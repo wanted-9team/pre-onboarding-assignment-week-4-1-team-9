@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
-import PropTypes from 'prop-types'
 import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
@@ -13,21 +12,21 @@ import styled from '@emotion/styled'
 
 import FilterIcon from './FilterIcon'
 
-function UserListTableToolbar({ numSelected, setSearchInputData, handleSearch }) {
+function UserListTableToolbar({ selected, setSearchInputData, handleSearch }) {
   return (
     <Toolbar
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
+        ...(selected.uuid && {
           bgcolor: theme =>
             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
       }}
     >
-      {numSelected > 0 ? (
+      {selected.uuid ? (
         <Typography sx={{ flex: '1 1 100%' }} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
+          {selected.name}
         </Typography>
       ) : (
         <Typography sx={{ flex: '1 1 50%' }} variant="h6" id="tableTitle" component="div">
@@ -35,7 +34,7 @@ function UserListTableToolbar({ numSelected, setSearchInputData, handleSearch })
         </Typography>
       )}
 
-      {numSelected > 0 ? (
+      {selected.uuid ? (
         <Tooltip title="Delete">
           <IconButton>
             <DeleteIcon />
@@ -61,10 +60,6 @@ function UserListTableToolbar({ numSelected, setSearchInputData, handleSearch })
       )}
     </Toolbar>
   )
-}
-
-UserListTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
 }
 
 export default UserListTableToolbar

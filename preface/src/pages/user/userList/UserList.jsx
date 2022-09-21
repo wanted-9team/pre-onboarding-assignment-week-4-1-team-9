@@ -87,7 +87,7 @@ const UserList = () => {
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <UserListTableToolbar
-          numSelected={selected.length}
+          selected={selected}
           setSearchInputData={setSearchInputData}
           handleSearch={handleSearch}
         />
