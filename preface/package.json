@@ -30,7 +30,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "cd .. && husky install preface/.husky",
-    "postinstall": "husky install",
     "format": "prettier --cache --write .",
     "lint": "eslint --cache ."
   },

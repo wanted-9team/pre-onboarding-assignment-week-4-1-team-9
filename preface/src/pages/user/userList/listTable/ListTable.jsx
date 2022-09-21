@@ -11,8 +11,11 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import ListTableCell from './ListTableCell'
 import Checkbox from '@mui/material/Checkbox'
-import { getUserList } from 'api'
-import { toLocaleDateFunc } from 'utils/transDate'
+import Button from '@mui/material/Button'
+import { useNavigate } from 'react-router-dom'
+import { getUserList, getUserSetting } from 'api'
+import { toLocaleDateFunc, transLoginTimeFunc } from 'utils/transDate'
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1
@@ -42,33 +45,45 @@ function stableSort(array, comparator) {
 }
 
 const ListTable = () => {
-  const [order, setOrder] = React.useState('asc')
-  const [orderBy, setOrderBy] = React.useState('calories')
-  const [page, setPage] = React.useState(0)
-  const [selected, setSelected] = React.useState([])
-  const [dense, setDense] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
-  const [row, setRow] = useState([])
-
-  const fetch = async () => {
-    const response = await getUserList()
-    setRow(response.data)
-  }
+  const [order, setOrder] = useState('asc')
+  const [orderBy, setOrderBy] = useState('calories')
+  const [page, setPage] = useState(0)
+  const [selected, setSelected] = useState([])
+  const [dense, setDense] = useState(false)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [userData, setUserData] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
-    fetch()
+    const fetchUserData = async () => {
+      try {
+        const userListRes = await getUserList()
+        const userSettingRes = await getUserSetting()
+        concatUserFunc(userListRes.data, userSettingRes.data)
+      } catch (err) {
+        throw new Error(err)
+      }
+    }
+    fetchUserData()
   }, [])
 
-  const handleRequestSort = (event, cellId) => {
+  const concatUserFunc = (userList, settings) => {
+    const newUserData = userList.map(user => ({
+      ...user,
+      ...settings.find(({ uuid }) => uuid === user.uuid),
+    }))
+    setUserData(newUserData)
+  }
+
+  const handleRequestSort = cellId => {
     const isAsc = orderBy === cellId && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
     setOrderBy(cellId)
   }
 
-  const handleClick = (event, name) => {
+  const handleSelectUser = name => {
     const selectedIndex = selected.indexOf(name)
     let newSelected = []
-
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name)
     } else if (selectedIndex === 0) {
@@ -84,19 +99,25 @@ const ListTable = () => {
     setSelected(newSelected)
   }
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (_, newPage) => {
     setPage(newPage)
   }
 
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10))
+  const handleChangeRowsPerPage = ({ target }) => {
+    setRowsPerPage(parseInt(target.value, 10))
     setPage(0)
   }
 
-  const handleChangeDense = event => {
-    setDense(event.target.checked)
+  const handleChangeDense = ({ target }) => {
+    setDense(target.checked)
   }
+
+  const goUserDetails = user => {
+    navigate(`${user.id}`, { state: user })
+  }
+
   const isSelected = name => selected.indexOf(name) !== -1
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -110,45 +131,63 @@ const ListTable = () => {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={row.length}
+              rowCount={userData.length}
             />
             <TableBody>
-              {stableSort(row, getComparator(order, orderBy))
+              {stableSort(userData, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+                .map((user, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`
-                  const isItemSelected = isSelected(row.name)
+                  const isItemSelected = isSelected(user.name)
+
                   return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.uuid}
-                      aria-checked={isItemSelected}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox" onClick={event => handleClick(event, row.name)}>
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="normal">
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="left">보여중인 계좌수</TableCell>
-                      <TableCell align="left">{row.email}</TableCell>
-                      <TableCell align="left">{toLocaleDateFunc(row.birth_date)}</TableCell>
-                      <TableCell align="left">{row.phone_number}</TableCell>
-                      <TableCell align="left">{row.gender_origin}</TableCell>
-                      <TableCell align="left">{toLocaleDateFunc(row.last_login)}</TableCell>
-                      <TableCell align="left">혜택 수신 동의 여부</TableCell>
-                      <TableCell align="left">활성화 여부</TableCell>
-                      <TableCell align="left">{toLocaleDateFunc(row.created_at)}</TableCell>
-                    </TableRow>
+                    user.uuid && (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={user.uuid}
+                        aria-checked={isItemSelected}
+                        selected={isItemSelected}
+                      >
+                        <TableCell
+                          id="selectbox"
+                          padding="checkbox"
+                          onClick={() => handleSelectUser(user.name)}
+                        >
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell id={labelId} scope="row" padding="normal">
+                          {user.name}
+                        </TableCell>
+                        <TableCell align="left">보유중인 계좌수</TableCell>
+                        <TableCell align="left">{user.email}</TableCell>
+                        <TableCell align="left">{toLocaleDateFunc(user.birth_date)}</TableCell>
+                        <TableCell align="left">{user.phone_number}</TableCell>
+                        <TableCell align="left">{user.gender_origin}</TableCell>
+                        <TableCell align="left">{transLoginTimeFunc(user.last_login)}</TableCell>
+                        <TableCell align="left">
+                          {user.allow_marketing_push ? 'Yes' : 'No'}
+                        </TableCell>
+                        <TableCell align="left">{user.is_active ? 'Yes' : 'No'}</TableCell>
+                        <TableCell align="left">{toLocaleDateFunc(user.created_at)}</TableCell>
+                        <TableCell align="left">
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={() => goUserDetails(user)}
+                          >
+                            상세 보기
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    )
                   )
                 })}
             </TableBody>
@@ -157,7 +196,7 @@ const ListTable = () => {
         <TablePagination
           rowsPerPageOptions={[10, 20, 30]}
           component="div"
-          count={row.length}
+          count={userData.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
