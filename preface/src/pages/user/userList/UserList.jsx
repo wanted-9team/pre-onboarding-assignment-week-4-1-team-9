@@ -11,17 +11,20 @@ import Switch from '@mui/material/Switch'
 import UserListTableToolbar from './components/UserListTableToolbar'
 import UserListTableHead from './components/UserListTableHead'
 import UserListTableBody from './components/UserListTableBody'
-import { getUserList, getUserSetting, getAccounts } from 'api'
+import { getUserList, getUserSetting, getAccounts, searchUsers } from 'api'
 import { findEqualUuidFunc, findEqualUserId } from 'utils/findEqualData'
 
 const UserList = () => {
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState('name')
   const [page, setPage] = useState(0)
-  const [selected, setSelected] = useState([])
+  const [selected, setSelected] = useState({})
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [userData, setUserData] = useState([])
+  const [searchInputData, setSearchInputData] = useState('')
+  const [userSettingsData, setUserSettingsData] = useState([])
+  const [userAccountList, setUserAccountList] = useState([])
 
   const concatUserFunc = (userList, userSettings, accountList) => {
     const newUserData = userList
@@ -34,12 +37,25 @@ const UserList = () => {
     setUserData(newUserData)
   }
 
+  const handleSearch = async e => {
+    e.preventDefault()
+    if (!searchInputData) return
+    try {
+      const searchUserRes = await searchUsers(searchInputData)
+      concatUserFunc(searchUserRes.data, userSettingsData, userAccountList)
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const userListRes = await getUserList()
         const userSettingRes = await getUserSetting()
         const accountListRes = await getAccounts()
+        setUserSettingsData(userSettingRes.data)
+        setUserAccountList(accountListRes.data)
         concatUserFunc(userListRes.data, userSettingRes.data, accountListRes.data)
       } catch (err) {
         throw new Error(err)
@@ -70,7 +86,11 @@ const UserList = () => {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <UserListTableToolbar numSelected={selected.length} />
+        <UserListTableToolbar
+          numSelected={selected.length}
+          setSearchInputData={setSearchInputData}
+          handleSearch={handleSearch}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
