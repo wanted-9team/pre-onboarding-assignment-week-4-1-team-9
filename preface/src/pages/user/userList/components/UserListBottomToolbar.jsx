@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
@@ -12,21 +12,30 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 
 const UserListBottomToolbar = ({
-  handleSearch,
+  handleSearchSubmit,
   setSearchInputData,
   page,
   handleChangePage,
   limit,
   setLimit,
   totalUserLength,
+  setPage,
 }) => {
-  const handleChangeLimit = ({ target }) => {
-    setLimit(target.value)
-  }
+  const MAX_PAGE = Math.ceil(totalUserLength / limit)
+  const handleChangeLimit = useCallback(
+    ({ target }) => {
+      setLimit(target.value)
+    },
+    [setLimit],
+  )
+
+  useEffect(() => {
+    setPage(page > MAX_PAGE ? MAX_PAGE : page)
+  }, [MAX_PAGE])
 
   return (
     <Toolbar sx={{ justifyContent: 'space-between' }}>
-      <Form onSubmit={handleSearch}>
+      <Form onSubmit={handleSearchSubmit}>
         <Stack direction="row" spacing={1}>
           <TextField
             placeholder="Enter"
@@ -60,11 +69,7 @@ const UserListBottomToolbar = ({
           </FormControl>
         </Box>
 
-        <Pagination
-          count={Math.ceil(totalUserLength / limit)}
-          page={page}
-          onChange={handleChangePage}
-        />
+        <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} />
       </Box>
     </Toolbar>
   )

@@ -51,7 +51,7 @@ const UserList = () => {
     }
   }, [concatUserFunc, limit, page])
 
-  const handleSearch = useCallback(
+  const handleSearchSubmit = useCallback(
     async e => {
       e.preventDefault()
       if (!searchInputData) {
@@ -83,11 +83,7 @@ const UserList = () => {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <UserListTableToolbar
-          selected={selected}
-          setSearchInputData={setSearchInputData}
-          handleSearch={handleSearch}
-        />
+        <UserListTableToolbar selected={selected} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -99,13 +95,14 @@ const UserList = () => {
           </Table>
         </TableContainer>
         <UserListBottomToolbar
-          handleSearch={handleSearch}
+          handleSearchSubmit={handleSearchSubmit}
           setSearchInputData={setSearchInputData}
           page={page}
           handleChangePage={handleChangePage}
           setLimit={setLimit}
           limit={limit}
           totalUserLength={totalUserLength}
+          setPage={setPage}
         />
       </Paper>
       <FormControlLabel
