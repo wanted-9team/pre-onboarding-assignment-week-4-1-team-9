@@ -1,4 +1,4 @@
-export const findEqualUuidFunc = (user, userSettings) => {
+export const findEqualUuid = (user, userSettings) => {
   const { is_active, allow_marketing_push, is_staff } = userSettings.find(
     settings => settings.uuid === user.uuid,
   )
