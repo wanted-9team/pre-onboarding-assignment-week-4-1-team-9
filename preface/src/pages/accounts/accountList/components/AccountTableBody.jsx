@@ -50,7 +50,7 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
               </TableCell>
               <TableCell align="right">{toBrokerName(row.broker_id)}</TableCell>
               <TableCell align="right">
-                <Link to={`/main/${row.id}`}>{row.number}</Link>
+                <Link to={`/main/accountlist/${row.id}`}>{row.number}</Link>
               </TableCell>
               <TableCell align="right">{toStatusString(row.status)}</TableCell>
               <TableCell align="right">{row.name}</TableCell>
