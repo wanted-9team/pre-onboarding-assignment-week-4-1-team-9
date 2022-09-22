@@ -1,4 +1,4 @@
-const Comparator = {
+const comparator = {
   descendingComparator: function (a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
       return -1
@@ -10,9 +10,9 @@ const Comparator = {
   },
   getComparator: (order, orderBy) => {
     return order === 'desc'
-      ? (a, b) => Comparator.descendingComparator(a, b, orderBy)
-      : (a, b) => -Comparator.descendingComparator(a, b, orderBy)
+      ? (a, b) => comparator.descendingComparator(a, b, orderBy)
+      : (a, b) => -comparator.descendingComparator(a, b, orderBy)
   },
 }
 
-export default Comparator
+export default comparator
