@@ -1,11 +1,13 @@
 import React from 'react'
 import Sider from 'components/Sider/Sider'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import { styled } from '@mui/material'
 import Header from 'components/Header/Header'
 import Footer from 'components/Footer/Footer'
+import { storage } from 'utils/storage'
 
 function Main() {
+  if (!storage.get()) return <Navigate to="/" replace />
   return (
     <MainContainer>
       <Sider />
