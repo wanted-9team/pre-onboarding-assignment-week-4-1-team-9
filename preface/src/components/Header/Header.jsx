@@ -1,5 +1,5 @@
-import { styled } from '@mui/material'
 import React from 'react'
+import { styled } from '@mui/material'
 
 function Header() {
   return <HeaderContainer>Header</HeaderContainer>
@@ -8,9 +8,11 @@ function Header() {
 export default Header
 
 const HeaderContainer = styled('div')({
-  width: '100%',
-  height: 80,
+  position: 'fixed',
+  top: 0,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  width: '80%',
+  height: 80,
 })
