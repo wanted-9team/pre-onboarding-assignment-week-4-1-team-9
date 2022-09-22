@@ -16,6 +16,10 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
   }
 
   const handleSelectUser = user => {
+    if (selected.uuid === user.uuid) {
+      setSelected({})
+      return
+    }
     setSelected(user)
   }
 
@@ -42,7 +46,13 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
                   name="checkbox-buttons"
                 />
               </TableCell>
-              <TableCell id={labelId} scope="row" align="center">
+              <TableCell
+                id={labelId}
+                scope="row"
+                align="center"
+                onClick={() => goUserDetails(user)}
+                sx={{ cursor: 'pointer' }}
+              >
                 {user.name}
               </TableCell>
               <TableCell align="center">{user.accountList.length}</TableCell>
@@ -54,11 +64,6 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
               <TableCell align="center">{user.allow_marketing_push ? 'Yes' : 'No'}</TableCell>
               <TableCell align="center">{toLocaleDateFunc(user.created_at)}</TableCell>
               <TableCell align="center">{transLoginTimeFunc(user.last_login)}</TableCell>
-              <TableCell align="center">
-                <Button variant="outlined" size="small" onClick={() => goUserDetails(user)}>
-                  상세 보기
-                </Button>
-              </TableCell>
             </TableRow>
           )
         )

@@ -10,11 +10,10 @@ const UserListTableHead = () => {
       <TableRow>
         <TableCell padding="checkbox" align="center" />
         {HEAD_CELLS.map(headCell => (
-          <TableCell key={headCell.id} align="center" padding="normal">
+          <TableCell key={headCell.id} align="center" padding="normal" sx={{ minWidth: '50px' }}>
             {headCell.label}
           </TableCell>
         ))}
-        <TableCell align="center" />
       </TableRow>
     </TableHead>
   )

@@ -12,7 +12,7 @@ import UserListTableHead from './components/UserListTableHead'
 import UserListTableBody from './components/UserListTableBody'
 import UserListBottomToolbar from './components/UserListBottomToolbar'
 import { getUserList, getUserSetting, getAccounts, searchUsers, getTotalUserList } from 'api'
-import { findEqualUuidFunc, findEqualUserId } from 'utils/findEqualData'
+import { findEqualUuid, findEqualUserId } from 'utils/findEqualData'
 
 const UserList = () => {
   const [page, setPage] = useState(1)
@@ -30,7 +30,7 @@ const UserList = () => {
       .filter(user => user.uuid)
       .map(user => ({
         ...user,
-        ...findEqualUuidFunc(user, userSettings),
+        ...findEqualUuid(user, userSettings),
         ...findEqualUserId(user, accountList),
       }))
     setUserData(newUserData)
@@ -72,13 +72,13 @@ const UserList = () => {
     fetchUserData()
   }, [page, limit])
 
-  const handleChangePage = (_, newPage) => {
+  const handleChangePage = useCallback((_, newPage) => {
     setPage(newPage)
-  }
+  }, [])
 
-  const handleChangeDense = ({ target }) => {
+  const handleChangeDense = useCallback(({ target }) => {
     setDense(target.checked)
-  }
+  }, [])
 
   return (
     <Box sx={{ width: '100%' }}>
