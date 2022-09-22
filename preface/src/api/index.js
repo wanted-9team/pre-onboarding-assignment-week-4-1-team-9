@@ -91,8 +91,8 @@ export const editUser = async editedData => {
   return await Axios.put('users', bodyData)
 }
 
-export const deleteUser = async uuid => {
-  return await Axios.delete(`users?uuid=${uuid}`)
+export const deleteUser = async id => {
+  return await Axios.delete(`users/${id}`)
 }
 
 export const getUserSetting = async () => {
