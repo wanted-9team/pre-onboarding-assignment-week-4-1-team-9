@@ -6,6 +6,7 @@ import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
 import { toLocaleDateFunc, transLoginTimeFunc } from 'utils/transDate'
 import { maskingPhoneNumber } from 'utils/maskingNumber'
+import { maskingName } from 'utils/maskingName'
 import { useNavigate } from 'react-router-dom'
 
 const UserListTableBody = ({ userData, selected, setSelected }) => {
@@ -43,7 +44,7 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
                 />
               </TableCell>
               <TableCell id={labelId} scope="row" align="center">
-                {user.name}
+                {maskingName(user.name)}
               </TableCell>
               <TableCell align="center">{user.accountList.length}</TableCell>
               <TableCell align="center">{user.email}</TableCell>
