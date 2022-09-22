@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import Stack from '@mui/material/Stack'
 import { alpha } from '@mui/material/styles'
 
-import FilterIcon from './FilterIcon'
+import FilterSelect from './FilterSelect'
 
 function UserListTableToolbar({ selected }) {
   return (
@@ -39,7 +39,7 @@ function UserListTableToolbar({ selected }) {
         </Tooltip>
       ) : (
         <Stack direction="row" spacing={2}>
-          <FilterIcon />
+          <FilterSelect />
         </Stack>
       )}
     </Toolbar>
