@@ -12,9 +12,10 @@ const FilterSelect = () => {
   const handleFilterUser = ({ target }) => {
     setFilterUser(target.value)
   }
-  useEffect(() => {
-    console.log(filterUser)
-  }, [filterUser])
+  // useEffect(() => {
+  //   console.log(filterUser)
+  // }, [filterUser])
+
   return (
     <Box sx={{ width: 120 }}>
       <FormControl fullWidth>

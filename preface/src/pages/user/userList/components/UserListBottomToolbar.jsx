@@ -34,7 +34,12 @@ const UserListBottomToolbar = ({
   }, [MAX_PAGE])
 
   return (
-    <Toolbar sx={{ justifyContent: 'space-between' }}>
+    <Toolbar
+      sx={{
+        justifyContent: 'space-between',
+        flexDirection: { xs: 'column', sm: 'column', md: 'column', lg: 'row' },
+      }}
+    >
       <Form onSubmit={handleSearchSubmit}>
         <Stack direction="row" spacing={1}>
           <TextField
@@ -43,12 +48,18 @@ const UserListBottomToolbar = ({
             type="text"
             onChange={({ target }) => setSearchInputData(target.value)}
           />
-          <Button variant="contained" size="small" disableElevation>
+          <Button variant="contained" disableElevation>
             검색
           </Button>
         </Stack>
       </Form>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'column', md: 'column', lg: 'row' },
+          alignItems: 'center',
+        }}
+      >
         <Box sx={{ maxWidth: 120, minWidth: 100 }}>
           <FormControl fullWidth>
             <InputLabel id="limit-select-label" size="small">
@@ -69,7 +80,7 @@ const UserListBottomToolbar = ({
           </FormControl>
         </Box>
 
-        <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} />
+        <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} size="small" />
       </Box>
     </Toolbar>
   )
