@@ -85,7 +85,6 @@ export default function AccountList() {
   const [page, setPage] = useState(0)
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-
   const [rows, setRows] = useState([])
 
   const fetchAccountsData = async () => {

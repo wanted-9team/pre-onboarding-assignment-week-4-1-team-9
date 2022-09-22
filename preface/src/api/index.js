@@ -7,8 +7,9 @@ const SERVER_URL =
 
 // 로그인 기능이 구현이 안됐으므로 postman으로 로그인 한 번 한 뒤 response 받은 token으로 대체하세요!
 const ACCESS_TOKEN =
-  storage.get().access_token ||
-  `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld2ZhY2VAZGNvLmNvbSIsImlhdCI6MTY2Mzc4NDY3MSwiZXhwIjoxNjYzNzg4MjcxLCJzdWIiOiIxMDIifQ.o7DEOaG_3pA746zF-gDFq8aIuddzUSycouQesZq60Dw`
+
+  storage.get() ||
+  `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld2ZhY2VAZGNvLmNvbSIsImlhdCI6MTY2Mzc5MDk4MCwiZXhwIjoxNjYzNzk0NTgwLCJzdWIiOiIxMDIifQ.E9WjwW3bt-cDIUFmNfrbsBNpUZf9yN6gO2hzgHYbEVA`
 
 const Axios = axios.create({
   baseURL: SERVER_URL,
@@ -27,17 +28,29 @@ export const getAccounts = async () => {
   return await Axios.get('/accounts')
 }
 
+export const getAccountDetail = async id => {
+  return await Axios.get(`/accounts/${id}`)
+}
+
 export const editAccount = async editedData => {
   const bodyData = JSON.stringify(editedData)
   return await Axios.put('accounts', bodyData)
 }
 
-export const deleteAccount = async uuid => {
-  return await Axios.delete(`accounts?uuid=${uuid}`)
+export const deleteAccount = async id => {
+  return await Axios.delete(`accounts/${id}`)
 }
 
-export const getUserList = async () => {
+export const getUserList = async (_page, _limit) => {
+  return await Axios.get(`users?_page=${_page}&_limit=${_limit}&_order=asc&_sort=id`)
+}
+
+export const getTotalUserList = async () => {
   return await Axios.get('users')
+}
+
+export const getUserDetail = async id => {
+  return await Axios.get(`users/${id}`)
 }
 
 export const addUser = async userData => {

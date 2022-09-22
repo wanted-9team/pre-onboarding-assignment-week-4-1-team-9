@@ -1,0 +1,70 @@
+import React from 'react'
+import TableBody from '@mui/material/TableBody'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+import Checkbox from '@mui/material/Checkbox'
+import Button from '@mui/material/Button'
+import { toLocaleDateFunc, transLoginTimeFunc } from 'utils/transDate'
+import { maskingPhoneNumber } from 'utils/maskingNumber'
+import { useNavigate } from 'react-router-dom'
+
+const UserListTableBody = ({ userData, selected, setSelected }) => {
+  const navigate = useNavigate()
+
+  const goUserDetails = user => {
+    navigate(`${user.id}`, { state: user })
+  }
+
+  const handleSelectUser = user => {
+    setSelected(user)
+  }
+
+  const isSelected = (selected, userUuid) => selected === userUuid
+
+  return (
+    <TableBody>
+      {userData.map((user, index) => {
+        const labelId = `enhanced-table-checkbox-${index}`
+        const isItemSelected = isSelected(selected.uuid, user.uuid)
+        return (
+          user.uuid && (
+            <TableRow
+              hover
+              tabIndex={-1}
+              key={user.uuid}
+              aria-checked={isItemSelected}
+              selected={isItemSelected}
+            >
+              <TableCell padding="checkbox" role={'checkbox'}>
+                <Checkbox
+                  checked={isItemSelected}
+                  onChange={() => handleSelectUser(user)}
+                  name="checkbox-buttons"
+                />
+              </TableCell>
+              <TableCell id={labelId} scope="row" align="center">
+                {user.name}
+              </TableCell>
+              <TableCell align="center">{user.accountList.length}</TableCell>
+              <TableCell align="center">{user.email}</TableCell>
+              <TableCell align="center">{maskingPhoneNumber(user.phone_number)}</TableCell>
+              <TableCell align="center">{toLocaleDateFunc(user.birth_date)}</TableCell>
+              <TableCell align="center">{user.gender_origin}</TableCell>
+              <TableCell align="center">{user.is_active ? 'Yes' : 'No'}</TableCell>
+              <TableCell align="center">{user.allow_marketing_push ? 'Yes' : 'No'}</TableCell>
+              <TableCell align="center">{toLocaleDateFunc(user.created_at)}</TableCell>
+              <TableCell align="center">{transLoginTimeFunc(user.last_login)}</TableCell>
+              <TableCell align="center">
+                <Button variant="outlined" size="small" onClick={() => goUserDetails(user)}>
+                  상세 보기
+                </Button>
+              </TableCell>
+            </TableRow>
+          )
+        )
+      })}
+    </TableBody>
+  )
+}
+
+export default UserListTableBody
