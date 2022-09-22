@@ -7,9 +7,8 @@ const SERVER_URL =
 
 // 로그인 기능이 구현이 안됐으므로 postman으로 로그인 한 번 한 뒤 response 받은 token으로 대체하세요!
 const ACCESS_TOKEN =
-
   storage.get() ||
-  `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld2ZhY2VAZGNvLmNvbSIsImlhdCI6MTY2Mzc5MDk4MCwiZXhwIjoxNjYzNzk0NTgwLCJzdWIiOiIxMDIifQ.E9WjwW3bt-cDIUFmNfrbsBNpUZf9yN6gO2hzgHYbEVA`
+  `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld2ZhY2VAZGNvLmNvbSIsImlhdCI6MTY2Mzg2Mzk2MSwiZXhwIjoxNjYzODY3NTYxLCJzdWIiOiIxMDIifQ.43M4HZPUGoOG7RWAyr2JVuenNuvuoE4oEt-8M-DP71U`
 
 const Axios = axios.create({
   baseURL: SERVER_URL,
@@ -63,8 +62,8 @@ export const editUser = async editedData => {
   return await Axios.put('users', bodyData)
 }
 
-export const deleteUser = async uuid => {
-  return await Axios.delete(`users?uuid=${uuid}`)
+export const deleteUser = async id => {
+  return await Axios.delete(`users/${id}`)
 }
 
 export const getUserSetting = async () => {
