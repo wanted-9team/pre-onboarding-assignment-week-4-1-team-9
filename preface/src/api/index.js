@@ -5,11 +5,7 @@ const BACKEND_PORT_NUMBER = process.env.REACT_APP_SERVER_PORT || '4000'
 const SERVER_URL =
   (process.env.REACT_APP_SERVER_URL || 'http://localhost:') + BACKEND_PORT_NUMBER + '/'
 
-// 로그인 기능이 구현이 안됐으므로 postman으로 로그인 한 번 한 뒤 response 받은 token으로 대체하세요!
-const ACCESS_TOKEN =
-
-  storage.get() ||
-  `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld2ZhY2VAZGNvLmNvbSIsImlhdCI6MTY2Mzc5MDk4MCwiZXhwIjoxNjYzNzk0NTgwLCJzdWIiOiIxMDIifQ.E9WjwW3bt-cDIUFmNfrbsBNpUZf9yN6gO2hzgHYbEVA`
+const ACCESS_TOKEN = storage.get()
 
 const Axios = axios.create({
   baseURL: SERVER_URL,
@@ -18,6 +14,38 @@ const Axios = axios.create({
     'Content-type': 'application/json',
   },
 })
+
+Axios.interceptors.request.use(
+  function (config) {
+    config.headers.Authorization = `Bearer ${storage.get()}`
+    return config
+  },
+  function (error) {
+    return Promise.reject(error)
+  },
+)
+
+axios.interceptors.response.use(
+  function (response) {
+    return response
+  },
+  function (error) {
+    if (error.response) {
+      const {
+        config,
+        response: { status },
+      } = error
+
+      if (status === 401) {
+        const newAccessToken = error.response.data.newAccessToken
+        storage.set(newAccessToken)
+        config.headers.Authorization = `Bearer ${storage.get()}`
+        return axios(config)
+      }
+    }
+    return Promise.reject(error)
+  },
+)
 
 export const login = async loginData => {
   const bodyData = JSON.stringify(loginData)
