@@ -11,10 +11,11 @@ import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
 import brokers from 'data/brokers.json'
 import accountStatus from 'data/accountStatus.json'
-import getKeyByValue from 'utils/getKeyByValue'
+import toStatusString from 'utils/transAccountStatus'
 import { toLocaleDateFunc } from 'utils/transDate'
 import Box from '@mui/material/Box'
-import EarningsRate from 'utils/EarningsRate'
+import getEarningsRate from 'utils/getEarningsRate'
+import getFormattedPrice from 'utils/getFormattedPrice'
 
 function AccountDetails() {
   const navigate = useNavigate()
@@ -49,9 +50,11 @@ function AccountDetails() {
           ...accountListRes.data,
           userName: userNameRes.data.name,
           broker_id: brokers[accountListRes.data.broker_id],
-          status: getKeyByValue(accountStatus, accountListRes.data.status),
+          status: toStatusString(accountListRes.data.status),
+          assets: getFormattedPrice(accountListRes.data.assets),
+          payments: getFormattedPrice(accountListRes.data.payments),
           created_at: toLocaleDateFunc(accountListRes.data.created_at),
-          earnings_rate: EarningsRate(accountListRes.data.assets, accountListRes.data.payments),
+          earnings_rate: getEarningsRate(accountListRes.data.assets, accountListRes.data.payments),
         }
         setAccountDetail(newAccountDetail)
       } catch (e) {
