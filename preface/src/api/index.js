@@ -7,7 +7,6 @@ const SERVER_URL =
 
 // 로그인 기능이 구현이 안됐으므로 postman으로 로그인 한 번 한 뒤 response 받은 token으로 대체하세요!
 const ACCESS_TOKEN =
-
   storage.get() ||
   `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ld2ZhY2VAZGNvLmNvbSIsImlhdCI6MTY2Mzc5MDk4MCwiZXhwIjoxNjYzNzk0NTgwLCJzdWIiOiIxMDIifQ.E9WjwW3bt-cDIUFmNfrbsBNpUZf9yN6gO2hzgHYbEVA`
 
@@ -33,8 +32,9 @@ export const getAccountDetail = async id => {
 }
 
 export const editAccount = async editedData => {
+  const id = editedData.id
   const bodyData = JSON.stringify(editedData)
-  return await Axios.put('accounts', bodyData)
+  return await Axios.put(`accounts/${id}`, bodyData)
 }
 
 export const deleteAccount = async id => {
