@@ -10,6 +10,7 @@ import toBrokerName from 'utils/transBroker'
 import getEarningsRate from 'utils/getEarningsRate'
 import toStatusString from 'utils/transAccountStatus'
 import getFormattedPrice from 'utils/getFormattedPrice'
+import { toLocaleDateFunc } from 'utils/transDate'
 
 function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsPerPage, onClick }) {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
@@ -46,7 +47,7 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
               </TableCell>
 
               <TableCell component="th" scope="row" padding="none" align="right">
-                {row.user_id}
+                {row.user_name}
               </TableCell>
               <TableCell align="right">{toBrokerName(row.broker_id)}</TableCell>
               <TableCell align="right">
@@ -57,8 +58,8 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
               <TableCell align="right">{getFormattedPrice(row.assets)}</TableCell>
               <TableCell align="right">{getFormattedPrice(row.payments)}</TableCell>
               <TableCell>{getEarningsRate(row.assets, row.payments)}%</TableCell>
-              <TableCell>{row.is_active ? '활성화' : '비활성화'}</TableCell>
-              <TableCell align="right">{row.created_at.split('T')[0]}</TableCell>
+              <TableCell>{row.is_active ? 'Yes' : 'No'}</TableCell>
+              <TableCell align="right">{toLocaleDateFunc(row.created_at)}</TableCell>
             </TableRow>
           )
         })}

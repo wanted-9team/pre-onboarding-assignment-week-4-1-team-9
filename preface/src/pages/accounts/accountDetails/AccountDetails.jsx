@@ -9,13 +9,18 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
+import Input from '@mui/material/Input'
+import Box from '@mui/material/Box'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
 import brokers from 'data/brokers.json'
-import accountStatus from 'data/accountStatus.json'
 import toStatusString from 'utils/transAccountStatus'
 import { toLocaleDateFunc } from 'utils/transDate'
-import Box from '@mui/material/Box'
 import getEarningsRate from 'utils/getEarningsRate'
 import getFormattedPrice from 'utils/getFormattedPrice'
+
+const ariaLabel = { 'aria-label': 'description' }
 
 function AccountDetails() {
   const navigate = useNavigate()
@@ -33,12 +38,13 @@ function AccountDetails() {
   }
 
   const onClickEditComplete = async detail => {
-    const id = detail.id
+    await editAccount(detail)
+    setEditMode(false)
   }
 
   const onClickDeleteDetail = async id => {
     await deleteAccount(id)
-    await navigate('/main')
+    await navigate(-1)
   }
 
   useEffect(() => {
@@ -49,12 +55,6 @@ function AccountDetails() {
         const newAccountDetail = {
           ...accountListRes.data,
           userName: userNameRes.data.name,
-          broker_id: brokers[accountListRes.data.broker_id],
-          status: toStatusString(accountListRes.data.status),
-          assets: getFormattedPrice(accountListRes.data.assets),
-          payments: getFormattedPrice(accountListRes.data.payments),
-          created_at: toLocaleDateFunc(accountListRes.data.created_at),
-          earnings_rate: getEarningsRate(accountListRes.data.assets, accountListRes.data.payments),
         }
         setAccountDetail(newAccountDetail)
       } catch (e) {
@@ -71,7 +71,7 @@ function AccountDetails() {
           <TableHead>
             <TableRow>
               <TableCell align="center">사용자명</TableCell>
-              <TableCell align="center">브로커 명</TableCell>
+              <TableCell align="center">증권사명</TableCell>
               <TableCell align="center">계좌 상태</TableCell>
               <TableCell align="center">계좌번호</TableCell>
               <TableCell align="center">계좌명</TableCell>
@@ -89,19 +89,121 @@ function AccountDetails() {
                   <TableCell component="th" scope="row">
                     {accountDetail?.userName}
                   </TableCell>
-                  <TableCell align="center">{accountDetail.broker_id}</TableCell>
-                  <TableCell align="center">{accountDetail.status}</TableCell>
+                  <TableCell align="center">{brokers[accountDetail.broker_id]}</TableCell>
+                  <TableCell align="center">{toStatusString(accountDetail.status)}</TableCell>
                   <TableCell align="center">{accountDetail.number}</TableCell>
                   <TableCell align="center">{accountDetail.name}</TableCell>
-                  <TableCell align="center">{accountDetail.assets}</TableCell>
-                  <TableCell align="center">{accountDetail.payments}</TableCell>
+                  <TableCell align="center">{getFormattedPrice(accountDetail.assets)}</TableCell>
+                  <TableCell align="center">{getFormattedPrice(accountDetail.payments)}</TableCell>
+                  <TableCell align="center">{accountDetail.is_active ? 'YES' : 'NO'}</TableCell>
                   <TableCell align="center">
-                    {accountDetail.is_active ? '사용중' : '사용X'}
+                    {getEarningsRate(accountDetail.assets, accountDetail.payments)}
                   </TableCell>
-                  <TableCell align="center">{accountDetail.earnings_rate}</TableCell>
-                  <TableCell align="center">{accountDetail.created_at}</TableCell>
+                  <TableCell align="center">{toLocaleDateFunc(accountDetail.created_at)}</TableCell>
                 </>
-              ) : null}
+              ) : (
+                <>
+                  <TableCell align="center">
+                    <Input
+                      name="userName"
+                      defaultValue={accountDetail.userName}
+                      inputProps={ariaLabel}
+                      onChange={onChangeHandler}
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Select
+                      sx={{ width: '100%' }}
+                      name="broker_id"
+                      onChange={onChangeHandler}
+                      defaultValue={accountDetail.broker_id}
+                    >
+                      <MenuItem value="209">유안타증권</MenuItem>
+                      <MenuItem value="218">현대증권</MenuItem>
+                      <MenuItem value="230">미래에셋증권</MenuItem>
+                      <MenuItem value="238">대우증권</MenuItem>
+                      <MenuItem value="240">삼성증권</MenuItem>
+                      <MenuItem value="243">한국투자증권</MenuItem>
+                      <MenuItem value="247">우리투자증권</MenuItem>
+                      <MenuItem value="261">교보증권</MenuItem>
+                      <MenuItem value="262">하이투자증권</MenuItem>
+                      <MenuItem value="263">HMC투자증권</MenuItem>
+                      <MenuItem value="264">키움증권</MenuItem>
+                      <MenuItem value="265">이베스트투자증권</MenuItem>
+                      <MenuItem value="266">SK증권</MenuItem>
+                      <MenuItem value="267">대신증권</MenuItem>
+                      <MenuItem value="268">아이엠투자증권</MenuItem>
+                      <MenuItem value="269">한화투자증권</MenuItem>
+                      <MenuItem value="270">하나대투자증권</MenuItem>
+                      <MenuItem value="279">동부증권</MenuItem>
+                      <MenuItem value="280">유진투자증권</MenuItem>
+                      <MenuItem value="288">카카오페이증권</MenuItem>
+                      <MenuItem value="287">메리츠종합금융증권</MenuItem>
+                      <MenuItem value="290">부국증권</MenuItem>
+                      <MenuItem value="291">신영증권</MenuItem>
+                      <MenuItem value="292">LIG투자증권</MenuItem>
+                      <MenuItem value="271">토스증권</MenuItem>
+                    </Select>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Select
+                      sx={{ width: '100%' }}
+                      name="status"
+                      onChange={onChangeHandler}
+                      defaultValue={accountDetail.status}
+                    >
+                      <MenuItem value="1">입금대기</MenuItem>
+                      <MenuItem value="2">운용중</MenuItem>
+                      <MenuItem value="3">투자중지</MenuItem>
+                      <MenuItem value="4">해지</MenuItem>
+                      <MenuItem value="9999">관리자확인필요</MenuItem>
+                    </Select>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Input
+                      name="number"
+                      defaultValue={accountDetail.number}
+                      inputProps={ariaLabel}
+                      onChange={onChangeHandler}
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Input
+                      name="name"
+                      defaultValue={accountDetail.name}
+                      inputProps={ariaLabel}
+                      onChange={onChangeHandler}
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Input
+                      name="assets"
+                      defaultValue={accountDetail.assets}
+                      inputProps={ariaLabel}
+                      onChange={onChangeHandler}
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Input
+                      name="payments"
+                      defaultValue={accountDetail.payments}
+                      inputProps={ariaLabel}
+                      onChange={onChangeHandler}
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Select
+                      sx={{ width: '100%' }}
+                      name="is_active"
+                      onChange={onChangeHandler}
+                      defaultValue={accountDetail.is_active}
+                    >
+                      <MenuItem value={true}>YES</MenuItem>
+                      <MenuItem value={false}>NO</MenuItem>
+                    </Select>
+                  </TableCell>
+                </>
+              )}
             </TableRow>
           </TableBody>
         </Table>
@@ -127,7 +229,14 @@ function AccountDetails() {
         ) : (
           <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
             <Box>
-              <Button variant="contained">저장</Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  onClickEditComplete(accountDetail)
+                }}
+              >
+                저장
+              </Button>
             </Box>
             <Box>
               <Button variant="contained" color="error" onClick={onClickEditMode}>
