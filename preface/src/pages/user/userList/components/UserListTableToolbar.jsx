@@ -9,13 +9,13 @@ import { alpha } from '@mui/material/styles'
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import FilterSelect from './FilterSelect'
 import Button from '@mui/material/Button'
-import UserFormDialog from './UserFormDialog'
-
+import UserFormDialog from './userFormDialog/UserFormDialog'
+import { deleteUser } from 'api'
 const UserListTableToolbar = ({ selected }) => {
   const [openDialog, setOpenDialog] = useState(false)
 
-  const handleUserDelete = () => {
-    console.log('delete')
+  const handleUserDelete = async () => {
+    await deleteUser(selected.id)
   }
   const handleClickOpenModal = () => {
     setOpenDialog(true)
