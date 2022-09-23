@@ -6,6 +6,7 @@ import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
 import { toLocaleDateFunc, transLoginTimeFunc } from 'utils/transDate'
 import { maskingPhoneNumber } from 'utils/maskingNumber'
+import { maskingName } from 'utils/maskingName'
 import { useNavigate } from 'react-router-dom'
 
 const UserListTableBody = ({ userData, selected, setSelected }) => {
@@ -16,6 +17,10 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
   }
 
   const handleSelectUser = user => {
+    if (selected.uuid === user.uuid) {
+      setSelected({})
+      return
+    }
     setSelected(user)
   }
 
@@ -42,8 +47,14 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
                   name="checkbox-buttons"
                 />
               </TableCell>
-              <TableCell id={labelId} scope="row" align="center">
-                {user.name}
+              <TableCell
+                id={labelId}
+                scope="row"
+                align="center"
+                onClick={() => goUserDetails(user)}
+                sx={{ cursor: 'pointer' }}
+              >
+                {maskingName(user.name)}
               </TableCell>
               <TableCell align="center">{user.accountList.length}</TableCell>
               <TableCell align="center">{user.email}</TableCell>
@@ -54,11 +65,6 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
               <TableCell align="center">{user.allow_marketing_push ? 'Yes' : 'No'}</TableCell>
               <TableCell align="center">{toLocaleDateFunc(user.created_at)}</TableCell>
               <TableCell align="center">{transLoginTimeFunc(user.last_login)}</TableCell>
-              <TableCell align="center">
-                <Button variant="outlined" size="small" onClick={() => goUserDetails(user)}>
-                  상세 보기
-                </Button>
-              </TableCell>
             </TableRow>
           )
         )
