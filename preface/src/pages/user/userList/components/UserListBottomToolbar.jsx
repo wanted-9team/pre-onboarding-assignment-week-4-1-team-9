@@ -10,25 +10,39 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setPagination } from 'redux/slice/PageSlice'
+import { GET_SEARCH_USER, GET_USER_LIST_PAGE } from 'redux/saga/actionType'
 
 const UserListBottomToolbar = ({
-  handleSearchSubmit,
-  setSearchInputData,
+  searchInputText,
+  setSearchInputText,
   page,
   handleChangePage,
   limit,
   setLimit,
-  totalUserLength,
 }) => {
+  const totalUserLength = useSelector(state => state.userList.totalResults)
   const MAX_PAGE = Math.ceil(totalUserLength / limit)
   const dispatch = useDispatch()
+
   const handleChangeLimit = useCallback(
     ({ target }) => {
       setLimit(target.value)
     },
     [setLimit],
+  )
+
+  const handleSearchSubmit = useCallback(
+    async e => {
+      e.preventDefault()
+      if (!searchInputText) {
+        dispatch({ type: GET_USER_LIST_PAGE, payload: { limit, page } })
+        return
+      }
+      dispatch({ type: GET_SEARCH_USER, payload: { searchInputText } })
+    },
+    [searchInputText, dispatch, limit, page],
   )
 
   useEffect(() => {
@@ -48,7 +62,8 @@ const UserListBottomToolbar = ({
             placeholder="Enter"
             size="small"
             type="text"
-            onChange={({ target }) => setSearchInputData(target.value)}
+            value={searchInputText}
+            onChange={({ target }) => setSearchInputText(target.value)}
           />
           <Button variant="contained" disableElevation>
             검색
