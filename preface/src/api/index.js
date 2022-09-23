@@ -71,7 +71,7 @@ export const deleteAccount = async id => {
 }
 
 export const getUserList = async (_page, _limit) => {
-  return await Axios.get(`users?_page=${_page}&_limit=${_limit}&_order=asc&_sort=name`)
+  return await Axios.get(`users?_page=${_page}&_limit=${_limit}&_order=asc&_sort=id`)
 }
 
 export const getTotalUserList = async () => {
@@ -89,7 +89,7 @@ export const addUser = async userData => {
 
 export const editUser = async editedData => {
   const bodyData = JSON.stringify(editedData)
-  return await Axios.put('users', bodyData)
+  return await Axios.put(`users/${editedData.id}`, bodyData)
 }
 
 export const deleteUser = async id => {

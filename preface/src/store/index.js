@@ -8,7 +8,6 @@ import createSagaMiddleware from '@redux-saga/core'
 import UserListSlice from 'redux/slice/UserListSlice'
 import SnackBarSlice from 'redux/slice/SnackBarSlice'
 import { rootSaga } from 'redux/saga'
-import logger from 'redux-logger'
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -21,7 +20,7 @@ const persistAuth = persistReducer(persistConfig, authReducer)
 
 export const store = configureStore({
   reducer: { auth: persistAuth, page: PageSlice, userList: UserListSlice, snackbar: SnackBarSlice },
-  middleware: [logger, sagaMiddleware, thunk],
+  middleware: [sagaMiddleware, thunk],
 })
 sagaMiddleware.run(rootSaga)
 export const persistor = persistStore(store)
