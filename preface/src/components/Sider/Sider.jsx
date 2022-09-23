@@ -3,14 +3,14 @@ import { styled } from '@mui/material'
 import NavMenuGroup from './components/NavMenuGroup'
 import LogoutButton from './components/LogoutButton'
 
-const NAV_CONFIG = [
+export const NAV_CONFIG = [
   {
     title: '계좌목록',
-    path: '/main/accountList',
+    path: '/main/accountlist',
   },
   {
     title: '사용자 정보',
-    path: '/main/userList',
+    path: '/main/userlist',
   },
 ]
 

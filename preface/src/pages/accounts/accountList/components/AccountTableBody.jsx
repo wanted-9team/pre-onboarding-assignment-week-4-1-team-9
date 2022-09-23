@@ -5,7 +5,7 @@ import TableRow from '@mui/material/TableRow'
 import Checkbox from '@mui/material/Checkbox'
 
 import { Link } from 'react-router-dom'
-import comparator from 'utils/Comparator'
+import comparator from 'utils/comparator'
 import toBrokerName from 'utils/transBroker'
 import getEarningsRate from 'utils/getEarningsRate'
 import toStatusString from 'utils/transAccountStatus'
