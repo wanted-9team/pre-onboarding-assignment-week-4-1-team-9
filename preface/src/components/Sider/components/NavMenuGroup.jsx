@@ -14,7 +14,7 @@ const NavMenuGroup = ({ menuList }) => {
       {menuList.map((menuItem, index) => (
         <ListItemButton
           key={index}
-          selected={location.pathname === menuItem.path}
+          selected={location.pathname.includes(menuItem.path)}
           onClick={() => movePage(menuItem.path)}
         >
           <ListItemText primary={menuItem.title} />
