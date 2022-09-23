@@ -9,7 +9,7 @@ import { alpha } from '@mui/material/styles'
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import FilterSelect from './FilterSelect'
 import Button from '@mui/material/Button'
-import UserFormDialog from './UserFormDialog'
+import UserFormDialog from './userFormDialog/UserFormDialog'
 
 const UserListTableToolbar = ({ selected }) => {
   const [openDialog, setOpenDialog] = useState(false)
