@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { styled } from '@mui/material'
+import { Box, styled } from '@mui/material'
 import Button from '@mui/material/Button'
 import InputCommon from './components/InputCommon'
 import { login } from 'api'
@@ -12,7 +12,8 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const loginHandler = async () => {
+  const loginHandler = async event => {
+    event.preventDefault()
     const response = await login(inputValue)
     storage.set(response.data.accessToken)
     dispatch({ type: 'Auth/getAuth', payload: response.data.user.email })
@@ -38,7 +39,12 @@ const Login = () => {
           />
         </InputContainer>
       </InputSection>
-      <Button onClick={loginHandler} sx={{ width: '100%', height: 50 }} variant="contained">
+      <Button
+        type="submit"
+        // onClick={loginHandler}
+        sx={{ width: '100%', height: 50 }}
+        variant="contained"
+      >
         로그인
       </Button>
     </LoginContainer>
