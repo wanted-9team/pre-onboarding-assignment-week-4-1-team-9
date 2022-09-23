@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
@@ -11,12 +11,24 @@ import UserFormSelector from './UserFormSelector'
 import { EMAIL_REGEX, PHONE_REGEX } from 'utils/userFormRegex'
 import { v4 as uuidv4 } from 'uuid'
 
+import { useDispatch } from 'react-redux'
+import { ADD_USER, GET_USER_LIST_PAGE } from 'redux/saga/actionType'
+
+const timeDate = new Date()
+const initailTimeFunc = () => {
+  return timeDate.toISOString()
+}
+
 const INITIAL_USER_DATA = {
   name: '',
   email: '',
   password: '',
   phone_number: '',
   detail_address: '',
+  last_login: '',
+  created_at: '',
+  updated_at: '',
+  age: 0,
 }
 const INITIAL_BIRTH_GENDER_DATA = {
   year: '',
@@ -24,19 +36,20 @@ const INITIAL_BIRTH_GENDER_DATA = {
   day: '',
   gender_origin: '',
 }
-const UserFormDialog = ({ setOpenDialog, openDialog }) => {
+const UserFormDialog = ({ setOpenDialog, openDialog, limit, page }) => {
   const [birthAndGender, setBirthAndGender] = useState(INITIAL_BIRTH_GENDER_DATA)
   const [postDaumVisible, setPostDaumVisible] = useState(true)
   const [address, setAddress] = useState('')
   const [userData, setUserData] = useState(INITIAL_USER_DATA)
+  const dispatch = useDispatch()
+
   const handleClose = () => {
     setOpenDialog(false)
+    setUserData(INITIAL_USER_DATA)
+    setBirthAndGender(INITIAL_BIRTH_GENDER_DATA)
+    setAddress('')
   }
 
-  useEffect(() => {
-    console.log(birthAndGender)
-    console.log(userData)
-  }, [birthAndGender, userData])
   const handlePostDaumVisible = () => {
     setPostDaumVisible(!postDaumVisible)
   }
@@ -49,8 +62,24 @@ const UserFormDialog = ({ setOpenDialog, openDialog }) => {
     const { name, value } = target
     setBirthAndGender(prev => ({ ...prev, [name]: value }))
   }, [])
-  const handlePostUser = () => {
-    const postBody = { ...birthAndGender }
+
+  const handlePostUser = async e => {
+    e.preventDefault()
+    const birth_date = new Date(birthAndGender.year, birthAndGender.month, birthAndGender.day)
+    const postBody = {
+      ...userData,
+      birth_date: birth_date.toISOString(),
+      address,
+      uuid: uuidv4(),
+      last_login: initailTimeFunc(),
+      created_at: initailTimeFunc(),
+      updated_at: initailTimeFunc(),
+      age: timeDate.getUTCFullYear() - birth_date.getUTCFullYear() + 1,
+      gender_origin: birthAndGender.gender_origin,
+    }
+    dispatch({ type: ADD_USER, payload: postBody })
+    dispatch({ type: GET_USER_LIST_PAGE, payload: { page, limit } })
+    handleClose()
   }
   return (
     <Dialog open={openDialog} onClose={handleClose}>
@@ -68,6 +97,7 @@ const UserFormDialog = ({ setOpenDialog, openDialog }) => {
               fullWidth
               variant="standard"
               onChange={handleUserData}
+              value={userData.name}
               error={userData.name.length === 0}
             />
             <TextField
@@ -80,6 +110,7 @@ const UserFormDialog = ({ setOpenDialog, openDialog }) => {
               variant="standard"
               placeholder="example@mail.com"
               onChange={handleUserData}
+              value={userData.email}
               error={!EMAIL_REGEX.test(userData.email)}
             />
             <TextField
@@ -91,10 +122,10 @@ const UserFormDialog = ({ setOpenDialog, openDialog }) => {
               fullWidth
               variant="standard"
               onChange={handleUserData}
-              error={userData.password.length <= 6}
+              value={userData.password}
+              error={userData.password.length < 6}
             />
             <TextField
-              required
               margin="dense"
               id="phone_number"
               label="전화번호"
@@ -103,13 +134,13 @@ const UserFormDialog = ({ setOpenDialog, openDialog }) => {
               variant="standard"
               placeholder="010-1234-5678"
               onChange={handleUserData}
+              value={userData.phone_number}
               error={!PHONE_REGEX.test(userData.phone_number)}
             />
             <Stack direction="row" alignItems="center" spacing={2}>
               <TextField
                 aria-readonly
                 value={address}
-                required
                 margin="dense"
                 id="address"
                 label="주소"
@@ -134,6 +165,7 @@ const UserFormDialog = ({ setOpenDialog, openDialog }) => {
               fullWidth
               variant="standard"
               onChange={handleUserData}
+              value={userData.detail_address}
             />
             <UserFormSelector
               birthAndGender={birthAndGender}

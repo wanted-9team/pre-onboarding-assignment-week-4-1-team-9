@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
@@ -7,15 +8,25 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import Stack from '@mui/material/Stack'
 import { alpha } from '@mui/material/styles'
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
-import FilterSelect from './FilterSelect'
 import Button from '@mui/material/Button'
+
+import FilterSelect from './FilterSelect'
 import UserFormDialog from './userFormDialog/UserFormDialog'
 
-const UserListTableToolbar = ({ selected }) => {
+import { DELETE_USER, GET_USER_LIST_PAGE } from 'redux/saga/actionType'
+import { useDispatch } from 'react-redux'
+
+const UserListTableToolbar = ({ selected, setSelected, page, limit }) => {
+  const dispatch = useDispatch()
   const [openDialog, setOpenDialog] = useState(false)
 
   const handleUserDelete = () => {
-    console.log('delete')
+    const confirmMessage = window.confirm('정말 삭제 하시겠습니까?')
+    if (confirmMessage) {
+      dispatch({ type: DELETE_USER, payload: selected.id })
+      dispatch({ type: GET_USER_LIST_PAGE, payload: { page, limit } })
+      setSelected({})
+    }
   }
   const handleClickOpenModal = () => {
     setOpenDialog(true)
@@ -67,7 +78,12 @@ const UserListTableToolbar = ({ selected }) => {
           사용자 등록
         </Button>
       )}
-      <UserFormDialog setOpenDialog={setOpenDialog} openDialog={openDialog} />
+      <UserFormDialog
+        setOpenDialog={setOpenDialog}
+        openDialog={openDialog}
+        limit={limit}
+        page={page}
+      />
     </Toolbar>
   )
 }

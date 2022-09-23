@@ -5,9 +5,7 @@ const BACKEND_PORT_NUMBER = process.env.REACT_APP_SERVER_PORT || '4000'
 const SERVER_URL =
   (process.env.REACT_APP_SERVER_URL || 'http://localhost:') + BACKEND_PORT_NUMBER + '/'
 
-
 const ACCESS_TOKEN = storage.get()
-
 
 const Axios = axios.create({
   baseURL: SERVER_URL,
@@ -73,7 +71,7 @@ export const deleteAccount = async id => {
 }
 
 export const getUserList = async (_page, _limit) => {
-  return await Axios.get(`users?_page=${_page}&_limit=${_limit}&_order=asc&_sort=id`)
+  return await Axios.get(`users?_page=${_page}&_limit=${_limit}&_order=asc&_sort=name`)
 }
 
 export const getTotalUserList = async () => {

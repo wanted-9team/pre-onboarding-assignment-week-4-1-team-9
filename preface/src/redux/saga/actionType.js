@@ -1,0 +1,7 @@
+export const GET_TOTAL_USER = 'GET_TOTAL_USER'
+export const GET_USER_LIST_PAGE = 'GET_USER_LIST_PAGE'
+export const GET_USER_SETTINGS = 'GET_USER_SETTINGS'
+export const GET_USER_ACCOUNTS = 'GET_USER_ACCOUNTS'
+export const GET_SEARCH_USER = 'GET_SEARCH_USER'
+export const ADD_USER = 'ADD_USER'
+export const DELETE_USER = 'DELETE_USER'
