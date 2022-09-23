@@ -26,6 +26,7 @@ const MainContainer = styled('div')({
   display: 'flex',
   paddingLeft: 250,
   overflow: 'hidden',
+  margin: 0,
 })
 
 const MainSection = styled('section')({
