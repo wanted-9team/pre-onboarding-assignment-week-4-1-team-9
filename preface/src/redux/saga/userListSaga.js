@@ -7,6 +7,7 @@ import {
   getTotalUserList,
   addUser,
   deleteUser,
+  editUser,
 } from 'api'
 import {
   GET_TOTAL_USER,
@@ -14,6 +15,7 @@ import {
   GET_SEARCH_USER,
   ADD_USER,
   DELETE_USER,
+  EDIT_USER,
 } from './actionType'
 import {
   getUserListAction,
@@ -40,6 +42,7 @@ function* getTotalUserSaga() {
 
 function* getUserListSaga({ payload }) {
   const { page, limit } = payload
+  yield delay(100)
   try {
     const userList = yield call(getUserList, page, limit)
     yield put(getUserListAction(userList.data))
@@ -91,6 +94,20 @@ function* addUserSaga({ payload }) {
   }
 }
 
+function* editUserSaga({ payload }) {
+  try {
+    const editRes = yield call(editUser, payload)
+    yield put(setSuccessSnackAction(true))
+    yield put(setMessageAction(editRes.statusText))
+  } catch (err) {
+    yield put(setFailureSnackAction(true))
+    yield put(setMessageAction(err.message))
+  } finally {
+    yield delay(3000)
+    yield put(setSuccessSnackAction(false))
+    yield put(setFailureSnackAction(false))
+  }
+}
 function* deleteUserSaga({ payload }) {
   try {
     const deleteRes = yield call(deleteUser, payload)
@@ -119,4 +136,5 @@ export function* watchUserAsync() {
   yield takeEvery(ADD_USER, getTotalUserSaga)
   yield takeEvery(DELETE_USER, deleteUserSaga)
   yield takeEvery(DELETE_USER, getTotalUserSaga)
+  yield takeEvery(EDIT_USER, editUserSaga)
 }
