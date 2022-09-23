@@ -1,6 +1,20 @@
 import { put, takeEvery, call, delay } from 'redux-saga/effects'
-import { getUserList, getUserSetting, getAccounts, searchUsers, getTotalUserList } from 'api'
-import { GET_TOTAL_USER, GET_USER_LIST_PAGE, GET_SEARCH_USER } from './actionType'
+import {
+  getUserList,
+  getUserSetting,
+  getAccounts,
+  searchUsers,
+  getTotalUserList,
+  addUser,
+  deleteUser,
+} from 'api'
+import {
+  GET_TOTAL_USER,
+  GET_USER_LIST_PAGE,
+  GET_SEARCH_USER,
+  ADD_USER,
+  DELETE_USER,
+} from './actionType'
 import {
   getUserListAction,
   getUserAccountsAction,
@@ -8,6 +22,11 @@ import {
   getTotalResultsAction,
   getErrorMessageAction,
 } from 'redux/slice/UserListSlice'
+import {
+  setSuccessSnackAction,
+  setFailureSnackAction,
+  setMessageAction,
+} from 'redux/slice/SnackBarSlice'
 
 function* getTotalUserSaga() {
   yield delay(200)
@@ -20,7 +39,7 @@ function* getTotalUserSaga() {
 }
 
 function* getUserListSaga({ payload }) {
-  const { limit, page } = payload
+  const { page, limit } = payload
   try {
     const userList = yield call(getUserList, page, limit)
     yield put(getUserListAction(userList.data))
@@ -57,6 +76,36 @@ function* getSearchUserSaga({ payload }) {
   }
 }
 
+function* addUserSaga({ payload }) {
+  try {
+    const addUserRes = yield call(addUser, payload)
+    yield put(setSuccessSnackAction(true))
+    yield put(setMessageAction(addUserRes.statusText))
+  } catch (err) {
+    yield put(setFailureSnackAction(true))
+    yield put(setMessageAction(err.response.data))
+  } finally {
+    yield delay(3000)
+    yield put(setSuccessSnackAction(false))
+    yield put(setFailureSnackAction(false))
+  }
+}
+
+function* deleteUserSaga({ payload }) {
+  try {
+    const deleteRes = yield call(deleteUser, payload)
+    yield put(setSuccessSnackAction(true))
+    yield put(setMessageAction(deleteRes.statusText))
+  } catch (err) {
+    yield put(setFailureSnackAction(true))
+    yield put(setMessageAction(err.response.data))
+  } finally {
+    yield delay(3000)
+    yield put(setSuccessSnackAction(false))
+    yield put(setFailureSnackAction(false))
+  }
+}
+
 export function* watchUserAsync() {
   yield takeEvery(GET_TOTAL_USER, getTotalUserSaga)
   yield takeEvery(GET_USER_LIST_PAGE, getUserSettingsSaga)
@@ -66,4 +115,8 @@ export function* watchUserAsync() {
   yield takeEvery(GET_SEARCH_USER, getUserSettingsSaga)
   yield takeEvery(GET_SEARCH_USER, getUserAccountsSaga)
   yield takeEvery(GET_SEARCH_USER, getSearchUserSaga)
+  yield takeEvery(ADD_USER, addUserSaga)
+  yield takeEvery(ADD_USER, getTotalUserSaga)
+  yield takeEvery(DELETE_USER, deleteUserSaga)
+  yield takeEvery(DELETE_USER, getTotalUserSaga)
 }
