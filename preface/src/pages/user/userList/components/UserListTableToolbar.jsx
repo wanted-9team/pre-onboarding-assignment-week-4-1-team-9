@@ -15,6 +15,7 @@ import UserFormDialog from './userFormDialog/UserFormDialog'
 
 import { DELETE_USER, GET_USER_LIST_PAGE } from 'redux/saga/actionType'
 import { useDispatch } from 'react-redux'
+import { INITIAL_USER_DATA } from '../UserList'
 
 const UserListTableToolbar = ({ selected, setSelected, page, limit }) => {
   const dispatch = useDispatch()
@@ -25,7 +26,7 @@ const UserListTableToolbar = ({ selected, setSelected, page, limit }) => {
     if (confirmMessage) {
       dispatch({ type: DELETE_USER, payload: selected.id })
       dispatch({ type: GET_USER_LIST_PAGE, payload: { page, limit } })
-      setSelected({})
+      setSelected(INITIAL_USER_DATA)
     }
   }
   const handleClickOpenModal = () => {
@@ -63,7 +64,7 @@ const UserListTableToolbar = ({ selected, setSelected, page, limit }) => {
       {selected.uuid ? (
         <>
           <Tooltip title="Edit">
-            <IconButton>
+            <IconButton onClick={handleClickOpenModal}>
               <ModeEditIcon />
             </IconButton>
           </Tooltip>
@@ -79,6 +80,8 @@ const UserListTableToolbar = ({ selected, setSelected, page, limit }) => {
         </Button>
       )}
       <UserFormDialog
+        selected={selected}
+        setSelected={setSelected}
         setOpenDialog={setOpenDialog}
         openDialog={openDialog}
         limit={limit}

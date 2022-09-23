@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
-const DaumPostAddress = ({ setAddress, setPostDaumVisible, handlePostDaumVisible }) => {
+const DaumPostAddress = ({ setSelected, setPostDaumVisible, handlePostDaumVisible }) => {
   const handleComplete = data => {
     let fullAddress = data.address
     let extraAddress = ''
@@ -19,7 +19,7 @@ const DaumPostAddress = ({ setAddress, setPostDaumVisible, handlePostDaumVisible
       }
       fullAddress += extraAddress !== '' ? ` (${extraAddress})` : ''
     }
-    setAddress(data.address, data.bname, data.buildingName, fullAddress, data.zonecode)
+    setSelected(prev => ({ ...prev, address: fullAddress }))
     setPostDaumVisible(true)
   }
 

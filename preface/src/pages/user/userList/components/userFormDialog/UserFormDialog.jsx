@@ -6,84 +6,80 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import Stack from '@mui/material/Stack'
+
 import DaumPostAddress from '../daumPost/DaumPostAddress'
 import UserFormSelector from './UserFormSelector'
 import { EMAIL_REGEX, PHONE_REGEX } from 'utils/userFormRegex'
+import { deleteKeyValue } from 'utils/deleteKeyValue'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useDispatch } from 'react-redux'
-import { ADD_USER, GET_USER_LIST_PAGE } from 'redux/saga/actionType'
+import { ADD_USER, GET_USER_LIST_PAGE, EDIT_USER } from 'redux/saga/actionType'
+import { INITIAL_USER_DATA } from '../../UserList'
 
 const timeDate = new Date()
 const initailTimeFunc = () => {
   return timeDate.toISOString()
 }
 
-const INITIAL_USER_DATA = {
-  name: '',
-  email: '',
-  password: '',
-  phone_number: '',
-  detail_address: '',
-  last_login: '',
-  created_at: '',
-  updated_at: '',
-  age: 0,
-}
-const INITIAL_BIRTH_GENDER_DATA = {
+const INITIAL_BIRTH_DATE = {
   year: '',
   month: '',
-  day: '',
-  gender_origin: '',
+  date: '',
 }
-const UserFormDialog = ({ setOpenDialog, openDialog, limit, page }) => {
-  const [birthAndGender, setBirthAndGender] = useState(INITIAL_BIRTH_GENDER_DATA)
+const UserPostFormDialog = ({ selected, setSelected, setOpenDialog, openDialog, limit, page }) => {
   const [postDaumVisible, setPostDaumVisible] = useState(true)
-  const [address, setAddress] = useState('')
-  const [userData, setUserData] = useState(INITIAL_USER_DATA)
+  const [birthDate, setBirthDate] = useState(INITIAL_BIRTH_DATE)
   const dispatch = useDispatch()
 
   const handleClose = () => {
     setOpenDialog(false)
-    setUserData(INITIAL_USER_DATA)
-    setBirthAndGender(INITIAL_BIRTH_GENDER_DATA)
-    setAddress('')
+    setBirthDate(INITIAL_BIRTH_DATE)
+    setSelected(INITIAL_USER_DATA)
   }
 
   const handlePostDaumVisible = () => {
     setPostDaumVisible(!postDaumVisible)
   }
-  const handleUserData = useCallback(({ target }) => {
-    const { id, value } = target
-    setUserData(prev => ({ ...prev, [id]: value }))
-  }, [])
+  const handleUserData = useCallback(
+    ({ target }) => {
+      const { name, value } = target
+      setSelected(prev => ({ ...prev, [name]: value }))
+    },
+    [setSelected],
+  )
 
-  const handleBirthAndGender = useCallback(({ target }) => {
-    const { name, value } = target
-    setBirthAndGender(prev => ({ ...prev, [name]: value }))
-  }, [])
-
-  const handlePostUser = async e => {
-    e.preventDefault()
-    const birth_date = new Date(birthAndGender.year, birthAndGender.month, birthAndGender.day)
+  const handlePostUser = () => {
+    const birth_date = new Date(birthDate.year, birthDate.month, birthDate.date)
+    const newSelected = { ...selected }
     const postBody = {
-      ...userData,
-      birth_date: birth_date.toISOString(),
-      address,
+      ...newSelected,
+      birth_date: birthDate.year ? birth_date.toISOString() : initailTimeFunc(),
       uuid: uuidv4(),
       last_login: initailTimeFunc(),
       created_at: initailTimeFunc(),
       updated_at: initailTimeFunc(),
       age: timeDate.getUTCFullYear() - birth_date.getUTCFullYear() + 1,
-      gender_origin: birthAndGender.gender_origin,
     }
-    dispatch({ type: ADD_USER, payload: postBody })
-    dispatch({ type: GET_USER_LIST_PAGE, payload: { page, limit } })
+    const putBody = {
+      ...deleteKeyValue(newSelected),
+      updated_at: initailTimeFunc(),
+      last_login: initailTimeFunc(),
+    }
+
+    if (newSelected.uuid) {
+      dispatch({ type: EDIT_USER, payload: putBody })
+      dispatch({ type: GET_USER_LIST_PAGE, payload: { page, limit } })
+    } else {
+      dispatch({ type: ADD_USER, payload: postBody })
+      dispatch({ type: GET_USER_LIST_PAGE, payload: { page, limit } })
+    }
     handleClose()
   }
+
   return (
     <Dialog open={openDialog} onClose={handleClose}>
-      <DialogTitle>사용자 등록</DialogTitle>
+      <DialogTitle>{selected.uuid ? '사용자 수정' : '사용자 등록'}</DialogTitle>
       {postDaumVisible ? (
         <>
           <DialogContent>
@@ -91,58 +87,60 @@ const UserFormDialog = ({ setOpenDialog, openDialog, limit, page }) => {
               autoFocus
               required
               margin="dense"
-              id="name"
+              name="name"
               label="이름"
               type="text"
               fullWidth
               variant="standard"
               onChange={handleUserData}
-              value={userData.name}
-              error={userData.name.length === 0}
+              value={selected.name}
+              error={selected.name.length === 0}
             />
             <TextField
               required
               margin="dense"
-              id="email"
+              name="email"
               label="이메일"
               type="email"
               fullWidth
               variant="standard"
               placeholder="example@mail.com"
               onChange={handleUserData}
-              value={userData.email}
-              error={!EMAIL_REGEX.test(userData.email)}
+              value={selected.email}
+              error={!EMAIL_REGEX.test(selected.email)}
             />
+            {!selected.uuid && (
+              <TextField
+                required
+                margin="dense"
+                name="password"
+                label="비밀번호"
+                type="password"
+                fullWidth
+                variant="standard"
+                onChange={handleUserData}
+                value={selected.password}
+                error={selected.password.length < 6}
+              />
+            )}
             <TextField
-              required
               margin="dense"
-              id="password"
-              label="비밀번호"
-              type="password"
-              fullWidth
-              variant="standard"
-              onChange={handleUserData}
-              value={userData.password}
-              error={userData.password.length < 6}
-            />
-            <TextField
-              margin="dense"
-              id="phone_number"
+              name="phone_number"
               label="전화번호"
               type="text"
               fullWidth
               variant="standard"
               placeholder="010-1234-5678"
               onChange={handleUserData}
-              value={userData.phone_number}
-              error={!PHONE_REGEX.test(userData.phone_number)}
+              value={selected.phone_number}
+              error={!PHONE_REGEX.test(selected.phone_number)}
             />
             <Stack direction="row" alignItems="center" spacing={2}>
               <TextField
                 aria-readonly
-                value={address}
+                value={selected.address}
                 margin="dense"
-                id="address"
+                name="address"
                 label="주소"
                 type="text"
                 fullWidth
@@ -159,27 +157,32 @@ const UserFormDialog = ({ setOpenDialog, openDialog, limit, page }) => {
             </Stack>
             <TextField
               margin="dense"
-              id="detail_address"
+              name="detail_address"
               label="상세주소"
               type="text"
               fullWidth
               variant="standard"
               onChange={handleUserData}
-              value={userData.detail_address}
+              value={selected.detail_address}
             />
-            <UserFormSelector
-              birthAndGender={birthAndGender}
-              handleBirthAndGender={handleBirthAndGender}
-            />
+            {!selected.uuid && (
+              <UserFormSelector
+                selected={selected}
+                birthDate={birthDate}
+                setBirthDate={setBirthDate}
+                handleUserData={handleUserData}
+                setSelected={setSelected}
+              />
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>취소</Button>
-            <Button onClick={handlePostUser}>등록</Button>
+            <Button onClick={handlePostUser}>{selected.uuid ? '수정' : '등록'}</Button>
           </DialogActions>
         </>
       ) : (
         <DaumPostAddress
-          setAddress={setAddress}
+          setSelected={setSelected}
           setPostDaumVisible={setPostDaumVisible}
           handlePostDaumVisible={handlePostDaumVisible}
         />
@@ -188,4 +191,4 @@ const UserFormDialog = ({ setOpenDialog, openDialog, limit, page }) => {
   )
 }
 
-export default UserFormDialog
+export default UserPostFormDialog

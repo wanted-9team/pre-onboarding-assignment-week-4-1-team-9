@@ -17,8 +17,22 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import { setPaginationAction } from 'redux/slice/PageSlice'
 import { GET_USER_LIST_PAGE } from 'redux/saga/actionType'
 
+export const INITIAL_USER_DATA = {
+  name: '',
+  email: '',
+  password: '',
+  phone_number: '',
+  detail_address: '',
+  last_login: '',
+  created_at: '',
+  updated_at: '',
+  age: 0,
+  gender_origin: '',
+  birth_date: '',
+}
+
 const UserList = () => {
-  const [selected, setSelected] = useState({})
+  const [selected, setSelected] = useState(INITIAL_USER_DATA)
   const [dense, setDense] = useState(false)
   const [searchInputText, setSearchInputText] = useState('')
 
@@ -28,7 +42,7 @@ const UserList = () => {
 
   useEffect(() => {
     dispatch({ type: GET_USER_LIST_PAGE, payload: { page, limit } })
-    setSelected({})
+    setSelected(INITIAL_USER_DATA)
     setSearchInputText('')
   }, [page, limit, dispatch])
 
