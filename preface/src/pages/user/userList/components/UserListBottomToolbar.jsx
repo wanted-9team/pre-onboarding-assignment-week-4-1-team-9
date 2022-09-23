@@ -10,6 +10,8 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
+import { useDispatch } from 'react-redux'
+import { setPagination } from 'redux/slice/PageSlice'
 
 const UserListBottomToolbar = ({
   handleSearchSubmit,
@@ -19,9 +21,9 @@ const UserListBottomToolbar = ({
   limit,
   setLimit,
   totalUserLength,
-  setPage,
 }) => {
   const MAX_PAGE = Math.ceil(totalUserLength / limit)
+  const dispatch = useDispatch()
   const handleChangeLimit = useCallback(
     ({ target }) => {
       setLimit(target.value)
@@ -30,7 +32,7 @@ const UserListBottomToolbar = ({
   )
 
   useEffect(() => {
-    setPage(page > MAX_PAGE ? MAX_PAGE : page)
+    dispatch(setPagination(MAX_PAGE && page > MAX_PAGE ? MAX_PAGE : page))
   }, [MAX_PAGE])
 
   return (

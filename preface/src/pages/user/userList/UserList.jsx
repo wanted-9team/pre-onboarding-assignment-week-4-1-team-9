@@ -13,9 +13,10 @@ import UserListTableBody from './components/UserListTableBody'
 import UserListBottomToolbar from './components/UserListBottomToolbar'
 import { getUserList, getUserSetting, getAccounts, searchUsers, getTotalUserList } from 'api'
 import { findEqualUuid, findEqualUserId } from 'utils/findEqualData'
+import { useSelector, useDispatch } from 'react-redux'
+import { setPagination } from 'redux/slice/PageSlice'
 
 const UserList = () => {
-  const [page, setPage] = useState(1)
   const [selected, setSelected] = useState({})
   const [dense, setDense] = useState(false)
   const [limit, setLimit] = useState(10)
@@ -24,6 +25,8 @@ const UserList = () => {
   const [userSettingsData, setUserSettingsData] = useState([])
   const [userAccountList, setUserAccountList] = useState([])
   const [totalUserLength, setTotalUserLength] = useState(0)
+  const dispatch = useDispatch()
+  const page = useSelector(state => state.page.page)
 
   const concatUserFunc = useCallback((userList, userSettings, accountList) => {
     const newUserData = userList
@@ -33,6 +36,7 @@ const UserList = () => {
         ...findEqualUuid(user, userSettings),
         ...findEqualUserId(user, accountList),
       }))
+
     setUserData(newUserData)
   }, [])
 
@@ -70,11 +74,16 @@ const UserList = () => {
 
   useEffect(() => {
     fetchUserData()
+    setSelected({})
+    setSearchInputData('')
   }, [page, limit])
 
-  const handleChangePage = useCallback((_, newPage) => {
-    setPage(newPage)
-  }, [])
+  const handleChangePage = useCallback(
+    (_, newPage) => {
+      dispatch(setPagination(newPage))
+    },
+    [dispatch],
+  )
 
   const handleChangeDense = useCallback(({ target }) => {
     setDense(target.checked)
@@ -102,7 +111,6 @@ const UserList = () => {
           setLimit={setLimit}
           limit={limit}
           totalUserLength={totalUserLength}
-          setPage={setPage}
         />
       </Paper>
       <FormControlLabel

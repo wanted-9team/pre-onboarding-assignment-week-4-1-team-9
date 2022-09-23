@@ -10,7 +10,7 @@ const YEAR = (() => {
   const years = []
   const thisYear = new Date().getFullYear()
   for (let i = thisYear; i >= 1950; i--) {
-    years.push(i.toString())
+    years.push(i)
   }
   return years
 })()
@@ -79,8 +79,10 @@ const UserFormSelector = ({ birthAndGender, handleBirthAndGender }) => {
           value={birthAndGender.gender_origin}
           onChange={handleBirthAndGender}
         >
-          <MenuItem value={1}> 남</MenuItem>
-          <MenuItem value={2}> 여</MenuItem>
+          <MenuItem value={1}> 1</MenuItem>
+          <MenuItem value={2}> 2</MenuItem>
+          <MenuItem value={3}> 3</MenuItem>
+          <MenuItem value={4}> 4</MenuItem>
         </Select>
       </FormControl>
     </Stack>
