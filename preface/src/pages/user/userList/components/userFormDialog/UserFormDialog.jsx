@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
@@ -10,8 +10,9 @@ import DaumPostAddress from '../daumPost/DaumPostAddress'
 import UserFormSelector from './UserFormSelector'
 import { EMAIL_REGEX, PHONE_REGEX } from 'utils/userFormRegex'
 import { v4 as uuidv4 } from 'uuid'
-import { addUser } from 'api'
-import ErrorSnackBar from './ErrorSnackBar'
+
+import { useDispatch } from 'react-redux'
+import { ADD_USER, GET_USER_LIST_PAGE } from 'redux/saga/actionType'
 
 const timeDate = new Date()
 const initailTimeFunc = () => {
@@ -35,13 +36,12 @@ const INITIAL_BIRTH_GENDER_DATA = {
   day: '',
   gender_origin: '',
 }
-const UserFormDialog = ({ setOpenDialog, openDialog }) => {
+const UserFormDialog = ({ setOpenDialog, openDialog, limit, page }) => {
   const [birthAndGender, setBirthAndGender] = useState(INITIAL_BIRTH_GENDER_DATA)
   const [postDaumVisible, setPostDaumVisible] = useState(true)
   const [address, setAddress] = useState('')
   const [userData, setUserData] = useState(INITIAL_USER_DATA)
-  const [open, setOpen] = useState(false)
-  const [errorMsg, setErrorMsg] = useState('')
+  const dispatch = useDispatch()
 
   const handleClose = () => {
     setOpenDialog(false)
@@ -49,11 +49,6 @@ const UserFormDialog = ({ setOpenDialog, openDialog }) => {
     setBirthAndGender(INITIAL_BIRTH_GENDER_DATA)
     setAddress('')
   }
-
-  useEffect(() => {
-    // console.log(birthAndGender)
-    console.log(userData)
-  }, [birthAndGender, userData])
 
   const handlePostDaumVisible = () => {
     setPostDaumVisible(!postDaumVisible)
@@ -68,7 +63,8 @@ const UserFormDialog = ({ setOpenDialog, openDialog }) => {
     setBirthAndGender(prev => ({ ...prev, [name]: value }))
   }, [])
 
-  const handlePostUser = async () => {
+  const handlePostUser = async e => {
+    e.preventDefault()
     const birth_date = new Date(birthAndGender.year, birthAndGender.month, birthAndGender.day)
     const postBody = {
       ...userData,
@@ -81,16 +77,9 @@ const UserFormDialog = ({ setOpenDialog, openDialog }) => {
       age: timeDate.getUTCFullYear() - birth_date.getUTCFullYear() + 1,
       gender_origin: birthAndGender.gender_origin,
     }
-    try {
-      await addUser(postBody)
-      setOpenDialog(false)
-    } catch (err) {
-      if (err.message) {
-        setOpen(true)
-        setErrorMsg(err.response.data)
-      }
-      throw new Error(err)
-    }
+    dispatch({ type: ADD_USER, payload: postBody })
+    dispatch({ type: GET_USER_LIST_PAGE, payload: { page, limit } })
+    handleClose()
   }
   return (
     <Dialog open={openDialog} onClose={handleClose}>
@@ -195,7 +184,6 @@ const UserFormDialog = ({ setOpenDialog, openDialog }) => {
           handlePostDaumVisible={handlePostDaumVisible}
         />
       )}
-      <ErrorSnackBar open={open} setOpen={setOpen} errorMsg={errorMsg} />
     </Dialog>
   )
 }

@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import { useDispatch, useSelector } from 'react-redux'
-import { setPagination } from 'redux/slice/PageSlice'
+import { setPaginationAction, setLimitAction } from 'redux/slice/PageSlice'
 import { GET_SEARCH_USER, GET_USER_LIST_PAGE } from 'redux/saga/actionType'
 
 const UserListBottomToolbar = ({
@@ -20,7 +20,6 @@ const UserListBottomToolbar = ({
   page,
   handleChangePage,
   limit,
-  setLimit,
 }) => {
   const totalUserLength = useSelector(state => state.userList.totalResults)
   const MAX_PAGE = Math.ceil(totalUserLength / limit)
@@ -28,16 +27,16 @@ const UserListBottomToolbar = ({
 
   const handleChangeLimit = useCallback(
     ({ target }) => {
-      setLimit(target.value)
+      dispatch(setLimitAction(target.value))
     },
-    [setLimit],
+    [dispatch],
   )
 
   const handleSearchSubmit = useCallback(
     async e => {
       e.preventDefault()
       if (!searchInputText) {
-        dispatch({ type: GET_USER_LIST_PAGE, payload: { limit, page } })
+        dispatch({ type: GET_USER_LIST_PAGE, payload: { page, limit } })
         return
       }
       dispatch({ type: GET_SEARCH_USER, payload: { searchInputText } })
@@ -46,7 +45,7 @@ const UserListBottomToolbar = ({
   )
 
   useEffect(() => {
-    dispatch(setPagination(MAX_PAGE && page > MAX_PAGE ? MAX_PAGE : page))
+    dispatch(setPaginationAction(MAX_PAGE && page > MAX_PAGE ? MAX_PAGE : page))
   }, [MAX_PAGE])
 
   return (
