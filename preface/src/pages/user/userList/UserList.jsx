@@ -1,11 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 
-import Box from '@mui/material/Box'
-import Table from '@mui/material/Table'
-import TableContainer from '@mui/material/TableContainer'
-import Paper from '@mui/material/Paper'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Switch from '@mui/material/Switch'
+import { Box, Table, TableContainer, Paper, FormControlLabel, Switch } from '@mui/material'
 
 import UserListTableToolbar from './components/UserListTableToolbar'
 import UserListTableHead from './components/UserListTableHead'

@@ -1,10 +1,5 @@
 import React from 'react'
-
-import Select from '@mui/material/Select'
-import Box from '@mui/material/Box'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
+import { Select, Box, InputLabel, MenuItem, FormControl } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { filterUserAction } from 'redux/slice/FilterUserSlice'
 import { FILTER_TAG } from './UserListTableBody'

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableRow from '@mui/material/TableRow'
-import { toLocaleDateFunc } from '../../../../utils/transDate'
+import { TableBody, TableCell, TableRow } from '@mui/material'
+import { toLocaleDateFunc } from 'utils/transDate'
 import getEarningsRate from 'utils/getEarningsRate'
 import toBrokerName from 'utils/transBroker'
 import toStatusString from 'utils/transAccountStatus'
@@ -10,6 +8,7 @@ import { Link } from 'react-router-dom'
 import getFormattedPrice from 'utils/getFormattedPrice'
 import theme from 'theme'
 import { earningsRateColor } from 'utils/earningsRateColor'
+
 function UserAccountTableBody({ rows, page, rowsPerPage, filterData }) {
   const [filterList, setFilterList] = useState([])
 

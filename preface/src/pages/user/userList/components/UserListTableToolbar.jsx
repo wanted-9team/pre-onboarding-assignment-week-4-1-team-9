@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
 
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import Tooltip from '@mui/material/Tooltip'
-import IconButton from '@mui/material/IconButton'
+import { Toolbar, Typography, Tooltip, IconButton, Stack, Button } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import Stack from '@mui/material/Stack'
-import { alpha } from '@mui/material/styles'
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
-import Button from '@mui/material/Button'
+import { alpha } from '@mui/material/styles'
 
 import FilterSelect from './FilterSelect'
 import UserFormDialog from './userFormDialog/UserFormDialog'
