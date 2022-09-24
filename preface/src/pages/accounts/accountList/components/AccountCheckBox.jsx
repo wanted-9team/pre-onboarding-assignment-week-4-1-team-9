@@ -41,7 +41,7 @@ export default function AccountCheckbox({ onSelectBrocker }) {
       )}
       style={{ width: 350 }}
       onChange={(event, value, reason) => onSelectBrocker(value)}
-      renderInput={params => <TextField {...params} label="Checkboxes" placeholder="Favorites" />}
+      renderInput={params => <TextField {...params} label="증권사명" />}
     />
   )
 }

@@ -11,10 +11,12 @@ import AccountTableHead from './components/AccountTableHead'
 import AccountTableToolbar from './components/AccountTableToolbar'
 import AccountTableBody from './components/AccountTableBody'
 import AccountCheckbox from './components/AccountCheckBox'
+import AccountCombobox from './components/AccountComboBox'
 import AccountSearchBar from './components/AccountSearchBar'
 
 import { getAccounts, getTotalUserList } from 'api'
 import { findEqualUserName } from 'utils/findEqualData'
+import { accountStatusList, toStatusNumber } from 'utils/transAccountStatus'
 
 import { matchSorter } from 'match-sorter'
 
@@ -90,7 +92,13 @@ export default function AccountList() {
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [accountList, setAccountList] = useState([])
   const [totalAccountList, setTotalAccountList] = useState([])
-  const [selectedBroker, setSelectedBroker] = useState([])
+  const [filterOption, setFilterOption] = useState(
+    { brokers: [] },
+    { isActive: null },
+    { accountStatus: '' },
+  )
+  const isActiveOptions = ['활성화', '비활성화']
+  const accountStatusOptions = accountStatusList.filter(value => value !== 'default')
 
   const concatName = useCallback((accountList, userList) => {
     const newAccountData = accountList
@@ -169,31 +177,95 @@ export default function AccountList() {
   const isSelected = name => selected.indexOf(name) !== -1
 
   const handleSelectBroker = broker => {
+    let tempFilterOption = filterOption
     if (broker.length === 0) {
-      setSelectedBroker([])
-      fetchAccountsData()
+      tempFilterOption.brokers = []
+      setFilterOption(tempFilterOption)
+      filterData(totalAccountList, filterOption)
       return
     }
-    setSelectedBroker(broker)
-    filterBroker(totalAccountList, broker)
+    tempFilterOption.brokers = broker
+    setFilterOption(tempFilterOption)
+    filterData(totalAccountList, filterOption)
   }
 
-  const filterBroker = (data, brokers) => {
+  const filterData = (data, filterOptions) => {
     let matchedData = []
-    brokers.map(broker => {
-      matchedData = matchedData.concat(matchSorter(data, broker.number, { keys: ['broker_id'] }))
-    })
-    setAccountList(matchedData)
+    for (const filterOption in filterOptions) {
+      if (filterOption === 'brokers' && filterOptions[filterOption].length > 0) {
+        filterOptions[filterOption].map(filter => {
+          matchedData = matchedData.concat(
+            matchSorter(data, filter.number, { keys: ['broker_id'] }),
+          )
+        })
+      } else if (filterOption === 'isActive' && filterOptions.isActive != null) {
+        if (matchedData.length > 0 && matchedData) {
+          matchedData = matchSorter(matchedData, filterOptions.isActive, { keys: ['is_active'] })
+        } else {
+          matchedData = matchSorter(data, filterOptions.isActive, { keys: ['is_active'] })
+        }
+      } else if (filterOption === 'accountStatus') {
+        if (matchedData.length > 0) {
+          matchedData = matchSorter(matchedData, filterOptions.accountStatus, {
+            keys: ['status'],
+          })
+        } else {
+          matchedData = matchSorter(data, filterOptions.accountStatus, { keys: ['status'] })
+        }
+      } else if (filterOptions.brokers.length === 0 && filterOptions.isActive === null) {
+        matchedData = data
+      }
+    }
 
-    return
+    setAccountList(matchedData)
+  }
+
+  const handleSelectActive = selected => {
+    let tempFilterOption = filterOption
+    if (selected === '활성화') {
+      tempFilterOption.isActive = true
+    } else if (selected === '비활성화') {
+      tempFilterOption.isActive = false
+    } else {
+      tempFilterOption.isActive = null
+    }
+    setFilterOption(tempFilterOption)
+    filterData(totalAccountList, filterOption)
+  }
+
+  const handleSelectStatus = status => {
+    let tempFilterOption = filterOption
+    if (status === null) {
+      tempFilterOption.accountStatus = ''
+    } else {
+      tempFilterOption.accountStatus = toStatusNumber(status)
+    }
+    setFilterOption(tempFilterOption)
+    filterData(totalAccountList, filterOption)
   }
 
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <AccountCheckbox onSelectBrocker={handleSelectBroker}></AccountCheckbox>
-        <AccountSearchBar></AccountSearchBar>
-        <Button variant="contained">검색하기</Button>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <AccountCheckbox onSelectBrocker={handleSelectBroker}></AccountCheckbox>
+            <AccountCombobox
+              onSelect={handleSelectActive}
+              options={isActiveOptions}
+              title="활성화 여부"
+            ></AccountCombobox>
+            <AccountCombobox
+              onSelect={handleSelectStatus}
+              options={accountStatusOptions}
+              title="계좌 상태"
+            ></AccountCombobox>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <AccountSearchBar></AccountSearchBar>
+            <Button variant="contained">검색하기</Button>
+          </Box>
+        </Box>
 
         <AccountTableToolbar numSelected={selected.length} />
         <TableContainer>
