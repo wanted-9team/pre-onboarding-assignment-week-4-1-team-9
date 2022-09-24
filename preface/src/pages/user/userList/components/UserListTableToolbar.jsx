@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 
 import { Toolbar, Typography, Tooltip, IconButton, Stack, Button } from '@mui/material'
-import { DeleteIcon, ModeEditIcon } from '@mui/icons-material'
+import DeleteIcon from '@mui/icons-material/Delete'
+import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import { alpha } from '@mui/material/styles'
 
 import FilterSelect from './FilterSelect'
