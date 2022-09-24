@@ -65,7 +65,8 @@
 
 - 사용자 페이지 <br><br>
 
-https://user-images.githubusercontent.com/85508157/192121789-a8f99acf-196f-4d6d-a914-9df249efa9cc.mov
+https://user-images.githubusercontent.com/85508157/192121864-9817e518-a41f-41f4-aa0c-3411fa3a3562.mov
+
 
  <br><br>
 
