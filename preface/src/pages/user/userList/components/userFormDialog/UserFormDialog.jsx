@@ -138,13 +138,14 @@ const UserPostFormDialog = ({ selected, setSelected, setOpenDialog, openDialog, 
             <Stack direction="row" alignItems="center" spacing={2}>
               <TextField
                 aria-readonly
-                value={selected.address || ''}
+                value={selected.address}
                 margin="dense"
                 name="address"
                 label="주소"
                 type="text"
                 fullWidth
                 variant="standard"
+                onChange={handleUserData}
               />
               <Button
                 onClick={handlePostDaumVisible}
