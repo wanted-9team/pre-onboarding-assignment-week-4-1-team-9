@@ -1,36 +1,37 @@
-import React, { useRef, useCallback } from 'react'
+import React, { useRef, useCallback, useState } from 'react'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import { searchAccounts, getTotalUserList } from 'api'
+
 
 function AccountSearchBar({
   accountsOption,
   setAccountsOption,
   concatName,
   fetchAccountsData,
-  setTotalAccountsLength,
+  setTotalAccountLength,
 }) {
   const inputRef = useRef('')
-  const handleSearchClick = useCallback(async () => {
-    setAccountsOption({ ...accountsOption, query: inputRef.current.value })
-    if (!accountsOption.query) {
+  const handleSearchSubmit = useCallback(
+    e => {
+      e.preventDefault()
+      setAccountsOption({ ...accountsOption, query: inputRef.current.value })
       fetchAccountsData()
-      return
-    }
-    try {
-      const searchAccountsRes = await searchAccounts(accountsOption.query)
-      const totalUserResponse = await getTotalUserList()
-      setTotalAccountsLength(searchAccountsRes.data.length)
-      concatName(searchAccountsRes.data, totalUserResponse.data)
-    } catch (err) {
-      throw new Error(err)
-    }
-  }, [concatName, fetchAccountsData, accountsOption, setTotalAccountsLength])
+    },
+    [accountsOption, setAccountsOption, fetchAccountsData],
+
+  )
   return (
-    <form onClick={handleSearchClick}>
+    <form onSubmit={handleSearchClick}>
+
       <Stack direction="row" spacing={1}>
-        <input placeholder="Enter" size="small" type="text" ref={inputRef} />
-        <Button variant="contained" disableElevation>
+        <input
+          placeholder="Enter"
+          size="small"
+          type="text"
+          ref={inputRef}
+          onChange={({ target }) => setQuery(target.value)}
+        />
+        <Button type="submit" variant="contained" disableElevation>
           검색
         </Button>
       </Stack>

@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import {
   Box,
-  Container,
   Table,
   TableContainer,
   Paper,
   FormControlLabel,
   Switch,
-  Button,
   Typography,
   MenuItem,
   Pagination,
@@ -20,18 +18,17 @@ import AccountTableHead from './components/AccountTableHead'
 import AccountTableBody from './components/AccountTableBody'
 import AccountSearchBar from './components/AccountSearchBar'
 
-import { getAccountListByConditions, getTotalUserList, getAccounts } from 'api'
+import { getAccountListByConditions, getTotalUserList } from 'api'
 import { findEqualUserName } from 'utils/findEqualData'
-import { accountStatusList, toStatusNumber } from 'utils/transAccountStatus'
+import { searchAccounts } from './../../../api/index'
 
 export default function AccountList() {
-  const [totalAccountList, setTotalAccountList] = useState([])
   const [accountList, setAccountList] = useState([])
   const [totalAccountLength, setTotalAccountLength] = useState(0)
   const [accountsOption, setAccountsOption] = useState({
     page: 0,
     dense: false,
-    rowsPerPage: 5,
+    rowsPerPage: 10,
     query: '',
   })
 
@@ -45,44 +42,47 @@ export default function AccountList() {
         ...findEqualUserName(account, userList),
       }))
     setAccountList(newAccountData)
-    setTotalAccountList(newAccountData)
   }, [])
 
   const fetchAccountsData = useCallback(async () => {
     try {
-      const totalLengthRes = await getAccounts()
+      const totalLengthRes = await searchAccounts(query)
       const accountResponse = await getAccountListByConditions(page, rowsPerPage, query)
       const totalUserResponse = await getTotalUserList()
-
       setTotalAccountLength(totalLengthRes.data.length)
       concatName(accountResponse.data, totalUserResponse.data)
     } catch (err) {
       throw new Error(err)
     }
-  }, [concatName, accountsOption, totalAccountLength])
+
+  }, [concatName, page, rowsPerPage, query])
+
 
   useEffect(() => {
     fetchAccountsData()
-  }, [accountsOption, setAccountList])
+  }, [page, rowsPerPage])
 
   const handleChangeLimit = useCallback(
     ({ target }) => {
       setAccountsOption({ ...accountsOption, rowsPerPage: target.value })
     },
-    [setAccountsOption],
+    [setAccountsOption, accountsOption],
   )
 
   const handleChangePage = useCallback(
     (_, newPage) => {
-      setAccountsOption({ ...accountsOption, page: newPage })
+      setAccountsOption(prev => ({ ...prev, page: newPage }))
     },
     [accountsOption],
   )
 
   const handleChangeDense = event => {
-    setAccountsOption({ ...accountsOption, dense: event.target.checked })
+    setAccountsOption(prev => ({ ...prev, dense: event.target.checked }))
   }
 
+  useEffect(() => {
+    console.log(totalAccountLength)
+  }, [totalAccountLength])
   const MAX_PAGE = Math.ceil(totalAccountLength / rowsPerPage)
 
   return (
@@ -142,12 +142,17 @@ export default function AccountList() {
                 label="number"
                 onChange={handleChangeLimit}
               >
-                <MenuItem value={5}>5</MenuItem>
                 <MenuItem value={10}>10</MenuItem>
                 <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
               </Select>
             </FormControl>
-            <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} size="small" />
+            <Pagination
+              count={MAX_PAGE && MAX_PAGE}
+              page={page}
+              onChange={handleChangePage}
+              size="small"
+            />
           </Box>
         </Box>
       </Paper>

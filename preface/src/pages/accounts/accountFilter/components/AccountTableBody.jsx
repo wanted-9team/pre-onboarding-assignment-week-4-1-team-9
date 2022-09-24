@@ -29,14 +29,17 @@ function AccountTableBody({ rows, page, rowsPerPage, onClick }) {
           const earningsRate = getEarningsRate(row.assets, row.payments)
 
           return (
+
             <TableRow hover role="checkbox" tabIndex={-1} key={index} align="center">
               <TableCell component="th" scope="row" margin="2">
+
                 {row.user_name}
               </TableCell>
-              <TableCell>{toBrokerName(row.broker_id)}</TableCell>
-              <TableCell onClick={() => goAccountDetail(row.id)}>
+              <TableCell align="center">{toBrokerName(row.broker_id)}</TableCell>
+              <TableCell align="center" onClick={() => goAccountDetail(row.id)}>
                 {maskingAccount(getFormattedAccountNumber(row.broker_id, row.number))}
               </TableCell>
+
               <TableCell
                 sx={{
                   color:
@@ -63,6 +66,7 @@ function AccountTableBody({ rows, page, rowsPerPage, onClick }) {
                 {row.is_active ? 'Yes' : 'No'}
               </TableCell>
               <TableCell>{toLocaleDateFunc(row.created_at)}</TableCell>
+
             </TableRow>
           )
         })}

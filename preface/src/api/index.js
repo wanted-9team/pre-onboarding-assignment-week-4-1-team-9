@@ -111,5 +111,5 @@ export const searchUsers = async word => {
 }
 
 export const searchAccounts = async word => {
-  return await Axios.get(`accounts?q=${word}`)
+  return await Axios.get(`accounts?${word ? `q=${word}` : ''}`)
 }
