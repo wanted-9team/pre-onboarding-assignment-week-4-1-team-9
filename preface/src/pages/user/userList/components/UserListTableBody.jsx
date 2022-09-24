@@ -67,7 +67,7 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
               scope="row"
               align="center"
               onClick={() => goUserDetails(user)}
-              sx={{ cursor: 'pointer' }}
+              sx={{ cursor: 'pointer', color: theme.palette.success.main }}
             >
               {maskingName(user.name)}
             </TableCell>
