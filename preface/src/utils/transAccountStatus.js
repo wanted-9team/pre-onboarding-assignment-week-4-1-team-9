@@ -1,7 +1,11 @@
 import * as accountStatus from '../data/accountStatus.json'
 
-const toStatusString = number => {
+export const toStatusString = number => {
   return Object.keys(accountStatus).find(key => accountStatus[key] === number)
 }
 
-export default toStatusString
+export const toStatusNumber = status => {
+  return accountStatus[status]
+}
+
+export const accountStatusList = Object.keys(accountStatus)
