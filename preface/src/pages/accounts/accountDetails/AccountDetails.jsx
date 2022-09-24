@@ -34,6 +34,10 @@ function AccountDetails() {
 
   const onChangeHandler = event => {
     const { value, name } = event.target
+    if (name === 'status') {
+      setAccountDetail({ ...accountDetail, [name]: parseInt(value) })
+      return
+    }
     setAccountDetail({ ...accountDetail, [name]: value })
   }
 
