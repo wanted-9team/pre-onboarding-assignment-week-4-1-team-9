@@ -64,7 +64,11 @@
 ## 데모
 
 - 사용자 페이지 <br><br>
-![화면-기록-2022-09-25-오전-7 40 43-2](https://user-images.githubusercontent.com/85508157/192121362-30c3c543-7541-4914-8ba7-e74d12486541.gif) <br><br>
+
+https://user-images.githubusercontent.com/85508157/192121864-9817e518-a41f-41f4-aa0c-3411fa3a3562.mov
+
+
+ <br><br>
 
 - 댓글 수정 및 삭제, 페이지네이션<br><br>
   ![1365530a45e3fbbc](https://user-images.githubusercontent.com/92010078/190940835-6607b1e8-3c3f-405e-b9ba-6acbd6068f8b.gif)
@@ -108,7 +112,6 @@
 <img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white"/>
 <img src="https://img.shields.io/badge/Redux saga-999999?style=for-the-badge&logo=reduxsaga&logoColor=white"/>
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white"/>
-<img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white"/>
 <img src="https://img.shields.io/badge/mui-007FFF?style=for-the-badge&logo=mui&logoColor=white"/>
 </div>
 

@@ -20,9 +20,7 @@ function AccountTableBody({ rows }) {
   const goAccountDetail = id => {
     navigate(`/main/accountlist/${id}`)
   }
-  const goUserDetail = id => {
-    navigate(`/main/userlist/${id}`)
-  }
+
   return (
     <TableBody>
       {rows.map((row, index) => {
@@ -30,14 +28,7 @@ function AccountTableBody({ rows }) {
 
         return (
           <TableRow hover role="checkbox" tabIndex={-1} key={index} align="center">
-            <TableCell
-              align="center"
-              component="th"
-              scope="row"
-              padding="none"
-              onClick={() => goUserDetail(row.user_id)}
-              sx={{ cursor: 'pointer' }}
-            >
+            <TableCell align="center" component="th" scope="row" padding="none">
               {row.user_name}
             </TableCell>
 
