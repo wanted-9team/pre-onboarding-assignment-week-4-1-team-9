@@ -9,7 +9,7 @@ import brokers from 'data/brokers.json'
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
-export default function AccountCheckbox() {
+export default function AccountCheckbox({ onSelectBrocker }) {
   const makeBrokerData = () => {
     let newArray = []
     for (const broker_number in brokers) {
@@ -18,7 +18,6 @@ export default function AccountCheckbox() {
     return newArray
   }
   const brokerData = makeBrokerData()
-  console.log(brokerData)
 
   return (
     <Autocomplete
@@ -26,7 +25,9 @@ export default function AccountCheckbox() {
       id="checkboxes-tags-demo"
       options={brokerData}
       disableCloseOnSelect
+      filterSelectedOptions
       getOptionLabel={option => option.name}
+      isOptionEqualToValue={(option, value) => option.name === value.name}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
@@ -38,7 +39,8 @@ export default function AccountCheckbox() {
           {option.name}
         </li>
       )}
-      style={{ width: 500 }}
+      style={{ width: 350 }}
+      onChange={(event, value, reason) => onSelectBrocker(value)}
       renderInput={params => <TextField {...params} label="Checkboxes" placeholder="Favorites" />}
     />
   )

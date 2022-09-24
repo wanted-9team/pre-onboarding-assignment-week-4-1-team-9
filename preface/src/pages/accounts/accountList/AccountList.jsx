@@ -16,6 +16,8 @@ import AccountSearchBar from './components/AccountSearchBar'
 import { getAccounts, getTotalUserList } from 'api'
 import { findEqualUserName } from 'utils/findEqualData'
 
+import { matchSorter } from 'match-sorter'
+
 export const headCells = [
   {
     id: 'user_name',
@@ -87,7 +89,8 @@ export default function AccountList() {
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [accountList, setAccountList] = useState([])
-  const [totalUserList, setTotalUserList] = useState([])
+  const [totalAccountList, setTotalAccountList] = useState([])
+  const [selectedBroker, setSelectedBroker] = useState([])
 
   const concatName = useCallback((accountList, userList) => {
     const newAccountData = accountList
@@ -97,14 +100,14 @@ export default function AccountList() {
         ...findEqualUserName(account, userList),
       }))
     setAccountList(newAccountData)
+    setTotalAccountList(newAccountData)
   }, [])
 
   const fetchAccountsData = async () => {
     try {
       const accountResponse = await getAccounts()
       const totalUserResponse = await getTotalUserList()
-      // setAccountList(accountResponse.data)
-      // setTotalUserList(totalUserResponse.data)
+
       concatName(accountResponse.data, totalUserResponse.data)
     } catch (err) {
       throw new Error(err)
@@ -165,10 +168,30 @@ export default function AccountList() {
 
   const isSelected = name => selected.indexOf(name) !== -1
 
+  const handleSelectBroker = broker => {
+    if (broker.length === 0) {
+      setSelectedBroker([])
+      fetchAccountsData()
+      return
+    }
+    setSelectedBroker(broker)
+    filterBroker(totalAccountList, broker)
+  }
+
+  const filterBroker = (data, brokers) => {
+    let matchedData = []
+    brokers.map(broker => {
+      matchedData = matchedData.concat(matchSorter(data, broker.number, { keys: ['broker_id'] }))
+    })
+    setAccountList(matchedData)
+
+    return
+  }
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <AccountCheckbox></AccountCheckbox>
+        <AccountCheckbox onSelectBrocker={handleSelectBroker}></AccountCheckbox>
         <AccountSearchBar></AccountSearchBar>
         <Button variant="contained">검색하기</Button>
 
