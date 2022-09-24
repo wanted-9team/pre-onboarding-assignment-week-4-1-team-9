@@ -10,7 +10,7 @@ const UserAccountFilterSelect = ({ setFilterSelectOne, filterSelectOne }) => {
     <Box sx={{ width: 120, display: 'inline-block', marginLeft: '20px' }}>
       <FormControl fullWidth>
         <InputLabel id="account-select-label" size="small">
-          filter
+          활성화
         </InputLabel>
         <Select
           size="small"

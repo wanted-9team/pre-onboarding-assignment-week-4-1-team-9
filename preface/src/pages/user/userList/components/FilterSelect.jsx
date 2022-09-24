@@ -15,7 +15,7 @@ const FilterSelect = () => {
     <Box sx={{ width: 120 }}>
       <FormControl fullWidth>
         <InputLabel id="user-select-label" size="small">
-          filter
+          활성화
         </InputLabel>
         <Select
           size="small"
