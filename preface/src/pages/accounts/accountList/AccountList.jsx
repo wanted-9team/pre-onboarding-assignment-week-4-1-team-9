@@ -53,38 +53,39 @@ export default function AccountList() {
       const totalLengthRes = await getAccounts()
       const accountResponse = await getAccountListByConditions(page, rowsPerPage, query)
       const totalUserResponse = await getTotalUserList()
-
       setTotalAccountLength(totalLengthRes.data.length)
       concatName(accountResponse.data, totalUserResponse.data)
     } catch (err) {
       throw new Error(err)
     }
-  }, [concatName, accountsOption, totalAccountLength])
+  }, [concatName, page, rowsPerPage, query])
 
   useEffect(() => {
     fetchAccountsData()
-  }, [accountsOption, setAccountList])
+  }, [page, rowsPerPage])
 
   const handleChangeLimit = useCallback(
     ({ target }) => {
       setAccountsOption({ ...accountsOption, rowsPerPage: target.value })
     },
-    [setAccountsOption],
+    [setAccountsOption, accountsOption],
   )
 
   const handleChangePage = useCallback(
     (_, newPage) => {
-      setAccountsOption({ ...accountsOption, page: newPage })
+      setAccountsOption(prev => ({ ...prev, page: newPage }))
     },
     [accountsOption],
   )
 
   const handleChangeDense = event => {
-    setAccountsOption({ ...accountsOption, dense: event.target.checked })
+    setAccountsOption(prev => ({ ...prev, dense: event.target.checked }))
   }
 
+  useEffect(() => {
+    console.log(totalAccountLength)
+  }, [totalAccountLength])
   const MAX_PAGE = Math.ceil(totalAccountLength / rowsPerPage)
-
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -147,7 +148,12 @@ export default function AccountList() {
                 <MenuItem value={20}>20</MenuItem>
               </Select>
             </FormControl>
-            <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} size="small" />
+            <Pagination
+              count={MAX_PAGE && MAX_PAGE}
+              page={page}
+              onChange={handleChangePage}
+              size="small"
+            />
           </Box>
         </Box>
       </Paper>
