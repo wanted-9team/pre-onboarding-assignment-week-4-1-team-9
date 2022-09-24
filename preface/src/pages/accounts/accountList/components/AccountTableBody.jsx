@@ -19,6 +19,9 @@ function AccountTableBody({ rows, onClick }) {
   const goAccountDetail = id => {
     navigate(`/main/accountlist/${id}`)
   }
+  const goUserDetail = id => {
+    navigate(`/main/userlist/${id}`)
+  }
   return (
     <TableBody>
       {rows.map((row, index) => {
@@ -26,12 +29,23 @@ function AccountTableBody({ rows, onClick }) {
 
         return (
           <TableRow hover role="checkbox" tabIndex={-1} key={index} align="center">
-            <TableCell align="center" component="th" scope="row" padding="none">
+            <TableCell
+              align="center"
+              component="th"
+              scope="row"
+              padding="none"
+              onClick={() => goUserDetail(row.user_id)}
+              sx={{ cursor: 'pointer' }}
+            >
               {row.user_name}
             </TableCell>
 
             <TableCell align="center">{toBrokerName(row.broker_id)}</TableCell>
-            <TableCell align="center" onClick={() => goAccountDetail(row.id)}>
+            <TableCell
+              sx={{ cursor: 'pointer' }}
+              align="center"
+              onClick={() => goAccountDetail(row.id)}
+            >
               {maskingAccount(getFormattedAccountNumber(row.broker_id, row.number))}
             </TableCell>
             <TableCell align="center">{toStatusString(row.status)}</TableCell>
