@@ -71,14 +71,17 @@
 
 - 사용자 페이지 <br><br>
 
-https://user-images.githubusercontent.com/85508157/192121864-9817e518-a41f-41f4-aa0c-3411fa3a3562.mov
+  https://user-images.githubusercontent.com/85508157/192121864-9817e518-a41f-41f4-aa0c-3411fa3a3562.mov
 
 
- <br><br>
-
-- 계좌 수정 및 삭제, 페이지네이션<br><br>
-  ![1365530a45e3fbbc](https://user-images.githubusercontent.com/92010078/190940835-6607b1e8-3c3f-405e-b9ba-6acbd6068f8b.gif)
   
+- 사용자 편집<br><br>
+  ![사용자 편집](https://user-images.githubusercontent.com/92101831/192122171-e79e6ed1-408c-442c-a526-b4880dbfe1ca.gif)
+
+
+- 사용자 삭제<br><br>
+  ![사용자 삭제](https://user-images.githubusercontent.com/92101831/192122176-abe08cb6-6b1d-4694-af55-28fb5da042fb.gif)
+
   <br><br>
   
 - 계좌 수정 및 삭제, 페이지네이션<br><br>
@@ -111,7 +114,6 @@ https://user-images.githubusercontent.com/85508157/192121864-9817e518-a41f-41f4-
 - [x] Sider 메뉴에서는 현재 보고 있는 화면에 해당하는 메뉴가 하이라이트 되어야 합니다.
 - [x] 새로고침을 해도 로그인 상태가 유지되어야 하며, 상태에 따라 기존에 머무르던 화면이 그대로 보여야 합니다.
 - [x] 계좌 리스트에서 계좌번호를 누르면 계좌상세 화면으로 이동합니다.
-- [x] 계좌 리스트에서 사용자 이름을 누르면 사용자 상세로 이동합니다.
 - [x] 사용자 상세에서 사용자의 계좌목록이 보여야 합니다.
 - [x] 계좌 목록에서 각 계좌 상태별로 필터링이 가능해야 합니다.
 - [x] 수익률이 플러스인 계좌의 총자산 금액은 빨간색, 원금과 동일한 경우 검정색, 마이너스일 경우 파란색으로 보여줘야 합니다.
