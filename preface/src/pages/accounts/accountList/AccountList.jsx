@@ -178,9 +178,12 @@ export default function AccountList() {
     setSelected(newSelected)
   }
 
-  const handleChangePage = useCallback((_, newPage) => {
-    setAccountsOption({ ...accountsOption, page: newPage })
-  }, [])
+  const handleChangePage = useCallback(
+    (_, newPage) => {
+      setAccountsOption({ ...accountsOption, page: newPage })
+    },
+    [accountsOption.page],
+  )
 
   const handleChangeRowsPerPage = event => {
     setAccountsOption({ ...accountsOption, page: 0, rowsPerPage: parseInt(event.target.value, 10) })
@@ -233,12 +236,15 @@ export default function AccountList() {
             display: 'flex',
             flexDirection: { xs: 'column', sm: 'column', md: 'column', lg: 'row' },
             alignItems: 'center',
-            justifyContent: 'flex-end',
+            justifyContent: 'space-around',
             padding: '10px 0',
           }}
         >
-          <Box sx={{ maxWidth: 120, minWidth: 100 }}>
-            <FormControl fullWidth>
+          <Box>
+            <AccountSearchBar query={query} />
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <FormControl sx={{ minWidth: 75 }}>
               <InputLabel id="limit-select-label" size="small">
                 number
               </InputLabel>
@@ -255,9 +261,8 @@ export default function AccountList() {
                 <MenuItem value={20}>20</MenuItem>
               </Select>
             </FormControl>
+            <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} size="small" />
           </Box>
-
-          <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} size="small" />
         </Box>
       </Paper>
       <FormControlLabel

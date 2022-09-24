@@ -18,6 +18,7 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
       {rows.map((row, index) => {
         const isItemSelected = isSelected(row.name)
         const labelId = `enhanced-table-checkbox-${index}`
+        const earningsRate = getEarningsRate(row.assets, row.payments)
 
         return (
           <TableRow
@@ -40,32 +41,25 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
               />
             </TableCell>
 
-            <TableCell component="th" scope="row" padding="none" align="right">
+            <TableCell component="th" scope="row" padding="none">
               {row.user_name}
             </TableCell>
-            <TableCell align="right">{toBrokerName(row.broker_id)}</TableCell>
-            <TableCell align="right">
+            <TableCell>{toBrokerName(row.broker_id)}</TableCell>
+            <TableCell>
               <Link to={`/main/accountlist/${row.id}`}>{row.number}</Link>
             </TableCell>
-            <TableCell align="right">{toStatusString(row.status)}</TableCell>
-            <TableCell align="right">{row.name}</TableCell>
-            <TableCell align="right">{getFormattedPrice(row.assets)}</TableCell>
-            <TableCell align="right">{getFormattedPrice(row.payments)}</TableCell>
-            <TableCell>{getEarningsRate(row.assets, row.payments)}%</TableCell>
+            <TableCell>{toStatusString(row.status)}</TableCell>
+            <TableCell>{row.name}</TableCell>
+            <TableCell>{getFormattedPrice(row.assets)}</TableCell>
+            <TableCell>{getFormattedPrice(row.payments)}</TableCell>
+            <TableCell sx={{ color: `${earningsRate >= 0 ? 'blue' : 'red'}` }}>
+              {earningsRate}%
+            </TableCell>
             <TableCell>{row.is_active ? 'Yes' : 'No'}</TableCell>
-            <TableCell align="right">{toLocaleDateFunc(row.created_at)}</TableCell>
+            <TableCell>{toLocaleDateFunc(row.created_at)}</TableCell>
           </TableRow>
         )
       })}
-      {/* {emptyRows > 0 && (
-        <TableRow
-          style={{
-            height: (dense ? 33 : 53) * emptyRows,
-          }}
-        >
-          <TableCell colSpan={6} />
-        </TableRow>
-      )} */}
     </TableBody>
   )
 }
