@@ -64,7 +64,7 @@
 ## 데모
 
 - 사용자 페이지 <br><br>
-  ![11d634b6b3f07346](https://user-images.githubusercontent.com/85508157/192121148-a58d655e-c6b6-4258-8519-c83cd7c9f929.mov)<br><br>
+ <img src="https://user-images.githubusercontent.com/85508157/192121148-a58d655e-c6b6-4258-8519-c83cd7c9f929.mov" /> <br><br>
 
 - 댓글 수정 및 삭제, 페이지네이션<br><br>
   ![1365530a45e3fbbc](https://user-images.githubusercontent.com/92010078/190940835-6607b1e8-3c3f-405e-b9ba-6acbd6068f8b.gif)
