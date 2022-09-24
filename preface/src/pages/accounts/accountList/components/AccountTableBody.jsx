@@ -21,7 +21,6 @@ function AccountTableBody({ rows, onClick }) {
   return (
     <TableBody>
       {rows.map((row, index) => {
-        const labelId = `enhanced-table-checkbox-${index}`
         const earningsRate = getEarningsRate(row.assets, row.payments)
 
         return (

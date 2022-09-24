@@ -66,7 +66,7 @@ const UserListBottomToolbar = ({
             value={searchInputText}
             onChange={({ target }) => setSearchInputText(target.value)}
           />
-          <Button variant="contained" disableElevation>
+          <Button type="submit" variant="contained" disableElevation>
             검색
           </Button>
         </Stack>
