@@ -10,6 +10,8 @@ import { useLocation } from 'react-router'
 import { maskingPhoneNumber } from 'utils/maskingNumber'
 import Typography from '@mui/material/Typography'
 import UserAccountFilterSelect from './components/UserAccountFilterSelect'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { useNavigate } from 'react-router'
 
 export const headCells = [
   {
@@ -70,59 +72,16 @@ export const headCells = [
 
 const UserDetails = () => {
   const { state } = useLocation()
-
-  const [order, setOrder] = useState('asc')
-  const [orderBy, setOrderBy] = useState('user_name')
-  const [selected, setSelected] = useState([])
+  const navigate = useNavigate()
   const [page, setPage] = useState(0)
-  const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [rows, setRows] = useState([])
 
   const [filterSelectOne, setFilterSelectOne] = useState('all')
 
-  const highFunction = text => {
-    setFilterSelectOne(text)
-  }
-
   useEffect(() => {
     setRows(state.accountList)
   }, [])
-
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc'
-    setOrder(isAsc ? 'desc' : 'asc')
-    setOrderBy(property)
-  }
-
-  const handleSelectAllClick = event => {
-    if (event.target.checked) {
-      const newSelected = rows.map(n => n.name)
-      setSelected(newSelected)
-      return
-    }
-    setSelected([])
-  }
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name)
-    let newSelected = []
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      )
-    }
-
-    setSelected(newSelected)
-  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -133,19 +92,20 @@ const UserDetails = () => {
     setPage(0)
   }
 
-  const handleChangeDense = event => {
-    setDense(event.target.checked)
-  }
-
-  const isSelected = name => selected.indexOf(name) !== -1
-
   return (
-    <div>
-      <Box sx={{ width: '100%', marginBottom: '50px' }}>
-        <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
+    <Box>
+      <Box sx={{ marginBottom: '50px' }}>
+        <Typography
+          sx={{ flex: '1 1 100%', display: 'flex', alignItems: 'center' }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        >
+          <ArrowBackIcon sx={{ cursor: 'pointer', mr: 2 }} onClick={() => navigate(-1)} />
           사용자 정보
         </Typography>
-        <Paper sx={{ width: '100%', mb: 2 }}>
+
+        <Paper sx={{ mb: 2 }}>
           <TableContainer>
             <Table>
               <TableBody>
@@ -198,32 +158,19 @@ const UserDetails = () => {
       <Box sx={{ width: '100%' }}>
         <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
           계좌 목록
-          <UserAccountFilterSelect highFunction={highFunction} />
+          <UserAccountFilterSelect
+            filterSelectOne={filterSelectOne}
+            setFilterSelectOne={setFilterSelectOne}
+          />
         </Typography>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <TableContainer>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size={dense ? 'small' : 'medium'}
-            >
-              <UserAccountTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={rows.length}
-              />
+            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+              <UserAccountTableHead />
               <UserAccountTableBody
                 rows={rows}
-                order={order}
-                orderBy={orderBy}
                 page={page}
-                isSelected={isSelected}
-                dense={dense}
                 rowsPerPage={rowsPerPage}
-                onClick={handleClick}
                 filterData={filterSelectOne}
               />
             </Table>
@@ -236,11 +183,10 @@ const UserDetails = () => {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            onClick={handleClick}
           />
         </Paper>
       </Box>
-    </div>
+    </Box>
   )
 }
 
