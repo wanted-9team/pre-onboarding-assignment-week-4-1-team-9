@@ -74,6 +74,7 @@ function* getSearchUserSaga({ payload }) {
   try {
     const searchUser = yield call(searchUsers, searchInputText)
     yield put(getUserListAction(searchUser.data))
+    yield put(getTotalResultsAction(searchUser.data))
   } catch (err) {
     yield put(getErrorMessageAction(err))
   }

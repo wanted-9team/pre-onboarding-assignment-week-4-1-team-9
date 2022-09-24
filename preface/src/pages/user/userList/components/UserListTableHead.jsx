@@ -33,6 +33,7 @@ const HEAD_CELLS = [
   createHeadCell('gender_origin', '성별'),
   createHeadCell('is_active', '활성화'),
   createHeadCell('marketing_push', '혜택 수신 동의'),
+  createHeadCell('is_staff', '임직원'),
   createHeadCell('created_at', '가입일'),
   createHeadCell('last_login', '최근 로그인'),
 ]

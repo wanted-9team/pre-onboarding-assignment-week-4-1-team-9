@@ -89,7 +89,7 @@ const UserDetails = () => {
 
   useEffect(() => {
     setRows(state.accountList)
-  }, [])
+  }, [state])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
