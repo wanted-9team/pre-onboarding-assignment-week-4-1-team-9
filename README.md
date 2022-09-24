@@ -63,6 +63,12 @@
 
 ## 데모
 
+- 로그인 및 리다이렉팅 처리 및 사용자 이메일 표기<br><br>
+
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/69101321/192122125-d3daedb2-141b-4d87-ac54-73a6e3fb167e.gif)
+
+<br><br>
+
 - 사용자 페이지 <br><br>
 
 https://user-images.githubusercontent.com/85508157/192121864-9817e518-a41f-41f4-aa0c-3411fa3a3562.mov
@@ -70,8 +76,14 @@ https://user-images.githubusercontent.com/85508157/192121864-9817e518-a41f-41f4-
 
  <br><br>
 
-- 댓글 수정 및 삭제, 페이지네이션<br><br>
+- 계좌 수정 및 삭제, 페이지네이션<br><br>
   ![1365530a45e3fbbc](https://user-images.githubusercontent.com/92010078/190940835-6607b1e8-3c3f-405e-b9ba-6acbd6068f8b.gif)
+  
+  <br><br>
+  
+- 계좌 수정 및 삭제, 페이지네이션<br><br>
+  ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/69101321/192121396-ef727d59-6fe1-4572-af00-fa347308630d.gif)
+  <br><br>
 
 ## 구현 기능
 
