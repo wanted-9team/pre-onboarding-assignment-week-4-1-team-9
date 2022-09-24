@@ -153,8 +153,8 @@ const UserDetails = () => {
               </TableBody>
               <TableBody>
                 <TableRow>
-                  <TableCell className="">가입 경로</TableCell>
-                  <TableCell>{state.name}</TableCell>
+                  <TableCell className="">보유 계좌수</TableCell>
+                  <TableCell>{state.accountList.length}</TableCell>
                   <TableCell>가입 시각</TableCell>
                   <TableCell>{toLocaleDateFunc(state.created_at)}</TableCell>
                 </TableRow>

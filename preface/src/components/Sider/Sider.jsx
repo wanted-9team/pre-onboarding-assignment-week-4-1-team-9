@@ -2,6 +2,7 @@ import React from 'react'
 import { styled } from '@mui/material'
 import NavMenuGroup from './components/NavMenuGroup'
 import LogoutButton from './components/LogoutButton'
+import { useNavigate } from 'react-router-dom'
 
 export const NAV_CONFIG = [
   {
@@ -15,9 +16,14 @@ export const NAV_CONFIG = [
 ]
 
 function Sider() {
+  const navigate = useNavigate()
   return (
     <SiderContainer>
-      <SideLogo src="https://www.fint.co.kr/static/imgs/new/global/logo.svg" alt="logo" />
+      <SideLogo
+        src="https://www.fint.co.kr/static/imgs/new/global/logo.svg"
+        alt="logo"
+        onClick={() => navigate('/main')}
+      />
       <NavMenuGroup menuList={NAV_CONFIG} />
       <LogoutButton />
     </SiderContainer>

@@ -60,7 +60,7 @@ const UserListBottomToolbar = ({
       <Form onSubmit={handleSearchSubmit}>
         <Stack direction="row" spacing={1}>
           <TextField
-            placeholder="Enter"
+            placeholder="검색"
             size="small"
             type="text"
             value={searchInputText}
@@ -81,7 +81,7 @@ const UserListBottomToolbar = ({
         <Box sx={{ maxWidth: 120, minWidth: 100 }}>
           <FormControl fullWidth>
             <InputLabel id="limit-select-label" size="small">
-              number
+              행수
             </InputLabel>
             <Select
               size="small"

@@ -77,7 +77,7 @@ const UserList = () => {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="좁게 나열하게"
       />
       <MessageSnackBar />
     </Box>
