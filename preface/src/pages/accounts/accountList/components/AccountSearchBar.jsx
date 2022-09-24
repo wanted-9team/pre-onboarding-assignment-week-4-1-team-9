@@ -1,29 +1,24 @@
 import React, { useRef, useCallback, useState } from 'react'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import { searchAccounts, getAccountListByConditions, getTotalUserList } from 'api'
 
-function AccountSearchBar({ concatName, fetchAccountsData, setTotalAccountLength }) {
-  const inputRef = useRef(null)
-  const [query, setQuery] = useState('')
-  const handleSearchClick = useCallback(
-    async e => {
+
+function AccountSearchBar({
+  accountsOption,
+  setAccountsOption,
+  concatName,
+  fetchAccountsData,
+  setTotalAccountLength,
+}) {
+  const inputRef = useRef('')
+  const handleSearchSubmit = useCallback(
+    e => {
       e.preventDefault()
-      if (!query) {
-        fetchAccountsData()
-        return
-      }
-      try {
-        const searchAccountsRes = await searchAccounts(query)
-        const totalUserResponse = await getTotalUserList()
-        setTotalAccountLength(searchAccountsRes.data.length)
-        concatName(searchAccountsRes.data, totalUserResponse.data)
-      } catch (err) {
-        throw new Error(err)
-      }
+      setAccountsOption({ ...accountsOption, query: inputRef.current.value })
+      fetchAccountsData()
     },
+    [accountsOption, setAccountsOption, fetchAccountsData],
 
-    [concatName, fetchAccountsData, setTotalAccountLength, query],
   )
   return (
     <form onSubmit={handleSearchClick}>
