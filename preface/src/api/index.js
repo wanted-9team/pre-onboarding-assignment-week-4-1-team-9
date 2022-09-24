@@ -56,6 +56,12 @@ export const getAccounts = async () => {
   return await Axios.get('/accounts')
 }
 
+export const getAccountListByConditions = async (_page, _limit, query) => {
+  return await Axios.get(
+    `accounts?_page=${_page}&_limit=${_limit}&_order=asc&_sort=id${query ? `&q=${query}` : ''}`,
+  )
+}
+
 export const getAccountDetail = async id => {
   return await Axios.get(`/accounts/${id}`)
 }
@@ -102,4 +108,8 @@ export const getUserSetting = async () => {
 
 export const searchUsers = async word => {
   return await Axios.get(`users?q=${word}`)
+}
+
+export const searchAccounts = async word => {
+  return await Axios.get(`accounts?q=${word}`)
 }
