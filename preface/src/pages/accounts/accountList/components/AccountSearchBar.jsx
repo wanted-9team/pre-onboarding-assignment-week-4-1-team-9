@@ -1,7 +1,7 @@
-import React, { useRef, useCallback } from 'react'
+import React, { useRef, useCallback, useState } from 'react'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import { searchAccounts, getAccountListByConditions, getTotalUserList } from 'api'
+
 
 function AccountSearchBar({
   accountsOption,
@@ -17,13 +17,21 @@ function AccountSearchBar({
       setAccountsOption({ ...accountsOption, query: inputRef.current.value })
       fetchAccountsData()
     },
-    [concatName, accountsOption, setAccountsOption, setTotalAccountLength, fetchAccountsData],
+    [accountsOption, setAccountsOption, fetchAccountsData],
+
   )
   return (
-    <form onSubmit={handleSearchSubmit}>
+    <form onSubmit={handleSearchClick}>
+
       <Stack direction="row" spacing={1}>
-        <input placeholder="Enter" size="small" type="text" ref={inputRef} />
-        <Button variant="contained" disableElevation>
+        <input
+          placeholder="Enter"
+          size="small"
+          type="text"
+          ref={inputRef}
+          onChange={({ target }) => setQuery(target.value)}
+        />
+        <Button type="submit" variant="contained" disableElevation>
           검색
         </Button>
       </Stack>

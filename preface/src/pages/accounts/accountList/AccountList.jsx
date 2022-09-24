@@ -18,7 +18,7 @@ import AccountTableHead from './components/AccountTableHead'
 import AccountTableBody from './components/AccountTableBody'
 import AccountSearchBar from './components/AccountSearchBar'
 
-import { getAccountListByConditions, getTotalUserList, getAccounts } from 'api'
+import { getAccountListByConditions, getTotalUserList } from 'api'
 import { findEqualUserName } from 'utils/findEqualData'
 import { searchAccounts } from './../../../api/index'
 
@@ -49,39 +49,41 @@ export default function AccountList() {
       const totalLengthRes = await searchAccounts(query)
       const accountResponse = await getAccountListByConditions(page, rowsPerPage, query)
       const totalUserResponse = await getTotalUserList()
-
       setTotalAccountLength(totalLengthRes.data.length)
       concatName(accountResponse.data, totalUserResponse.data)
     } catch (err) {
       throw new Error(err)
     }
-  }, [concatName, accountsOption])
+
+  }, [concatName, page, rowsPerPage, query])
+
 
   useEffect(() => {
     fetchAccountsData()
-  }, [accountsOption, setAccountList])
+  }, [page, rowsPerPage])
 
   const handleChangeLimit = useCallback(
     ({ target }) => {
       setAccountsOption({ ...accountsOption, rowsPerPage: target.value })
     },
-    [setAccountsOption],
+    [setAccountsOption, accountsOption],
   )
 
   const handleChangePage = useCallback(
     (_, newPage) => {
-      setAccountsOption({ ...accountsOption, page: newPage })
+      setAccountsOption(prev => ({ ...prev, page: newPage }))
     },
     [accountsOption],
   )
 
   const handleChangeDense = event => {
-    setAccountsOption({ ...accountsOption, dense: event.target.checked })
+    setAccountsOption(prev => ({ ...prev, dense: event.target.checked }))
   }
 
+  useEffect(() => {
+    console.log(totalAccountLength)
+  }, [totalAccountLength])
   const MAX_PAGE = Math.ceil(totalAccountLength / rowsPerPage)
-
-  console.log(totalAccountLength)
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -145,7 +147,12 @@ export default function AccountList() {
                 <MenuItem value={30}>30</MenuItem>
               </Select>
             </FormControl>
-            <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} size="small" />
+            <Pagination
+              count={MAX_PAGE && MAX_PAGE}
+              page={page}
+              onChange={handleChangePage}
+              size="small"
+            />
           </Box>
         </Box>
       </Paper>
