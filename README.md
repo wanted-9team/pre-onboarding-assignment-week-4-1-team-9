@@ -64,7 +64,9 @@
 ## 데모
 
 - 사용자 페이지 <br><br>
-![화면-기록-2022-09-25-오전-8 06 54](https://user-images.githubusercontent.com/85508157/192121727-1fb6d324-64f3-441d-ae1e-9d87169198bf.gif)
+
+https://user-images.githubusercontent.com/85508157/192121789-a8f99acf-196f-4d6d-a914-9df249efa9cc.mov
+
  <br><br>
 
 - 댓글 수정 및 삭제, 페이지네이션<br><br>
