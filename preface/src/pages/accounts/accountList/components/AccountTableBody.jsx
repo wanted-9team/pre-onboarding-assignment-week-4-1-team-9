@@ -9,8 +9,9 @@ import getEarningsRate from 'utils/getEarningsRate'
 import { toStatusString } from 'utils/transAccountStatus'
 import getFormattedPrice from 'utils/getFormattedPrice'
 import { toLocaleDateFunc } from 'utils/transDate'
-import { maskingAccount } from 'utils/maskingAccountNumber'
 import { getFormattedAccountNumber } from 'utils/getFormattedAccountNumber'
+import { maskingAccount } from 'utils/maskingAccountNumber'
+
 
 function AccountTableBody({ rows, onClick }) {
   const navigate = useNavigate()
@@ -35,6 +36,7 @@ function AccountTableBody({ rows, onClick }) {
             <TableCell align="center" component="th" scope="row" padding="none">
               {row.user_name}
             </TableCell>
+
             <TableCell align="center">{toBrokerName(row.broker_id)}</TableCell>
             <TableCell align="center" onClick={() => goAccountDetail(row.id)}>
               {maskingAccount(getFormattedAccountNumber(row.broker_id, row.number))}
@@ -44,6 +46,7 @@ function AccountTableBody({ rows, onClick }) {
             <TableCell align="center">{getFormattedPrice(row.assets)}</TableCell>
             <TableCell align="center">{getFormattedPrice(row.payments)}</TableCell>
             <TableCell align="center" sx={{ color: `${earningsRate >= 0 ? 'blue' : 'red'}` }}>
+
               {earningsRate}%
             </TableCell>
             <TableCell align="center">{row.is_active ? 'Yes' : 'No'}</TableCell>
