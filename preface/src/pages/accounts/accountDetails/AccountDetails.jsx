@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getAccountDetail, getUserDetail, editAccount, deleteAccount } from 'api'
+import { getAccountDetail, getUserDetail, editAccount, deleteAccount, editUser } from 'api'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -41,7 +41,10 @@ function AccountDetails() {
   }
 
   const onClickEditComplete = async detail => {
+    const id = detail.user_id
+    const user_name = detail.userName
     await editAccount(detail)
+    await editUser({ id, name: user_name })
     setEditMode(false)
   }
 
