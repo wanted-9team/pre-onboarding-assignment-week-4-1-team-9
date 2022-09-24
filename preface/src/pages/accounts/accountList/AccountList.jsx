@@ -10,6 +10,11 @@ import {
   Switch,
   Button,
   Typography,
+  MenuItem,
+  Pagination,
+  FormControl,
+  InputLabel,
+  Select
 } from '@mui/material'
 
 import AccountTableHead from './components/AccountTableHead'
@@ -18,25 +23,34 @@ import AccountMultiSelectbox from './components/AccountMultiSelectBox'
 import AccountSinglebox from './components/AccountSingleBox'
 import AccountSearchBar from './components/AccountSearchBar'
 
-import { getAccounts, getTotalUserList } from 'api'
+import { getAccountListByConditions, getTotalUserList, getAccounts } from 'api'
 import { findEqualUserName } from 'utils/findEqualData'
 import { accountStatusList, toStatusNumber } from 'utils/transAccountStatus'
 
 import { matchSorter } from 'match-sorter'
 
 export default function AccountList() {
-  const [page, setPage] = useState(0)
-  const [dense, setDense] = useState(false)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
+
+
+  const [selected, setSelected] = useState([])
   const [accountList, setAccountList] = useState([])
-  const [totalAccountList, setTotalAccountList] = useState([])
+  const [totalAccountLength, setTotalAccountLength] = useState(0)
   const [filterOption, setFilterOption] = useState(
     { brokers: [] },
     { isActive: null },
     { accountStatus: '' },
   )
+  const [accountsOption, setAccountsOption] = useState({
+    page: 0,
+    dense: false,
+    rowsPerPage: 5,
+    query: '',
+  })
+
+  const { page, dense, rowsPerPage, query } = accountsOption
   const IS_ACTIVE_OPTIONS = ['활성화', '비활성화']
   const ACCOUNT_STATUS_OPTIONS = accountStatusList.filter(value => value !== 'default')
+
 
   const concatName = useCallback((accountList, userList) => {
     const newAccountData = accountList
@@ -49,32 +63,76 @@ export default function AccountList() {
     setTotalAccountList(newAccountData)
   }, [])
 
-  const fetchAccountsData = async () => {
+  const fetchAccountsData = useCallback(async () => {
     try {
-      const accountResponse = await getAccounts()
+      const totalLengthRes = await getAccounts()
+      const accountResponse = await getAccountListByConditions(page, rowsPerPage, query)
       const totalUserResponse = await getTotalUserList()
 
+      setTotalAccountLength(totalLengthRes.data.length)
       concatName(accountResponse.data, totalUserResponse.data)
     } catch (err) {
       throw new Error(err)
     }
-  }
+  }, [concatName, accountsOption, totalAccountLength])
 
   useEffect(() => {
     fetchAccountsData()
-  }, [])
+  }, [accountsOption, setAccountList])
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage)
+  const handleChangeLimit = useCallback(
+    ({ target }) => {
+      setAccountsOption({ ...accountsOption, rowsPerPage: target.value })
+    },
+    [setAccountsOption],
+  )
+
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc'
+    setOrder(isAsc ? 'desc' : 'asc')
+    setOrderBy(property)
   }
 
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
+  const handleSelectAllClick = event => {
+    if (event.target.checked) {
+      const newSelected = accountList.map(n => n.name)
+      setSelected(newSelected)
+      return
+    }
+    setSelected([])
   }
+
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name)
+    let newSelected = []
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name)
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1))
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1))
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      )
+    }
+
+    setSelected(newSelected)
+  }
+
+  const handleChangePage = useCallback(
+    (_, newPage) => {
+      setAccountsOption({ ...accountsOption, page: newPage })
+    },
+    [accountsOption],
+  )
+
 
   const handleChangeDense = event => {
-    setDense(event.target.checked)
+    setAccountsOption({ ...accountsOption, dense: event.target.checked })
   }
 
   const handleSelectBroker = broker => {
@@ -145,9 +203,12 @@ export default function AccountList() {
     filterData(totalAccountList, filterOption)
   }
 
+  const MAX_PAGE = Math.ceil(totalAccountLength / rowsPerPage)
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
+
         <Container sx={{ display: 'flex', flexDirection: 'column' }}>
           <Container sx={{ display: 'flex', flexDirection: 'row', gap: 5, mb: 2 }}>
             <AccountMultiSelectbox onSelectBrocker={handleSelectBroker}></AccountMultiSelectbox>
@@ -179,6 +240,7 @@ export default function AccountList() {
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
+
             <AccountTableHead rowCount={accountList.length} />
             <></>
             <AccountTableBody
@@ -189,16 +251,47 @@ export default function AccountList() {
             />
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={accountList.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          labelRowsPerPage="페이지별 행 수"
-        />
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'column', md: 'column', lg: 'row' },
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            padding: '10px 0',
+          }}
+        >
+          <Box>
+            <AccountSearchBar
+              accountsOption={accountsOption}
+              setAccountsOption={setAccountsOption}
+              concatName={concatName}
+              fetchAccountsData={fetchAccountsData}
+              setTotalAccountLength={setTotalAccountLength}
+            />
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <FormControl sx={{ minWidth: 75 }}>
+              <InputLabel id="limit-select-label" size="small">
+                number
+              </InputLabel>
+              <Select
+                size="small"
+                labelId="limit-select-label"
+                id="limit-select"
+                value={rowsPerPage}
+                label="number"
+                onChange={handleChangeLimit}
+              >
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+              </Select>
+            </FormControl>
+            <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} size="small" />
+          </Box>
+        </Box>
+
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
