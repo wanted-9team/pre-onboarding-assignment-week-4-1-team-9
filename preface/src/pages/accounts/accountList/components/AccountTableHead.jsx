@@ -1,58 +1,18 @@
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
-import Checkbox from '@mui/material/Checkbox'
-import Box from '@mui/material/Box'
-import TableSortLabel from '@mui/material/TableSortLabel'
-import { visuallyHidden } from '@mui/utils'
-import { headCells } from '../AccountList'
-import PropTypes from 'prop-types'
 
-function AccountTableHead({
-  onSelectAllClick,
-  order,
-  orderBy,
-  numSelected,
-  rowCount,
-  onRequestSort,
-}) {
-  const createSortHandler = property => event => {
-    onRequestSort(event, property)
-  }
-
+function AccountTableHead() {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
-        {headCells.map(headCell => (
+        {HEAD_CELLS.map(headCell => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={'center'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
+            {headCell.label}
           </TableCell>
         ))}
       </TableRow>
@@ -60,13 +20,67 @@ function AccountTableHead({
   )
 }
 
-AccountTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-}
-
 export default AccountTableHead
+
+const HEAD_CELLS = [
+  {
+    id: 'user_name',
+    numeric: false,
+    disablePadding: true,
+    label: '고객명',
+  },
+  {
+    id: 'broker_name',
+    numeric: false,
+    disablePadding: false,
+    label: '증권사명',
+  },
+  {
+    id: 'account_number',
+    numeric: true,
+    disablePadding: false,
+    label: '계좌번호',
+  },
+  {
+    id: 'account_status',
+    numeric: false,
+    disablePadding: false,
+    label: '계좌상태',
+  },
+  {
+    id: 'account_name',
+    numeric: false,
+    disablePadding: false,
+    label: '계좌명',
+  },
+  {
+    id: 'assets',
+    numeric: true,
+    disablePadding: false,
+    label: '평가금액',
+  },
+  {
+    id: 'payments',
+    numeric: true,
+    disablePadding: false,
+    label: '입금금액',
+  },
+  {
+    id: 'ratio',
+    numertic: false,
+    disablePadding: false,
+    label: '수익률',
+  },
+  {
+    id: 'is_active',
+    numeric: false,
+    disablePadding: false,
+    label: '활성화여부',
+  },
+  {
+    id: 'created_at',
+    numeric: false,
+    disablePadding: false,
+    label: '계좌개설일',
+  },
+]
