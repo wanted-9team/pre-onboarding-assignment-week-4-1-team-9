@@ -9,6 +9,8 @@ import { maskingName } from 'utils/maskingName'
 import { useNavigate } from 'react-router-dom'
 import { INITIAL_USER_DATA } from '../UserList'
 import { useSelector } from 'react-redux'
+import theme from 'theme'
+
 export const FILTER_TAG = {
   ALL: 'all',
   IS_ACTIVE: 'is_active',
@@ -77,8 +79,22 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
             <TableCell align="center">{maskingPhoneNumber(user.phone_number)}</TableCell>
             <TableCell align="center">{toLocaleDateFunc(user.birth_date)}</TableCell>
             <TableCell align="center">{user.gender_origin}</TableCell>
-            <TableCell align="center">{user.is_active ? 'Yes' : 'No'}</TableCell>
-            <TableCell align="center">{user.allow_marketing_push ? 'Yes' : 'No'}</TableCell>
+            <TableCell
+              align="center"
+              sx={{ color: user.is_active ? theme.palette.primary.main : theme.palette.error.main }}
+            >
+              {user.is_active ? 'Yes' : 'No'}
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                color: user.allow_marketing_push
+                  ? theme.palette.primary.main
+                  : theme.palette.error.main,
+              }}
+            >
+              {user.allow_marketing_push ? 'Yes' : 'No'}
+            </TableCell>
             <TableCell align="center">{toLocaleDateFunc(user.created_at)}</TableCell>
             <TableCell align="center">{transLoginTimeFunc(user.last_login)}</TableCell>
           </TableRow>
