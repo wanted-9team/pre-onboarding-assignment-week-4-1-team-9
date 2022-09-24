@@ -119,7 +119,7 @@ const UserPostFormDialog = ({ selected, setSelected, setOpenDialog, openDialog, 
                 fullWidth
                 variant="standard"
                 onChange={handleUserData}
-                value={selected.password}
+                value={selected.password || ''}
                 error={selected.password.length < 6}
               />
             )}
@@ -138,7 +138,7 @@ const UserPostFormDialog = ({ selected, setSelected, setOpenDialog, openDialog, 
             <Stack direction="row" alignItems="center" spacing={2}>
               <TextField
                 aria-readonly
-                value={selected.address}
+                value={selected.address || ''}
                 margin="dense"
                 name="address"
                 label="주소"
@@ -166,13 +166,15 @@ const UserPostFormDialog = ({ selected, setSelected, setOpenDialog, openDialog, 
               value={selected.detail_address}
             />
             {!selected.uuid && (
-              <UserFormSelector
-                selected={selected}
-                birthDate={birthDate}
-                setBirthDate={setBirthDate}
-                handleUserData={handleUserData}
-                setSelected={setSelected}
-              />
+              <Stack>
+                <UserFormSelector
+                  selected={selected}
+                  birthDate={birthDate}
+                  setBirthDate={setBirthDate}
+                  handleUserData={handleUserData}
+                  setSelected={setSelected}
+                />
+              </Stack>
             )}
           </DialogContent>
           <DialogActions>
