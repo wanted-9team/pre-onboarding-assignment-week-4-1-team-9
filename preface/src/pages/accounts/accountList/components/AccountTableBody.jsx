@@ -11,7 +11,7 @@ import getFormattedPrice from 'utils/getFormattedPrice'
 import { toLocaleDateFunc } from 'utils/transDate'
 import { getFormattedAccountNumber } from 'utils/getFormattedAccountNumber'
 import { maskingAccount } from 'utils/maskingAccountNumber'
-
+import theme from 'theme'
 
 function AccountTableBody({ rows, onClick }) {
   const navigate = useNavigate()
@@ -25,14 +25,7 @@ function AccountTableBody({ rows, onClick }) {
         const earningsRate = getEarningsRate(row.assets, row.payments)
 
         return (
-          <TableRow
-            hover
-            onClick={event => onClick(event, row.name)}
-            role="checkbox"
-            tabIndex={-1}
-            key={index}
-            align="center"
-          >
+          <TableRow hover role="checkbox" tabIndex={-1} key={index} align="center">
             <TableCell align="center" component="th" scope="row" padding="none">
               {row.user_name}
             </TableCell>
@@ -45,8 +38,14 @@ function AccountTableBody({ rows, onClick }) {
             <TableCell align="center">{row.name}</TableCell>
             <TableCell align="center">{getFormattedPrice(row.assets)}</TableCell>
             <TableCell align="center">{getFormattedPrice(row.payments)}</TableCell>
-            <TableCell align="center" sx={{ color: `${earningsRate >= 0 ? 'blue' : 'red'}` }}>
-
+            <TableCell
+              align="center"
+              sx={{
+                color: `${
+                  earningsRate >= 0 ? theme.palette.primary.main : theme.palette.error.main
+                }`,
+              }}
+            >
               {earningsRate}%
             </TableCell>
             <TableCell align="center">{row.is_active ? 'Yes' : 'No'}</TableCell>

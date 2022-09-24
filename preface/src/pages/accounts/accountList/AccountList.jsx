@@ -123,14 +123,14 @@ export default function AccountList() {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <FormControl sx={{ minWidth: 75 }}>
               <InputLabel id="limit-select-label" size="small">
-                number
+                행수
               </InputLabel>
               <Select
                 size="small"
                 labelId="limit-select-label"
                 id="limit-select"
                 value={rowsPerPage}
-                label="number"
+                label="행수"
                 onChange={handleChangeLimit}
               >
                 <MenuItem value={10}>10</MenuItem>
