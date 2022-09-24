@@ -144,7 +144,7 @@ https://user-images.githubusercontent.com/85508157/192121864-9817e518-a41f-41f4-
         ├─ pages
         │   ├─ accounts
         │   │   ├─ accountDetails
-        │   │   ├─ accountFilter
+        │   │   ├─ accountFilter
         │   │   │   └─ components
         │   │   └─ accountList
         │   │       └─ components
