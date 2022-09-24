@@ -18,9 +18,8 @@ import AccountTableHead from './components/AccountTableHead'
 import AccountTableBody from './components/AccountTableBody'
 import AccountSearchBar from './components/AccountSearchBar'
 
-import { getAccountListByConditions, getTotalUserList } from 'api'
+import { getAccountListByConditions, getTotalUserList, searchAccounts } from 'api'
 import { findEqualUserName } from 'utils/findEqualData'
-import { searchAccounts } from './../../../api/index'
 
 export default function AccountList() {
   const [accountList, setAccountList] = useState([])
@@ -54,13 +53,11 @@ export default function AccountList() {
     } catch (err) {
       throw new Error(err)
     }
-
   }, [concatName, page, rowsPerPage, query])
-
 
   useEffect(() => {
     fetchAccountsData()
-  }, [page, rowsPerPage])
+  }, [page, rowsPerPage, fetchAccountsData])
 
   const handleChangeLimit = useCallback(
     ({ target }) => {
@@ -69,20 +66,14 @@ export default function AccountList() {
     [setAccountsOption, accountsOption],
   )
 
-  const handleChangePage = useCallback(
-    (_, newPage) => {
-      setAccountsOption(prev => ({ ...prev, page: newPage }))
-    },
-    [accountsOption],
-  )
+  const handleChangePage = useCallback((_, newPage) => {
+    setAccountsOption(prev => ({ ...prev, page: newPage }))
+  }, [])
 
   const handleChangeDense = event => {
     setAccountsOption(prev => ({ ...prev, dense: event.target.checked }))
   }
 
-  useEffect(() => {
-    console.log(totalAccountLength)
-  }, [totalAccountLength])
   const MAX_PAGE = Math.ceil(totalAccountLength / rowsPerPage)
 
   return (
