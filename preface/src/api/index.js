@@ -5,9 +5,7 @@ const BACKEND_PORT_NUMBER = process.env.REACT_APP_SERVER_PORT || '4000'
 const SERVER_URL =
   (process.env.REACT_APP_SERVER_URL || 'http://localhost:') + BACKEND_PORT_NUMBER + '/'
 
-
 const ACCESS_TOKEN = storage.get()
-
 
 const Axios = axios.create({
   baseURL: SERVER_URL,
@@ -56,6 +54,23 @@ export const login = async loginData => {
 
 export const getAccounts = async () => {
   return await Axios.get('/accounts')
+}
+
+export const getAccountListByConditions = async (
+  _page,
+  _limit,
+  query,
+  filterByBroker,
+  filterByActive,
+  filterByStatus,
+) => {
+  return await Axios.get(
+    `accounts?_page=${_page}&_limit=${_limit}&_order=asc&_sort=id${query ? `&q=${query}` : ''}${
+      filterByBroker ? `&broker_name=${filterByBroker}` : ''
+    }${filterByActive ? `&is_active=${filterByActive}` : ''}${
+      filterByStatus ? `&status=${filterByStatus}` : ''
+    }`,
+  )
 }
 
 export const getAccountDetail = async id => {

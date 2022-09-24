@@ -2,18 +2,22 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableContainer from '@mui/material/TableContainer'
-import TablePagination from '@mui/material/TablePagination'
+import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import Button from '@mui/material/Button'
+import Pagination from '@mui/material/Pagination'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import Select from '@mui/material/Select'
 import AccountTableHead from './components/AccountTableHead'
 import AccountTableToolbar from './components/AccountTableToolbar'
 import AccountTableBody from './components/AccountTableBody'
 import AccountCheckbox from './components/AccountCheckBox'
 import AccountSearchBar from './components/AccountSearchBar'
 
-import { getAccounts, getTotalUserList } from 'api'
+import { getAccountListByConditions, getTotalUserList, getAccounts } from 'api'
 import { findEqualUserName } from 'utils/findEqualData'
 
 export const headCells = [
@@ -83,11 +87,21 @@ export default function AccountList() {
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState('user_name')
   const [selected, setSelected] = useState([])
-  const [page, setPage] = useState(0)
-  const [dense, setDense] = useState(false)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
   const [accountList, setAccountList] = useState([])
-  const [totalUserList, setTotalUserList] = useState([])
+  const [totalAccountLength, setTotalAccountLength] = useState(0)
+
+  const [accountsOption, setAccountsOption] = useState({
+    page: 0,
+    dense: false,
+    rowsPerPage: 5,
+    query: '',
+    filterByBroker: '',
+    filterByActive: '',
+    filterByStatus: '',
+  })
+
+  const { page, dense, rowsPerPage, query, filterByBroker, filterByActive, filterByStatus } =
+    accountsOption
 
   const concatName = useCallback((accountList, userList) => {
     const newAccountData = accountList
@@ -99,21 +113,35 @@ export default function AccountList() {
     setAccountList(newAccountData)
   }, [])
 
-  const fetchAccountsData = async () => {
+  const fetchAccountsData = useCallback(async () => {
     try {
-      const accountResponse = await getAccounts()
+      const totalLengthRes = await getAccounts()
+      const accountResponse = await getAccountListByConditions(
+        page,
+        rowsPerPage,
+        query,
+        filterByBroker,
+        filterByActive,
+        filterByStatus,
+      )
       const totalUserResponse = await getTotalUserList()
-      // setAccountList(accountResponse.data)
-      // setTotalUserList(totalUserResponse.data)
+      setTotalAccountLength(totalLengthRes.data.length)
       concatName(accountResponse.data, totalUserResponse.data)
     } catch (err) {
       throw new Error(err)
     }
-  }
+  }, [concatName, accountsOption])
 
   useEffect(() => {
     fetchAccountsData()
-  }, [])
+  }, [accountsOption, setAccountList])
+
+  const handleChangeLimit = useCallback(
+    ({ target }) => {
+      setAccountsOption({ ...accountsOption, rowsPerPage: target.value })
+    },
+    [setAccountsOption],
+  )
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -150,20 +178,21 @@ export default function AccountList() {
     setSelected(newSelected)
   }
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage)
-  }
+  const handleChangePage = useCallback((_, newPage) => {
+    setAccountsOption({ ...accountsOption, page: newPage })
+  }, [])
 
   const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
+    setAccountsOption({ ...accountsOption, page: 0, rowsPerPage: parseInt(event.target.value, 10) })
   }
 
   const handleChangeDense = event => {
-    setDense(event.target.checked)
+    setAccountsOption({ ...accountsOption, dense: event.target.checked })
   }
 
   const isSelected = name => selected.indexOf(name) !== -1
+
+  const MAX_PAGE = Math.ceil(totalAccountLength / rowsPerPage)
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -185,7 +214,7 @@ export default function AccountList() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={accountList.length}
+              rowCount={totalAccountLength}
             />
             <AccountTableBody
               rows={accountList}
@@ -199,16 +228,37 @@ export default function AccountList() {
             />
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={accountList.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          onClick={handleClick}
-        />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'column', md: 'column', lg: 'row' },
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            padding: '10px 0',
+          }}
+        >
+          <Box sx={{ maxWidth: 120, minWidth: 100 }}>
+            <FormControl fullWidth>
+              <InputLabel id="limit-select-label" size="small">
+                number
+              </InputLabel>
+              <Select
+                size="small"
+                labelId="limit-select-label"
+                id="limit-select"
+                value={rowsPerPage}
+                label="number"
+                onChange={handleChangeLimit}
+              >
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} size="small" />
+        </Box>
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
