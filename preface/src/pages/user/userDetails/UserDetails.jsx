@@ -9,6 +9,7 @@ import UserAccountTableHead from './components/UserAccountTableHead'
 import { useLocation } from 'react-router'
 import { maskingPhoneNumber } from 'utils/maskingNumber'
 import Typography from '@mui/material/Typography'
+import UserAccountFilterSelect from './components/UserAccountFilterSelect'
 
 export const headCells = [
   {
@@ -77,6 +78,12 @@ const UserDetails = () => {
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [rows, setRows] = useState([])
+
+  const [filterSelectOne, setFilterSelectOne] = useState('all')
+
+  const highFunction = text => {
+    setFilterSelectOne(text)
+  }
 
   useEffect(() => {
     setRows(state.accountList)
@@ -191,6 +198,7 @@ const UserDetails = () => {
       <Box sx={{ width: '100%' }}>
         <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
           계좌 목록
+          <UserAccountFilterSelect highFunction={highFunction} />
         </Typography>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <TableContainer>
@@ -216,6 +224,7 @@ const UserDetails = () => {
                 dense={dense}
                 rowsPerPage={rowsPerPage}
                 onClick={handleClick}
+                filterData={filterSelectOne}
               />
             </Table>
           </TableContainer>
