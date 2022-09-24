@@ -2,7 +2,7 @@ import * as React from 'react'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 
-export default function ComboBox({ onSelect, options, title }) {
+export default function AccountSingleBox({ onSelect, options, title }) {
   return (
     <Autocomplete
       disablePortal

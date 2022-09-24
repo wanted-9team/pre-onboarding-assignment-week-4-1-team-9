@@ -9,7 +9,7 @@ import brokers from 'data/brokers.json'
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
-export default function AccountCheckbox({ onSelectBrocker }) {
+export default function AccountMultiSelectbox({ onSelectBrocker }) {
   const makeBrokerData = () => {
     let newArray = []
     for (const broker_number in brokers) {
