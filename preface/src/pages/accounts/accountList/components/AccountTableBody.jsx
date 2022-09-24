@@ -7,11 +7,11 @@ import Checkbox from '@mui/material/Checkbox'
 import { useNavigate } from 'react-router-dom'
 import toBrokerName from 'utils/transBroker'
 import getEarningsRate from 'utils/getEarningsRate'
-import toStatusString from 'utils/transAccountStatus'
+import { toStatusString } from 'utils/transAccountStatus'
 import getFormattedPrice from 'utils/getFormattedPrice'
 import { toLocaleDateFunc } from 'utils/transDate'
 
-function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsPerPage, onClick }) {
+function AccountTableBody({ rows, onClick }) {
   const navigate = useNavigate()
 
   const goAccountDetail = id => {
@@ -20,7 +20,6 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
   return (
     <TableBody>
       {rows.map((row, index) => {
-        const isItemSelected = isSelected(row.name)
         const labelId = `enhanced-table-checkbox-${index}`
         const earningsRate = getEarningsRate(row.assets, row.payments)
 
@@ -29,22 +28,10 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
             hover
             onClick={event => onClick(event, row.name)}
             role="checkbox"
-            aria-checked={isItemSelected}
             tabIndex={-1}
             key={index}
-            selected={isItemSelected}
             align="center"
           >
-            <TableCell padding="checkbox">
-              <Checkbox
-                color="primary"
-                checked={isItemSelected}
-                inputProps={{
-                  'aria-labelledby': labelId,
-                }}
-              />
-            </TableCell>
-
             <TableCell component="th" scope="row" padding="none">
               {row.user_name}
             </TableCell>
@@ -67,4 +54,3 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
 }
 
 export default AccountTableBody
-

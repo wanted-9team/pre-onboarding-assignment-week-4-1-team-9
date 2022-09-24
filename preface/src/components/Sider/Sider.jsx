@@ -9,6 +9,10 @@ const NAV_CONFIG = [
     path: '/main/accountList',
   },
   {
+    title: '계좌 찾기',
+    path: '/main/accountFilter',
+  },
+  {
     title: '사용자 정보',
     path: '/main/userList',
   },
