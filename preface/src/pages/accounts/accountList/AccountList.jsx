@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import {
   Box,
-  Container,
   Table,
   TableContainer,
   Paper,
   FormControlLabel,
   Switch,
-  Button,
   Typography,
   MenuItem,
   Pagination,
@@ -22,16 +20,15 @@ import AccountSearchBar from './components/AccountSearchBar'
 
 import { getAccountListByConditions, getTotalUserList, getAccounts } from 'api'
 import { findEqualUserName } from 'utils/findEqualData'
-import { accountStatusList, toStatusNumber } from 'utils/transAccountStatus'
+import { searchAccounts } from './../../../api/index'
 
 export default function AccountList() {
-  const [totalAccountList, setTotalAccountList] = useState([])
   const [accountList, setAccountList] = useState([])
   const [totalAccountLength, setTotalAccountLength] = useState(0)
   const [accountsOption, setAccountsOption] = useState({
     page: 0,
     dense: false,
-    rowsPerPage: 5,
+    rowsPerPage: 10,
     query: '',
   })
 
@@ -45,12 +42,11 @@ export default function AccountList() {
         ...findEqualUserName(account, userList),
       }))
     setAccountList(newAccountData)
-    setTotalAccountList(newAccountData)
   }, [])
 
   const fetchAccountsData = useCallback(async () => {
     try {
-      const totalLengthRes = await getAccounts()
+      const totalLengthRes = await searchAccounts(query)
       const accountResponse = await getAccountListByConditions(page, rowsPerPage, query)
       const totalUserResponse = await getTotalUserList()
 
@@ -59,7 +55,7 @@ export default function AccountList() {
     } catch (err) {
       throw new Error(err)
     }
-  }, [concatName, accountsOption, totalAccountLength])
+  }, [concatName, accountsOption])
 
   useEffect(() => {
     fetchAccountsData()
@@ -84,6 +80,8 @@ export default function AccountList() {
   }
 
   const MAX_PAGE = Math.ceil(totalAccountLength / rowsPerPage)
+
+  console.log(totalAccountLength)
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -142,9 +140,9 @@ export default function AccountList() {
                 label="number"
                 onChange={handleChangeLimit}
               >
-                <MenuItem value={5}>5</MenuItem>
                 <MenuItem value={10}>10</MenuItem>
                 <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
               </Select>
             </FormControl>
             <Pagination count={MAX_PAGE} page={page} onChange={handleChangePage} size="small" />
