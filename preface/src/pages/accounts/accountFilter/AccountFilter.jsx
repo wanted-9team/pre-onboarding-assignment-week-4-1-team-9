@@ -7,7 +7,6 @@ import {
   Paper,
   FormControlLabel,
   Switch,
-  Button,
   TablePagination,
   Typography,
 } from '@mui/material'
@@ -16,7 +15,6 @@ import AccountTableHead from './components/AccountTableHead'
 import AccountTableBody from './components/AccountTableBody'
 import AccountMultiSelectbox from './components/AccountMultiSelectBox'
 import AccountSinglebox from './components/AccountSingleBox'
-import AccountSearchBar from './components/AccountSearchBar'
 
 import { getTotalUserList, getAccounts } from 'api'
 import { findEqualUserName } from 'utils/findEqualData'
@@ -148,6 +146,11 @@ export default function AccountList() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
+        <Box sx={{ ml: 5, mb: 3, mt: 3 }}>
+          <Typography variant="h6" id="tableTitle" component="div">
+            계좌 목록
+          </Typography>
+        </Box>
         <Container sx={{ display: 'flex', flexDirection: 'column' }}>
           <Container sx={{ display: 'flex', flexDirection: 'row', gap: 5, mb: 2 }}>
             <AccountMultiSelectbox onSelectBrocker={handleSelectBroker}></AccountMultiSelectbox>
@@ -163,11 +166,6 @@ export default function AccountList() {
             ></AccountSinglebox>
           </Container>
         </Container>
-        <Box sx={{ ml: 5, mb: 3, mt: 3 }}>
-          <Typography variant="h6" id="tableTitle" component="div">
-            계좌 목록
-          </Typography>
-        </Box>
 
         <TableContainer>
           <Table

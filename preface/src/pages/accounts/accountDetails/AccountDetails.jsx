@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getAccountDetail, getUserDetail, editAccount, deleteAccount } from 'api'
+import { getAccountDetail, getUserDetail, editAccount, deleteAccount, editUser } from 'api'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
 import Input from '@mui/material/Input'
 import Box from '@mui/material/Box'
-import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import { Typography } from '@mui/material'
@@ -21,7 +19,6 @@ import { toLocaleDateFunc } from 'utils/transDate'
 import getEarningsRate from 'utils/getEarningsRate'
 import getFormattedPrice from 'utils/getFormattedPrice'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { sizeHeight } from '@mui/system'
 
 const ariaLabel = { 'aria-label': 'description' }
 
@@ -41,7 +38,10 @@ function AccountDetails() {
   }
 
   const onClickEditComplete = async detail => {
+    const id = detail.user_id
+    const user_name = detail.userName
     await editAccount(detail)
+    await editUser({ id, name: user_name })
     setEditMode(false)
   }
 

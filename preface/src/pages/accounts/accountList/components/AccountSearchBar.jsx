@@ -15,7 +15,7 @@ function AccountSearchBar({ accountsOption, setAccountsOption, fetchAccountsData
   return (
     <form onSubmit={handleSearchSubmit}>
       <Stack direction="row" spacing={1}>
-        <input placeholder="Enter" size="small" type="text" ref={inputRef} />
+        <input placeholder="입력" size="small" type="text" ref={inputRef} />
         <Button variant="contained" disableElevation>
           검색
         </Button>
