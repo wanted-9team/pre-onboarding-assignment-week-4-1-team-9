@@ -9,6 +9,8 @@ import getEarningsRate from 'utils/getEarningsRate'
 import { toStatusString } from 'utils/transAccountStatus'
 import getFormattedPrice from 'utils/getFormattedPrice'
 import { toLocaleDateFunc } from 'utils/transDate'
+import { getFormattedAccountNumber } from 'utils/getFormattedAccountNumber'
+import { maskingAccount } from 'utils/maskingAccountNumber'
 
 function AccountTableBody({ rows, onClick }) {
   const navigate = useNavigate()
@@ -35,7 +37,9 @@ function AccountTableBody({ rows, onClick }) {
               {row.user_name}
             </TableCell>
             <TableCell>{toBrokerName(row.broker_id)}</TableCell>
-            <TableCell onClick={() => goAccountDetail(row.id)}>{row.number}</TableCell>
+            <TableCell onClick={() => goAccountDetail(row.id)}>
+              {maskingAccount(getFormattedAccountNumber(row.broker_id, row.number))}
+            </TableCell>
             <TableCell>{toStatusString(row.status)}</TableCell>
             <TableCell>{row.name}</TableCell>
             <TableCell>{getFormattedPrice(row.assets)}</TableCell>
