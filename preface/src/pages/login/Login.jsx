@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Box, styled } from '@mui/material'
-import Button from '@mui/material/Button'
+import { styled, Button } from '@mui/material'
 import InputCommon from './components/InputCommon'
 import { login } from 'api'
 import { storage } from 'utils/storage'
@@ -24,7 +23,7 @@ const Login = () => {
 
   return (
     <LoginContainer onSubmit={loginHandler}>
-      <LogoImage>로고이미지</LogoImage>
+      <LogoImage src="https://www.fint.co.kr/static/imgs/new/global/logo.svg" alt="logo" />
       <InputSection>
         <LoginTitle>로그인</LoginTitle>
         <InputContainer>
@@ -39,12 +38,7 @@ const Login = () => {
           />
         </InputContainer>
       </InputSection>
-      <Button
-        type="submit"
-        // onClick={loginHandler}
-        sx={{ width: '100%', height: 50 }}
-        variant="contained"
-      >
+      <Button type="submit" sx={{ width: '100%', height: 50 }} variant="contained">
         로그인
       </Button>
     </LoginContainer>
@@ -67,11 +61,10 @@ const LoginContainer = styled('form')({
   transform: 'translate(-50%,-50%)',
 })
 
-//이미지 선택되면 추후 img 로 변경예정
-const LogoImage = styled('div')({
+const LogoImage = styled('img')({
   width: '100%',
   height: 100,
-  backgroundColor: 'aqua',
+  margin: '10 0',
 })
 
 const InputSection = styled('section')({

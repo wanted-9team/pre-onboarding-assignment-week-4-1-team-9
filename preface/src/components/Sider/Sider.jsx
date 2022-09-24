@@ -17,7 +17,7 @@ export const NAV_CONFIG = [
 function Sider() {
   return (
     <SiderContainer>
-      <SideLogo />
+      <SideLogo src="https://www.fint.co.kr/static/imgs/new/global/logo.svg" alt="logo" />
       <NavMenuGroup menuList={NAV_CONFIG} />
       <LogoutButton />
     </SiderContainer>
@@ -34,8 +34,8 @@ const SiderContainer = styled('div')({
   zIndex: 105,
 })
 
-const SideLogo = styled('div')({
+const SideLogo = styled('img')({
   width: '100%',
   height: 80,
-  backgroundColor: 'blue',
+  marginTop: 10,
 })

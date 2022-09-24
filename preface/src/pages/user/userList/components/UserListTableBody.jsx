@@ -92,6 +92,14 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
             >
               {user.allow_marketing_push ? 'Yes' : 'No'}
             </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                color: user.is_staff ? theme.palette.primary.main : theme.palette.error.main,
+              }}
+            >
+              {user.is_staff ? 'Yes' : 'No'}
+            </TableCell>
             <TableCell align="center">{toLocaleDateFunc(user.created_at)}</TableCell>
             <TableCell align="center">{transLoginTimeFunc(user.last_login)}</TableCell>
           </TableRow>
