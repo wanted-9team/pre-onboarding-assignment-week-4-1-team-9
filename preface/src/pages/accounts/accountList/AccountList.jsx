@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableContainer from '@mui/material/TableContainer'
@@ -6,7 +6,6 @@ import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
-import Button from '@mui/material/Button'
 import Pagination from '@mui/material/Pagination'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
@@ -14,7 +13,6 @@ import Select from '@mui/material/Select'
 import AccountTableHead from './components/AccountTableHead'
 import AccountTableToolbar from './components/AccountTableToolbar'
 import AccountTableBody from './components/AccountTableBody'
-import AccountCheckbox from './components/AccountCheckBox'
 import AccountSearchBar from './components/AccountSearchBar'
 
 import { getAccountListByConditions, getTotalUserList, getAccounts } from 'api'
@@ -95,13 +93,9 @@ export default function AccountList() {
     dense: false,
     rowsPerPage: 5,
     query: '',
-    filterByBroker: '',
-    filterByActive: '',
-    filterByStatus: '',
   })
 
-  const { page, dense, rowsPerPage, query, filterByBroker, filterByActive, filterByStatus } =
-    accountsOption
+  const { page, dense, rowsPerPage, query } = accountsOption
 
   const concatName = useCallback((accountList, userList) => {
     const newAccountData = accountList
@@ -116,21 +110,14 @@ export default function AccountList() {
   const fetchAccountsData = useCallback(async () => {
     try {
       const totalLengthRes = await getAccounts()
-      const accountResponse = await getAccountListByConditions(
-        page,
-        rowsPerPage,
-        query,
-        filterByBroker,
-        filterByActive,
-        filterByStatus,
-      )
+      const accountResponse = await getAccountListByConditions(page, rowsPerPage, query)
       const totalUserResponse = await getTotalUserList()
       setTotalAccountLength(totalLengthRes.data.length)
       concatName(accountResponse.data, totalUserResponse.data)
     } catch (err) {
       throw new Error(err)
     }
-  }, [concatName, accountsOption])
+  }, [concatName, accountsOption, totalAccountLength])
 
   useEffect(() => {
     fetchAccountsData()
@@ -182,12 +169,8 @@ export default function AccountList() {
     (_, newPage) => {
       setAccountsOption({ ...accountsOption, page: newPage })
     },
-    [accountsOption.page],
+    [accountsOption],
   )
-
-  const handleChangeRowsPerPage = event => {
-    setAccountsOption({ ...accountsOption, page: 0, rowsPerPage: parseInt(event.target.value, 10) })
-  }
 
   const handleChangeDense = event => {
     setAccountsOption({ ...accountsOption, dense: event.target.checked })
@@ -200,10 +183,6 @@ export default function AccountList() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <AccountCheckbox></AccountCheckbox>
-        <AccountSearchBar></AccountSearchBar>
-        <Button variant="contained">검색하기</Button>
-
         <AccountTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -241,7 +220,13 @@ export default function AccountList() {
           }}
         >
           <Box>
-            <AccountSearchBar query={query} />
+            <AccountSearchBar
+              accountsOption={accountsOption}
+              setAccountsOption={setAccountsOption}
+              concatName={concatName}
+              fetchAccountsData={fetchAccountsData}
+              setTotalAccountLength={setTotalAccountLength}
+            />
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <FormControl sx={{ minWidth: 75 }}>
