@@ -2,8 +2,6 @@ import React from 'react'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import Checkbox from '@mui/material/Checkbox'
-import comparator from 'utils/comparator'
 import { useNavigate } from 'react-router-dom'
 import toBrokerName from 'utils/transBroker'
 import getEarningsRate from 'utils/getEarningsRate'
@@ -13,7 +11,7 @@ import { toLocaleDateFunc } from 'utils/transDate'
 import { getFormattedAccountNumber } from 'utils/getFormattedAccountNumber'
 import { maskingAccount } from 'utils/maskingAccountNumber'
 
-function AccountTableBody({ rows, page, order, orderBy, dense, rowsPerPage, onClick }) {
+function AccountTableBody({ rows, page, rowsPerPage, onClick }) {
   const navigate = useNavigate()
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
@@ -30,14 +28,7 @@ function AccountTableBody({ rows, page, order, orderBy, dense, rowsPerPage, onCl
           const earningsRate = getEarningsRate(row.assets, row.payments)
 
           return (
-            <TableRow
-              hover
-              onClick={event => onClick(event, row.name)}
-              role="checkbox"
-              tabIndex={-1}
-              key={index}
-              align="center"
-            >
+            <TableRow hover role="checkbox" tabIndex={-1} key={index} align="center">
               <TableCell component="th" scope="row" padding="none">
                 {row.user_name}
               </TableCell>
