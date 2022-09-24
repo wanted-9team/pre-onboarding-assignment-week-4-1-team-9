@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { styled } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { NAV_CONFIG } from 'components/Sider/Sider'
+import { NAV_CONFIG } from 'components/sider/Sider'
 
 function Header() {
   const data = useSelector(state => state.auth)

@@ -1,9 +1,9 @@
 import React from 'react'
-import Sider from 'components/Sider/Sider'
+import Sider from 'components/sider/Sider'
 import { Navigate, Outlet } from 'react-router-dom'
 import { styled } from '@mui/material'
-import Header from 'components/Header/Header'
-import Footer from 'components/Footer/Footer'
+import Header from 'components/header/Header'
+import Footer from 'components/footer/Footer'
 import { storage } from 'utils/storage'
 
 function Main() {

@@ -6,7 +6,7 @@ import AccountList from 'pages/accounts/accountList/AccountList'
 import AccountDetails from 'pages/accounts/accountDetails/AccountDetails'
 import UserList from 'pages/user/userList/UserList'
 import UserDetails from 'pages/user/userDetails/UserDetails'
-import BlankPage from 'components/BlankPage/BlankPage'
+import BlankPage from 'components/blankPage/BlankPage'
 
 const App = () => {
   return (
