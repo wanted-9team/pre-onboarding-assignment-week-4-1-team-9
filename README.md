@@ -116,46 +116,48 @@
 
 ```bash
 ├─ data_generate
-│
-├─ preface
+└─ preface
     ├─ public
     └─ src
-        │
         ├─ api
-        │
         ├─ components
-        │   ├─ BlankPage
-        │   ├─ Footer
-        │   ├─ Header
-        │   └─ Sider
-        │
+        │   ├─ blankPage
+        │   ├─ footer
+        │   ├─ header
+        │   └─ sider
         ├─ data
-        │
         ├─ pages
         │   ├─ accounts
+        │   │   ├─ accountDetails
+        │   │   └─ accountList
+        │   │       └─ components
         │   ├─ login
+        │   │   └─ components
         │   ├─ main
         │   └─ user
-        │
+        │       ├─ userDetails
+        │       │   └─ components
+        │       └─ userList
+        │           └─ components
+        │                ├─ daumPost
+        │                └─ userFormDialog
         ├─ redux
         │   ├─ middleware
         │   ├─ saga
         │   └─ slice
-        │
         ├─ store
-        │
         ├─ utils
-        │
         ├─ App.js
-        └─  index.js
+        └─ index.js
 
 ```
 
 ## Best Practices
 
-### 1. immer 라이브러리를 통해 불변성 관리를 하지 않은 이유
+### 1. MUI
 
-- immer를 사용하면 불변성관리가 간단해지지만, 성능적으로 immer를 사용하지 않는 게 코드가 더 빠르다
+- Material-Ui에는 자주 사용되는 기능들을 Component/Api로 제공이 되어 쉽게 디자인을 만들 수 있습니다.
+- styledcomponents 나 emotion 등의 스타일 라이브러리를 같이 사용 할 수 있다는 점이 장점입니다.
 
 ### 2. redux toolkit 사용한 이유
 
