@@ -6,7 +6,7 @@ const initialState = {
   message: '',
 }
 
-const SnackBarSlice = createSlice({
+const snackBarSlice = createSlice({
   name: 'userlist',
   initialState,
   reducers: {
@@ -23,5 +23,5 @@ const SnackBarSlice = createSlice({
 })
 
 export const { setSuccessSnackAction, setFailureSnackAction, setMessageAction } =
-  SnackBarSlice.actions
-export default SnackBarSlice.reducer
+  snackBarSlice.actions
+export default snackBarSlice.reducer

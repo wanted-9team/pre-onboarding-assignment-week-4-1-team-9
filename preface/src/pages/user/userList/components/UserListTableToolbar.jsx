@@ -16,6 +16,7 @@ import UserFormDialog from './userFormDialog/UserFormDialog'
 import { DELETE_USER, GET_USER_LIST_PAGE } from 'redux/saga/actionType'
 import { useDispatch } from 'react-redux'
 import { INITIAL_USER_DATA } from '../UserList'
+import { maskingName } from 'utils/maskingName'
 
 const UserListTableToolbar = ({ selected, setSelected, page, limit }) => {
   const dispatch = useDispatch()
@@ -45,8 +46,8 @@ const UserListTableToolbar = ({ selected, setSelected, page, limit }) => {
       }}
     >
       {selected.uuid ? (
-        <Typography sx={{ flex: '1 1 100%' }} color="inherit" variant="subtitle1" component="div">
-          {selected.name}
+        <Typography sx={{ flex: '1 1 100%' }} variant="subtitle1" component="div">
+          {maskingName(selected.name)}
         </Typography>
       ) : (
         <Stack

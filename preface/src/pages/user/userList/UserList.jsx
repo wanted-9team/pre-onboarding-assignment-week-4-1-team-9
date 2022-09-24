@@ -22,6 +22,7 @@ export const INITIAL_USER_DATA = {
   email: '',
   password: '',
   phone_number: '',
+  address: '',
   detail_address: '',
   last_login: '',
   created_at: '',

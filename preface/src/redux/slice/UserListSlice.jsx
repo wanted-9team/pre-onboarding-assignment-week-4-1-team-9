@@ -7,10 +7,9 @@ const initialState = {
   userAccounts: [],
   totalResults: 0,
   errorMsg: '',
-  searchUser: [],
 }
 
-const UserListSlice = createSlice({
+const userListSlice = createSlice({
   name: 'userlist',
   initialState,
   reducers: {
@@ -19,8 +18,8 @@ const UserListSlice = createSlice({
         .filter(user => user.uuid)
         .map(user => ({
           ...user,
-          ...findEqualUuid(user, state.userSettings),
-          ...findEqualUserId(user, state.userAccounts),
+          ...findEqualUuid(user.uuid, state.userSettings),
+          ...findEqualUserId(user.id, state.userAccounts),
         }))
     },
     getUserSettingAction: (state, { payload }) => {
@@ -44,5 +43,5 @@ export const {
   getErrorMessageAction,
   getUserSettingAction,
   getUserAccountsAction,
-} = UserListSlice.actions
-export default UserListSlice.reducer
+} = userListSlice.actions
+export default userListSlice.reducer

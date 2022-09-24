@@ -89,7 +89,7 @@ export const addUser = async userData => {
 
 export const editUser = async editedData => {
   const bodyData = JSON.stringify(editedData)
-  return await Axios.put(`users/${editedData.id}`, bodyData)
+  return await Axios.patch(`users/${editedData.id}`, bodyData)
 }
 
 export const deleteUser = async id => {
