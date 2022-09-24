@@ -1,7 +1,7 @@
-export const findEqualUuid = (user, userSettings) => {
+export const findEqualUuid = (userUuid, userSettings) => {
   const { is_active, allow_marketing_push, is_staff } = userSettings.find(
-    settings => settings.uuid === user.uuid,
-  ) || { is_active: false, allow_marketing_push: false, is_staff: false }
+    settings => settings.uuid === userUuid,
+  ) || { is_active: true, allow_marketing_push: true, is_staff: false }
 
   return {
     is_active,
@@ -10,8 +10,8 @@ export const findEqualUuid = (user, userSettings) => {
   }
 }
 
-export const findEqualUserId = (user, accountList) => {
-  const account = accountList.filter(account => account.user_id === user.id)
+export const findEqualUserId = (userId, accountList) => {
+  const account = accountList.filter(account => account.user_id === userId)
   return { accountList: account }
 }
 

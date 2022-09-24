@@ -5,7 +5,7 @@ const initialState = {
   limit: 10,
 }
 
-const PageSlice = createSlice({
+const pageSlice = createSlice({
   name: 'page',
   initialState,
   reducers: {
@@ -18,5 +18,5 @@ const PageSlice = createSlice({
   },
 })
 
-export const { setPaginationAction, setLimitAction } = PageSlice.actions
-export default PageSlice.reducer
+export const { setPaginationAction, setLimitAction } = pageSlice.actions
+export default pageSlice.reducer
