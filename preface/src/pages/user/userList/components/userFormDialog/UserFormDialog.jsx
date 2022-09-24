@@ -167,13 +167,15 @@ const UserPostFormDialog = ({ selected, setSelected, setOpenDialog, openDialog, 
               value={selected.detail_address}
             />
             {!selected.uuid && (
-              <UserFormSelector
-                selected={selected}
-                birthDate={birthDate}
-                setBirthDate={setBirthDate}
-                handleUserData={handleUserData}
-                setSelected={setSelected}
-              />
+              <Stack>
+                <UserFormSelector
+                  selected={selected}
+                  birthDate={birthDate}
+                  setBirthDate={setBirthDate}
+                  handleUserData={handleUserData}
+                  setSelected={setSelected}
+                />
+              </Stack>
             )}
           </DialogContent>
           <DialogActions>
