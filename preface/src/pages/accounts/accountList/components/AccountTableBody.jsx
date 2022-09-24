@@ -32,7 +32,11 @@ function AccountTableBody({ rows }) {
             </TableCell>
 
             <TableCell align="center">{toBrokerName(row.broker_id)}</TableCell>
-            <TableCell align="center" onClick={() => goAccountDetail(row.id)}>
+            <TableCell
+              align="center"
+              onClick={() => goAccountDetail(row.id)}
+              sx={{ cursor: 'pointer' }}
+            >
               {maskingAccount(getFormattedAccountNumber(row.broker_id, row.number))}
             </TableCell>
             <TableCell align="center">{toStatusString(row.status)}</TableCell>
