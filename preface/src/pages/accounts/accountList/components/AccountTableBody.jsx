@@ -9,6 +9,8 @@ import getEarningsRate from 'utils/getEarningsRate'
 import { toStatusString } from 'utils/transAccountStatus'
 import getFormattedPrice from 'utils/getFormattedPrice'
 import { toLocaleDateFunc } from 'utils/transDate'
+import { maskingAccount } from 'utils/maskingAccountNumber'
+import { getFormattedAccountNumber } from 'utils/getFormattedAccountNumber'
 
 function AccountTableBody({ rows, onClick }) {
   const navigate = useNavigate()
@@ -30,20 +32,22 @@ function AccountTableBody({ rows, onClick }) {
             key={index}
             align="center"
           >
-            <TableCell component="th" scope="row" padding="none">
+            <TableCell align="center" component="th" scope="row" padding="none">
               {row.user_name}
             </TableCell>
-            <TableCell>{toBrokerName(row.broker_id)}</TableCell>
-            <TableCell onClick={() => goAccountDetail(row.id)}>{row.number}</TableCell>
-            <TableCell>{toStatusString(row.status)}</TableCell>
-            <TableCell>{row.name}</TableCell>
-            <TableCell>{getFormattedPrice(row.assets)}</TableCell>
-            <TableCell>{getFormattedPrice(row.payments)}</TableCell>
-            <TableCell sx={{ color: `${earningsRate >= 0 ? 'blue' : 'red'}` }}>
+            <TableCell align="center">{toBrokerName(row.broker_id)}</TableCell>
+            <TableCell align="center" onClick={() => goAccountDetail(row.id)}>
+              {maskingAccount(getFormattedAccountNumber(row.broker_id, row.number))}
+            </TableCell>
+            <TableCell align="center">{toStatusString(row.status)}</TableCell>
+            <TableCell align="center">{row.name}</TableCell>
+            <TableCell align="center">{getFormattedPrice(row.assets)}</TableCell>
+            <TableCell align="center">{getFormattedPrice(row.payments)}</TableCell>
+            <TableCell align="center" sx={{ color: `${earningsRate >= 0 ? 'blue' : 'red'}` }}>
               {earningsRate}%
             </TableCell>
-            <TableCell>{row.is_active ? 'Yes' : 'No'}</TableCell>
-            <TableCell>{toLocaleDateFunc(row.created_at)}</TableCell>
+            <TableCell align="center">{row.is_active ? 'Yes' : 'No'}</TableCell>
+            <TableCell align="center">{toLocaleDateFunc(row.created_at)}</TableCell>
           </TableRow>
         )
       })}
