@@ -10,14 +10,19 @@ const YEAR = (() => {
   const years = []
   const thisYear = new Date().getFullYear()
   for (let i = thisYear; i >= 1950; i--) {
-    years.push(i.toString())
+    years.push(i)
   }
   return years
 })()
 const MONTH = Array.from(Array(12), (_, i) => i + 1)
-const DAY = Array.from(Array(31), (_, i) => i + 1)
+const DATE = Array.from(Array(31), (_, i) => i + 1)
 
-const UserFormSelector = ({ birthAndGender, handleBirthAndGender }) => {
+const UserPostFormSelector = ({ selected, setBirthDate, birthDate, handleUserData }) => {
+  const handleBirthDate = ({ target }) => {
+    const { name, value } = target
+    setBirthDate(prev => ({ ...prev, [name]: value }))
+  }
+
   return (
     <Stack direction="row" alignItems="center" spacing={2} pt={2}>
       <DialogContentText>생년월일</DialogContentText>
@@ -26,8 +31,8 @@ const UserFormSelector = ({ birthAndGender, handleBirthAndGender }) => {
         <Select
           labelId="year-select-label"
           id="year-select"
-          value={birthAndGender.year}
-          onChange={handleBirthAndGender}
+          value={birthDate.year}
+          onChange={handleBirthDate}
           name="year"
         >
           {YEAR.map(year => (
@@ -43,8 +48,8 @@ const UserFormSelector = ({ birthAndGender, handleBirthAndGender }) => {
           labelId="month-select-label"
           id="month-select"
           name="month"
-          value={birthAndGender.month}
-          onChange={handleBirthAndGender}
+          value={birthDate.month}
+          onChange={handleBirthDate}
         >
           {MONTH.map(month => (
             <MenuItem key={month} value={month}>
@@ -54,17 +59,17 @@ const UserFormSelector = ({ birthAndGender, handleBirthAndGender }) => {
         </Select>
       </FormControl>
       <FormControl sx={{ minWidth: 80 }}>
-        <InputLabel id="day-select-label">일</InputLabel>
+        <InputLabel id="date-select-label">일</InputLabel>
         <Select
-          labelId="day-select-label"
-          id="day-select"
-          name="day"
-          value={birthAndGender.day}
-          onChange={handleBirthAndGender}
+          labelId="date-select-label"
+          id="date-select"
+          name="date"
+          value={birthDate.date}
+          onChange={handleBirthDate}
         >
-          {DAY.map(day => (
-            <MenuItem key={day} value={day}>
-              {day}
+          {DATE.map(date => (
+            <MenuItem key={date} value={date}>
+              {date}
             </MenuItem>
           ))}
         </Select>
@@ -76,15 +81,17 @@ const UserFormSelector = ({ birthAndGender, handleBirthAndGender }) => {
           labelId="gender-select-label"
           id="gender-select"
           name="gender_origin"
-          value={birthAndGender.gender_origin}
-          onChange={handleBirthAndGender}
+          value={selected.gender_origin}
+          onChange={handleUserData}
         >
-          <MenuItem value={1}> 남</MenuItem>
-          <MenuItem value={2}> 여</MenuItem>
+          <MenuItem value={1}> 1</MenuItem>
+          <MenuItem value={2}> 2</MenuItem>
+          <MenuItem value={3}> 3</MenuItem>
+          <MenuItem value={4}> 4</MenuItem>
         </Select>
       </FormControl>
     </Stack>
   )
 }
 
-export default UserFormSelector
+export default UserPostFormSelector

@@ -61,8 +61,9 @@ export const getAccountDetail = async id => {
 }
 
 export const editAccount = async editedData => {
+  const id = editedData.id
   const bodyData = JSON.stringify(editedData)
-  return await Axios.put('accounts', bodyData)
+  return await Axios.put(`accounts/${id}`, bodyData)
 }
 
 export const deleteAccount = async id => {
@@ -88,7 +89,7 @@ export const addUser = async userData => {
 
 export const editUser = async editedData => {
   const bodyData = JSON.stringify(editedData)
-  return await Axios.put('users', bodyData)
+  return await Axios.put(`users/${editedData.id}`, bodyData)
 }
 
 export const deleteUser = async id => {

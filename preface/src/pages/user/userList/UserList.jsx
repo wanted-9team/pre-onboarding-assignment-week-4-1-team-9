@@ -11,79 +11,56 @@ import UserListTableToolbar from './components/UserListTableToolbar'
 import UserListTableHead from './components/UserListTableHead'
 import UserListTableBody from './components/UserListTableBody'
 import UserListBottomToolbar from './components/UserListBottomToolbar'
-import { getUserList, getUserSetting, getAccounts, searchUsers, getTotalUserList } from 'api'
-import { findEqualUuid, findEqualUserId } from 'utils/findEqualData'
+import MessageSnackBar from './components/userFormDialog/MessageSnackBar'
+
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
+import { setPaginationAction } from 'redux/slice/PageSlice'
+import { GET_USER_LIST_PAGE } from 'redux/saga/actionType'
+
+export const INITIAL_USER_DATA = {
+  name: '',
+  email: '',
+  password: '',
+  phone_number: '',
+  detail_address: '',
+  last_login: '',
+  created_at: '',
+  updated_at: '',
+  age: 0,
+  gender_origin: '',
+  birth_date: '',
+}
 
 const UserList = () => {
-  const [page, setPage] = useState(1)
-  const [selected, setSelected] = useState({})
+  const [selected, setSelected] = useState(INITIAL_USER_DATA)
   const [dense, setDense] = useState(false)
-  const [limit, setLimit] = useState(10)
-  const [userData, setUserData] = useState([])
-  const [searchInputData, setSearchInputData] = useState('')
-  const [userSettingsData, setUserSettingsData] = useState([])
-  const [userAccountList, setUserAccountList] = useState([])
-  const [totalUserLength, setTotalUserLength] = useState(0)
+  const [searchInputText, setSearchInputText] = useState('')
 
-  const concatUserFunc = useCallback((userList, userSettings, accountList) => {
-    const newUserData = userList
-      .filter(user => user.uuid)
-      .map(user => ({
-        ...user,
-        ...findEqualUuid(user, userSettings),
-        ...findEqualUserId(user, accountList),
-      }))
-    setUserData(newUserData)
-  }, [])
-
-  const fetchUserData = useCallback(async () => {
-    try {
-      const userListRes = await getUserList(page, limit)
-      const totalUserRes = await getTotalUserList()
-      const userSettingRes = await getUserSetting()
-      const accountListRes = await getAccounts()
-      setTotalUserLength(totalUserRes.data.filter(user => user.uuid).length)
-      setUserSettingsData(userSettingRes.data)
-      setUserAccountList(accountListRes.data)
-      concatUserFunc(userListRes.data, userSettingRes.data, accountListRes.data)
-    } catch (err) {
-      throw new Error(err)
-    }
-  }, [concatUserFunc, limit, page])
-
-  const handleSearchSubmit = useCallback(
-    async e => {
-      e.preventDefault()
-      if (!searchInputData) {
-        fetchUserData()
-        return
-      }
-      try {
-        const searchUserRes = await searchUsers(searchInputData)
-        concatUserFunc(searchUserRes.data, userSettingsData, userAccountList)
-      } catch (err) {
-        throw new Error(err)
-      }
-    },
-    [concatUserFunc, fetchUserData, searchInputData, userAccountList, userSettingsData],
-  )
+  const dispatch = useDispatch()
+  const { page, limit } = useSelector(state => state.page, shallowEqual)
+  const userData = useSelector(state => state.userList.userList)
 
   useEffect(() => {
-    fetchUserData()
-  }, [page, limit])
+    dispatch({ type: GET_USER_LIST_PAGE, payload: { page, limit } })
+    setSelected(INITIAL_USER_DATA)
+    setSearchInputText('')
+  }, [page, limit, dispatch])
 
-  const handleChangePage = useCallback((_, newPage) => {
-    setPage(newPage)
-  }, [])
+  const handleChangePage = useCallback(
+    (_, newPage) => {
+      dispatch(setPaginationAction(newPage))
+    },
+    [dispatch],
+  )
 
   const handleChangeDense = useCallback(({ target }) => {
     setDense(target.checked)
   }, [])
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <UserListTableToolbar selected={selected} />
+    <Box>
+      <Paper sx={{ mb: 2 }}>
+        <UserListTableToolbar selected={selected} setSelected={setSelected} page={page} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -95,20 +72,18 @@ const UserList = () => {
           </Table>
         </TableContainer>
         <UserListBottomToolbar
-          handleSearchSubmit={handleSearchSubmit}
-          setSearchInputData={setSearchInputData}
+          searchInputText={searchInputText}
+          setSearchInputText={setSearchInputText}
           page={page}
           handleChangePage={handleChangePage}
-          setLimit={setLimit}
           limit={limit}
-          totalUserLength={totalUserLength}
-          setPage={setPage}
         />
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+      <MessageSnackBar />
     </Box>
   )
 }

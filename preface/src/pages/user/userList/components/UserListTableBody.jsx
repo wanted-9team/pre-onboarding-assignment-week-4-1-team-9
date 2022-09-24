@@ -3,12 +3,11 @@ import TableBody from '@mui/material/TableBody'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import Checkbox from '@mui/material/Checkbox'
-import Button from '@mui/material/Button'
 import { toLocaleDateFunc, transLoginTimeFunc } from 'utils/transDate'
 import { maskingPhoneNumber } from 'utils/maskingNumber'
 import { maskingName } from 'utils/maskingName'
 import { useNavigate } from 'react-router-dom'
-
+import { INITIAL_USER_DATA } from '../UserList'
 const UserListTableBody = ({ userData, selected, setSelected }) => {
   const navigate = useNavigate()
 
@@ -18,7 +17,7 @@ const UserListTableBody = ({ userData, selected, setSelected }) => {
 
   const handleSelectUser = user => {
     if (selected.uuid === user.uuid) {
-      setSelected({})
+      setSelected(INITIAL_USER_DATA)
       return
     }
     setSelected(user)

@@ -24,8 +24,9 @@ export default Main
 
 const MainContainer = styled('div')({
   display: 'flex',
-  minHeight: '100%',
+  paddingLeft: 250,
   overflow: 'hidden',
+  margin: 0,
 })
 
 const MainSection = styled('section')({

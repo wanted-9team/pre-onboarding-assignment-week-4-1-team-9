@@ -1,15 +1,16 @@
 import React from 'react'
-import { styled, ListItemButton, ListItemText } from '@mui/material'
+import { styled } from '@mui/material'
 import NavMenuGroup from './components/NavMenuGroup'
+import LogoutButton from './components/LogoutButton'
 
-const NAV_CONFIG = [
+export const NAV_CONFIG = [
   {
     title: '계좌목록',
-    path: '/main/accountList',
+    path: '/main/accountlist',
   },
   {
     title: '사용자 정보',
-    path: '/main/userList',
+    path: '/main/userlist',
   },
 ]
 
@@ -18,18 +19,19 @@ function Sider() {
     <SiderContainer>
       <SideLogo />
       <NavMenuGroup menuList={NAV_CONFIG} />
-      <ListItemButton selected={false}>
-        <ListItemText primary="로그아웃" />
-      </ListItemButton>
+      <LogoutButton />
     </SiderContainer>
   )
 }
 export default Sider
 
 const SiderContainer = styled('div')({
-  flex: 2,
+  position: 'fixed',
+  left: 0,
+  width: 250,
   height: '100vh',
   backgroundColor: 'rgb(250,250,250)',
+  zIndex: 105,
 })
 
 const SideLogo = styled('div')({

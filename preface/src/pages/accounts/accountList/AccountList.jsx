@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableContainer from '@mui/material/TableContainer'
@@ -13,7 +13,8 @@ import AccountTableBody from './components/AccountTableBody'
 import AccountCheckbox from './components/AccountCheckBox'
 import AccountSearchBar from './components/AccountSearchBar'
 
-import { getAccounts } from 'api'
+import { getAccounts, getTotalUserList } from 'api'
+import { findEqualUserName } from 'utils/findEqualData'
 
 export const headCells = [
   {
@@ -85,12 +86,26 @@ export default function AccountList() {
   const [page, setPage] = useState(0)
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [rows, setRows] = useState([])
+  const [accountList, setAccountList] = useState([])
+  const [totalUserList, setTotalUserList] = useState([])
+
+  const concatName = useCallback((accountList, userList) => {
+    const newAccountData = accountList
+      .filter(account => account.user_id)
+      .map(account => ({
+        ...account,
+        ...findEqualUserName(account, userList),
+      }))
+    setAccountList(newAccountData)
+  }, [])
 
   const fetchAccountsData = async () => {
     try {
-      const response = await getAccounts()
-      setRows(response.data)
+      const accountResponse = await getAccounts()
+      const totalUserResponse = await getTotalUserList()
+      // setAccountList(accountResponse.data)
+      // setTotalUserList(totalUserResponse.data)
+      concatName(accountResponse.data, totalUserResponse.data)
     } catch (err) {
       throw new Error(err)
     }
@@ -108,7 +123,7 @@ export default function AccountList() {
 
   const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelected = rows.map(n => n.name)
+      const newSelected = accountList.map(n => n.name)
       setSelected(newSelected)
       return
     }
@@ -170,10 +185,10 @@ export default function AccountList() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={accountList.length}
             />
             <AccountTableBody
-              rows={rows}
+              rows={accountList}
               order={order}
               orderBy={orderBy}
               page={page}
@@ -187,7 +202,7 @@ export default function AccountList() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={accountList.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
