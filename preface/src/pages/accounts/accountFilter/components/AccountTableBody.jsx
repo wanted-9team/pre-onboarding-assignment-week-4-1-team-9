@@ -10,12 +10,11 @@ import getFormattedPrice from 'utils/getFormattedPrice'
 import { toLocaleDateFunc } from 'utils/transDate'
 import { getFormattedAccountNumber } from 'utils/getFormattedAccountNumber'
 import { maskingAccount } from 'utils/maskingAccountNumber'
+import { earningsRateColor } from 'utils/earningsRateColor'
 import theme from 'theme'
 
-function AccountTableBody({ rows, page, rowsPerPage, onClick }) {
+function AccountTableBody({ rows, page, rowsPerPage }) {
   const navigate = useNavigate()
-
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   const goAccountDetail = id => {
     navigate(`/main/accountlist/${id}`)
@@ -29,14 +28,16 @@ function AccountTableBody({ rows, page, rowsPerPage, onClick }) {
           const earningsRate = getEarningsRate(row.assets, row.payments)
 
           return (
-
             <TableRow hover role="checkbox" tabIndex={-1} key={index} align="center">
               <TableCell component="th" scope="row" margin="2">
-
                 {row.user_name}
               </TableCell>
               <TableCell align="center">{toBrokerName(row.broker_id)}</TableCell>
-              <TableCell align="center" onClick={() => goAccountDetail(row.id)}>
+              <TableCell
+                align="center"
+                onClick={() => goAccountDetail(row.id)}
+                sx={{ cursor: 'pointer' }}
+              >
                 {maskingAccount(getFormattedAccountNumber(row.broker_id, row.number))}
               </TableCell>
 
@@ -49,11 +50,17 @@ function AccountTableBody({ rows, page, rowsPerPage, onClick }) {
                 {toStatusString(row.status)}
               </TableCell>
               <TableCell>{row.name}</TableCell>
-              <TableCell>{getFormattedPrice(row.assets)}</TableCell>
+              <TableCell
+                sx={{
+                  color: earningsRateColor(getEarningsRate(row.assets, row.payments)),
+                }}
+              >
+                {getFormattedPrice(row.assets)}
+              </TableCell>
               <TableCell>{getFormattedPrice(row.payments)}</TableCell>
               <TableCell
                 sx={{
-                  color: earningsRate >= 0 ? theme.palette.primary.main : theme.palette.error.main,
+                  color: earningsRateColor(getEarningsRate(row.assets, row.payments)),
                 }}
               >
                 {earningsRate}%
@@ -66,7 +73,6 @@ function AccountTableBody({ rows, page, rowsPerPage, onClick }) {
                 {row.is_active ? 'Yes' : 'No'}
               </TableCell>
               <TableCell>{toLocaleDateFunc(row.created_at)}</TableCell>
-
             </TableRow>
           )
         })}

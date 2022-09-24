@@ -11,9 +11,10 @@ import getFormattedPrice from 'utils/getFormattedPrice'
 import { toLocaleDateFunc } from 'utils/transDate'
 import { getFormattedAccountNumber } from 'utils/getFormattedAccountNumber'
 import { maskingAccount } from 'utils/maskingAccountNumber'
+import { earningsRateColor } from 'utils/earningsRateColor'
 import theme from 'theme'
 
-function AccountTableBody({ rows, onClick }) {
+function AccountTableBody({ rows }) {
   const navigate = useNavigate()
 
   const goAccountDetail = id => {
@@ -42,27 +43,37 @@ function AccountTableBody({ rows, onClick }) {
 
             <TableCell align="center">{toBrokerName(row.broker_id)}</TableCell>
             <TableCell
-              sx={{ cursor: 'pointer' }}
               align="center"
               onClick={() => goAccountDetail(row.id)}
+              sx={{ cursor: 'pointer' }}
             >
               {maskingAccount(getFormattedAccountNumber(row.broker_id, row.number))}
             </TableCell>
             <TableCell align="center">{toStatusString(row.status)}</TableCell>
             <TableCell align="center">{row.name}</TableCell>
-            <TableCell align="center">{getFormattedPrice(row.assets)}</TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                color: earningsRateColor(getEarningsRate(row.assets, row.payments)),
+              }}
+            >
+              {getFormattedPrice(row.assets)}
+            </TableCell>
             <TableCell align="center">{getFormattedPrice(row.payments)}</TableCell>
             <TableCell
               align="center"
               sx={{
-                color: `${
-                  earningsRate >= 0 ? theme.palette.primary.main : theme.palette.error.main
-                }`,
+                color: earningsRateColor(getEarningsRate(row.assets, row.payments)),
               }}
             >
               {earningsRate}%
             </TableCell>
-            <TableCell align="center">{row.is_active ? 'Yes' : 'No'}</TableCell>
+            <TableCell
+              align="center"
+              sx={{ color: row.is_active ? theme.palette.primary.main : theme.palette.error.main }}
+            >
+              {row.is_active ? 'Yes' : 'No'}
+            </TableCell>
             <TableCell align="center">{toLocaleDateFunc(row.created_at)}</TableCell>
           </TableRow>
         )

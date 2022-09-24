@@ -34,7 +34,11 @@ function UserAccountTableBody({ rows, page, rowsPerPage, filterData }) {
               </TableCell>
               <TableCell>{toStatusString(row.status)}</TableCell>
               <TableCell>{row.name}</TableCell>
-              <TableCell>{getFormattedPrice(row.assets)}</TableCell>
+              <TableCell
+                sx={{ color: earningsRateColor(getEarningsRate(row.assets, row.payments)) }}
+              >
+                {getFormattedPrice(row.assets)}
+              </TableCell>
               <TableCell>{getFormattedPrice(row.payments)}</TableCell>
               <TableCell
                 sx={{ color: earningsRateColor(getEarningsRate(row.assets, row.payments)) }}
