@@ -109,6 +109,7 @@ function AccountDetails() {
                       defaultValue={accountDetail.userName}
                       inputProps={ariaLabel}
                       onChange={onChangeHandler}
+                      disabled
                     />
                   </TableCell>
                   <TableCell align="center">
@@ -168,12 +169,7 @@ function AccountDetails() {
                     />
                   </TableCell>
                   <TableCell align="center">
-                    <Input
-                      name="name"
-                      defaultValue={accountDetail.name}
-                      inputProps={ariaLabel}
-                      onChange={onChangeHandler}
-                    />
+                    <Input name="name" defaultValue={accountDetail.name} inputProps={ariaLabel} />
                   </TableCell>
                   <TableCell align="center">
                     <Input
