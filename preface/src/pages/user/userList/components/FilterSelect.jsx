@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import Select from '@mui/material/Select'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { filterUserAction } from 'redux/slice/FilterUserSlice'
+import { FILTER_TAG } from './UserListTableBody'
 const FilterSelect = () => {
-  const [filterUser, setFilterUser] = useState('all')
-
+  const filterTag = useSelector(state => state.filterUser.filterValue)
+  const dispatch = useDispatch()
   const handleFilterUser = ({ target }) => {
-    setFilterUser(target.value)
+    dispatch(filterUserAction(target.value))
   }
-  // useEffect(() => {
-  //   console.log(filterUser)
-  // }, [filterUser])
 
   return (
     <Box sx={{ width: 120 }}>
@@ -26,13 +25,13 @@ const FilterSelect = () => {
           size="small"
           labelId="user-select-label"
           id="user-select"
-          value={filterUser}
+          value={filterTag}
           label="filter"
           onChange={handleFilterUser}
         >
-          <MenuItem value={'all'}>전체 보기</MenuItem>
-          <MenuItem value={'is_active'}>활성화 여부</MenuItem>
-          <MenuItem value={'is_staff'}>임직원 계좌 여부</MenuItem>
+          <MenuItem value={FILTER_TAG.ALL}>전체 보기</MenuItem>
+          <MenuItem value={FILTER_TAG.IS_ACTIVE}>활성화 여부</MenuItem>
+          <MenuItem value={FILTER_TAG.IS_STAFF}>임직원 계좌 여부</MenuItem>
         </Select>
       </FormControl>
     </Box>

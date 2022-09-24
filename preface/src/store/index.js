@@ -8,7 +8,7 @@ import createSagaMiddleware from '@redux-saga/core'
 import userListSlice from 'redux/slice/UserListSlice'
 import snackBarSlice from 'redux/slice/SnackBarSlice'
 import { rootSaga } from 'redux/saga'
-
+import filterUserSlice from 'redux/slice/FilterUserSlice'
 const sagaMiddleware = createSagaMiddleware()
 
 const persistConfig = {
@@ -24,6 +24,7 @@ export const store = configureStore({
     page: pageSlice,
     userList: userListSlice,
     snackbar: snackBarSlice,
+    filterUser: filterUserSlice,
   },
   middleware: [sagaMiddleware, thunk],
 })
