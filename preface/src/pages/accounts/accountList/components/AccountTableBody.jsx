@@ -4,8 +4,7 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Checkbox from '@mui/material/Checkbox'
 
-import { Link } from 'react-router-dom'
-import comparator from 'utils/comparator'
+import { useNavigate } from 'react-router-dom'
 import toBrokerName from 'utils/transBroker'
 import getEarningsRate from 'utils/getEarningsRate'
 import toStatusString from 'utils/transAccountStatus'
@@ -13,6 +12,11 @@ import getFormattedPrice from 'utils/getFormattedPrice'
 import { toLocaleDateFunc } from 'utils/transDate'
 
 function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsPerPage, onClick }) {
+  const navigate = useNavigate()
+
+  const goAccountDetail = id => {
+    navigate(`/main/accountlist/${id}`)
+  }
   return (
     <TableBody>
       {rows.map((row, index) => {
@@ -45,9 +49,7 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
               {row.user_name}
             </TableCell>
             <TableCell>{toBrokerName(row.broker_id)}</TableCell>
-            <TableCell>
-              <Link to={`/main/accountlist/${row.id}`}>{row.number}</Link>
-            </TableCell>
+            <TableCell onClick={() => goAccountDetail(row.id)}>{row.number}</TableCell>
             <TableCell>{toStatusString(row.status)}</TableCell>
             <TableCell>{row.name}</TableCell>
             <TableCell>{getFormattedPrice(row.assets)}</TableCell>
@@ -65,3 +67,4 @@ function AccountTableBody({ rows, order, orderBy, page, isSelected, dense, rowsP
 }
 
 export default AccountTableBody
+

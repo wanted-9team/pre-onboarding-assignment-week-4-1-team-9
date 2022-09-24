@@ -6,7 +6,7 @@ import comparator from 'utils/comparator'
 import { toLocaleDateFunc } from '../../../../utils/transDate'
 import getEarningsRate from 'utils/getEarningsRate'
 import toBrokerName from 'utils/transBroker'
-import toStatusString from 'utils/transAccountStatus'
+import { toStatusString } from 'utils/transAccountStatus'
 import { Link } from 'react-router-dom'
 
 function UserAccountTableBody({
