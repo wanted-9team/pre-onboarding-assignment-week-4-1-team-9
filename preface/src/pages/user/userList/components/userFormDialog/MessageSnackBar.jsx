@@ -1,6 +1,5 @@
 import React, { forwardRef } from 'react'
-import Snackbar from '@mui/material/Snackbar'
-import MuiAlert from '@mui/material/Alert'
+import { Snackbar, MuiAlert } from '@mui/material'
 import { useSelector, shallowEqual } from 'react-redux'
 
 const Alert = forwardRef(function Alert(props, ref) {

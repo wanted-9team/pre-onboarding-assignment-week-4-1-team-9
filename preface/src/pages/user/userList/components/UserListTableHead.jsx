@@ -1,8 +1,5 @@
 import React from 'react'
-
-import TableHead from '@mui/material/TableHead'
-import TableCell from '@mui/material/TableCell'
-import TableRow from '@mui/material/TableRow'
+import { TableHead, TableCell, TableRow } from '@mui/material'
 
 const UserListTableHead = () => {
   return (
